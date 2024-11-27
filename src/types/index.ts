@@ -6,6 +6,7 @@ export interface Task {
   completed: boolean;
   createdAt: Date;
   status: string;
+  deadline: Date | null;
 }
 
 export interface Project {

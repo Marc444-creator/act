@@ -19,6 +19,7 @@ interface Store {
   updateProject: (id: string, name: string, color: string) => void;
   updateContext: (id: string, name: string, color: string) => void;
   updateTaskStatus: (taskId: string, statusId: string) => void;
+  updateTaskDeadline: (taskId: string, deadline: Date | null) => void;
 }
 
 export const useStore = create<Store>()(
@@ -96,6 +97,12 @@ export const useStore = create<Store>()(
         set((state) => ({
           tasks: state.tasks.map((task) =>
             task.id === taskId ? { ...task, status: statusId } : task
+          ),
+        })),
+      updateTaskDeadline: (taskId, deadline) =>
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === taskId ? { ...task, deadline } : task
           ),
         })),
     }),

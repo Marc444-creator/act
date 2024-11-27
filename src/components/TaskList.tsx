@@ -1,7 +1,8 @@
-import { X, Check } from "lucide-react";
+import { X, Check, Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useStore } from "../store/useStore";
+import { format } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -52,6 +53,12 @@ export const TaskList = ({ filterProject, filterContext }: TaskListProps) => {
             >
               {task.title}
             </span>
+            {task.deadline && (
+              <Badge variant="outline" className="gap-1">
+                <CalendarIcon className="w-3 h-3" />
+                {format(new Date(task.deadline), 'PP')}
+              </Badge>
+            )}
             {task.projectId && (
               <Badge
                 style={{
@@ -60,10 +67,7 @@ export const TaskList = ({ filterProject, filterContext }: TaskListProps) => {
                       ?.color || "#8B5CF6",
                 }}
               >
-                {
-                  store.projects.find((p) => p.id === task.projectId)
-                    ?.name
-                }
+                {store.projects.find((p) => p.id === task.projectId)?.name}
               </Badge>
             )}
             {task.contextId && (
@@ -75,10 +79,7 @@ export const TaskList = ({ filterProject, filterContext }: TaskListProps) => {
                       ?.color || "#D946EF",
                 }}
               >
-                {
-                  store.contexts.find((c) => c.id === task.contextId)
-                    ?.name
-                }
+                {store.contexts.find((c) => c.id === task.contextId)?.name}
               </Badge>
             )}
             {status && (

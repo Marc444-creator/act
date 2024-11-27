@@ -1,7 +1,13 @@
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -11,12 +17,14 @@ import {
 } from "@/components/ui/select";
 import { useStore } from "../store/useStore";
 import { toast } from "sonner";
+import { format } from "date-fns";
 
 export const TaskForm = () => {
   const [newTask, setNewTask] = useState("");
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [selectedContext, setSelectedContext] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string>("not-started");
+  const [deadline, setDeadline] = useState<Date | null>(null);
 
   const store = useStore();
 
@@ -30,8 +38,10 @@ export const TaskForm = () => {
       contextId: selectedContext,
       status: selectedStatus,
       completed: false,
+      deadline,
     });
     setNewTask("");
+    setDeadline(null);
     toast.success("Task added successfully!");
   };
 
@@ -109,6 +119,22 @@ export const TaskForm = () => {
           ))}
         </SelectContent>
       </Select>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="outline" className="w-[180px]">
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {deadline ? format(deadline, 'PPP') : <span>Set deadline</span>}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0">
+          <Calendar
+            mode="single"
+            selected={deadline}
+            onSelect={setDeadline}
+            initialFocus
+          />
+        </PopoverContent>
+      </Popover>
       <Button type="submit">
         <Plus className="w-4 h-4" />
       </Button>

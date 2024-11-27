@@ -46,7 +46,7 @@ export const TaskForm = () => {
   };
 
   return (
-    <form onSubmit={handleAddTask} className="flex gap-2">
+    <form onSubmit={handleAddTask} className="flex flex-col gap-2 md:flex-row md:items-center">
       <Input
         type="text"
         value={newTask}
@@ -54,90 +54,92 @@ export const TaskForm = () => {
         placeholder="Add a new task..."
         className="flex-1"
       />
-      <Select
-        value={selectedProject || "none"}
-        onValueChange={(value) => setSelectedProject(value === "none" ? null : value)}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Project" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="none">No Project</SelectItem>
-          {store.projects.map((project) => (
-            <SelectItem key={project.id} value={project.id}>
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-3 h-3 rounded-full"
-                  style={{ backgroundColor: project.color }}
-                />
-                {project.name}
-              </div>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select
-        value={selectedContext || "none"}
-        onValueChange={(value) => setSelectedContext(value === "none" ? null : value)}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Context" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="none">No Context</SelectItem>
-          {store.contexts.map((context) => (
-            <SelectItem key={context.id} value={context.id}>
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-3 h-3 rounded-full"
-                  style={{ backgroundColor: context.color }}
-                />
-                {context.name}
-              </div>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select
-        value={selectedStatus}
-        onValueChange={setSelectedStatus}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Status" />
-        </SelectTrigger>
-        <SelectContent>
-          {store.statuses.map((status) => (
-            <SelectItem key={status.id} value={status.id}>
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-3 h-3 rounded-full"
-                  style={{ backgroundColor: status.color }}
-                />
-                {status.name}
-              </div>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="outline" className="w-[180px]">
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {deadline ? format(deadline, 'PPP') : <span>Set deadline</span>}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0">
-          <Calendar
-            mode="single"
-            selected={deadline}
-            onSelect={setDeadline}
-            initialFocus
-          />
-        </PopoverContent>
-      </Popover>
-      <Button type="submit">
-        <Plus className="w-4 h-4" />
-      </Button>
+      <div className="grid grid-cols-2 gap-2 md:flex md:flex-row">
+        <Select
+          value={selectedProject || "none"}
+          onValueChange={(value) => setSelectedProject(value === "none" ? null : value)}
+        >
+          <SelectTrigger className="w-full md:w-[180px]">
+            <SelectValue placeholder="Project" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">No Project</SelectItem>
+            {store.projects.map((project) => (
+              <SelectItem key={project.id} value={project.id}>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: project.color }}
+                  />
+                  {project.name}
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select
+          value={selectedContext || "none"}
+          onValueChange={(value) => setSelectedContext(value === "none" ? null : value)}
+        >
+          <SelectTrigger className="w-full md:w-[180px]">
+            <SelectValue placeholder="Context" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">No Context</SelectItem>
+            {store.contexts.map((context) => (
+              <SelectItem key={context.id} value={context.id}>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: context.color }}
+                  />
+                  {context.name}
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select
+          value={selectedStatus}
+          onValueChange={setSelectedStatus}
+        >
+          <SelectTrigger className="w-full md:w-[180px]">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+          <SelectContent>
+            {store.statuses.map((status) => (
+              <SelectItem key={status.id} value={status.id}>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: status.color }}
+                  />
+                  {status.name}
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="w-full md:w-[180px]">
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {deadline ? format(deadline, 'PPP') : <span>Set deadline</span>}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0">
+            <Calendar
+              mode="single"
+              selected={deadline}
+              onSelect={setDeadline}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+        <Button type="submit" className="col-span-2 md:col-span-1">
+          <Plus className="w-4 h-4" />
+        </Button>
+      </div>
     </form>
   );
 };

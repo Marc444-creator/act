@@ -5,6 +5,7 @@ export interface Task {
   contextId: string | null;
   completed: boolean;
   createdAt: Date;
+  status: string;
 }
 
 export interface Project {
@@ -14,6 +15,12 @@ export interface Project {
 }
 
 export interface Context {
+  id: string;
+  name: string;
+  color: string;
+}
+
+export interface TaskStatus {
   id: string;
   name: string;
   color: string;

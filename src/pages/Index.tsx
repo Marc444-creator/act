@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { useStore } from "../store/useStore";
-import { Plus, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,13 +8,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { useStore } from "../store/useStore";
+import { TaskForm } from "../components/TaskForm";
+import { TaskList } from "../components/TaskList";
 
 const Index = () => {
-  const [newTask, setNewTask] = useState("");
-  const [selectedProject, setSelectedProject] = useState<string | null>(null);
-  const [selectedContext, setSelectedContext] = useState<string | null>(null);
   const [filterProject, setFilterProject] = useState<string | null>(null);
   const [filterContext, setFilterContext] = useState<string | null>(null);
   const [showProjectModal, setShowProjectModal] = useState(false);
@@ -27,26 +24,6 @@ const Index = () => {
   const [newContextColor, setNewContextColor] = useState("#D946EF");
 
   const store = useStore();
-
-  const filteredTasks = store.tasks.filter((task) => {
-    const matchesProject = !filterProject || task.projectId === filterProject;
-    const matchesContext = !filterContext || task.contextId === filterContext;
-    return matchesProject && matchesContext;
-  });
-
-  const handleAddTask = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTask.trim()) return;
-
-    store.addTask({
-      title: newTask,
-      projectId: selectedProject,
-      contextId: selectedContext,
-      completed: false,
-    });
-    setNewTask("");
-    toast.success("Task added successfully!");
-  };
 
   const handleAddProject = (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,63 +66,7 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Add Task Form */}
-        <form onSubmit={handleAddTask} className="flex gap-2">
-          <Input
-            type="text"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            placeholder="Add a new task..."
-            className="flex-1"
-          />
-          <Select
-            value={selectedProject || "none"}
-            onValueChange={(value) => setSelectedProject(value === "none" ? null : value)}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Project" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">No Project</SelectItem>
-              {store.projects.map((project) => (
-                <SelectItem key={project.id} value={project.id}>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: project.color }}
-                    />
-                    {project.name}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select
-            value={selectedContext || "none"}
-            onValueChange={(value) => setSelectedContext(value === "none" ? null : value)}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Context" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">No Context</SelectItem>
-              {store.contexts.map((context) => (
-                <SelectItem key={context.id} value={context.id}>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: context.color }}
-                    />
-                    {context.name}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button type="submit">
-            <Plus className="w-4 h-4" />
-          </Button>
-        </form>
+        <TaskForm />
 
         {/* Filters */}
         <div className="flex gap-2">
@@ -195,70 +116,7 @@ const Index = () => {
           </Select>
         </div>
 
-        {/* Tasks List */}
-        <div className="space-y-2">
-          {filteredTasks.map((task) => (
-            <div
-              key={task.id}
-              className="flex items-center gap-2 p-4 bg-white rounded-lg shadow-sm"
-            >
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => store.toggleTask(task.id)}
-              >
-                {task.completed ? (
-                  <Check className="w-4 h-4 text-green-500" />
-                ) : (
-                  <div className="w-4 h-4 border-2 rounded-full" />
-                )}
-              </Button>
-              <span
-                className={`flex-1 ${
-                  task.completed ? "line-through text-gray-400" : ""
-                }`}
-              >
-                {task.title}
-              </span>
-              {task.projectId && (
-                <Badge
-                  style={{
-                    backgroundColor:
-                      store.projects.find((p) => p.id === task.projectId)
-                        ?.color || "#8B5CF6",
-                  }}
-                >
-                  {
-                    store.projects.find((p) => p.id === task.projectId)
-                      ?.name
-                  }
-                </Badge>
-              )}
-              {task.contextId && (
-                <Badge
-                  variant="secondary"
-                  style={{
-                    backgroundColor:
-                      store.contexts.find((c) => c.id === task.contextId)
-                        ?.color || "#D946EF",
-                  }}
-                >
-                  {
-                    store.contexts.find((c) => c.id === task.contextId)
-                      ?.name
-                  }
-                </Badge>
-              )}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => store.deleteTask(task.id)}
-              >
-                <X className="w-4 h-4 text-gray-400" />
-              </Button>
-            </div>
-          ))}
-        </div>
+        <TaskList filterProject={filterProject} filterContext={filterContext} />
 
         {/* Project Modal */}
         {showProjectModal && (

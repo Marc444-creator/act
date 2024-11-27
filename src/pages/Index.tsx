@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useStore } from "../store/useStore";
-import { Task } from "../types";
 import { Plus, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -81,16 +80,10 @@ const Index = () => {
         <div className="flex justify-between items-center">
           <h1 className="text-4xl font-bold text-gray-900">Tasks</h1>
           <div className="space-x-2">
-            <Button
-              variant="outline"
-              onClick={() => setShowProjectModal(true)}
-            >
+            <Button variant="outline" onClick={() => setShowProjectModal(true)}>
               Add Project
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => setShowContextModal(true)}
-            >
+            <Button variant="outline" onClick={() => setShowContextModal(true)}>
               Add Context
             </Button>
           </div>
@@ -106,14 +99,14 @@ const Index = () => {
             className="flex-1"
           />
           <Select
-            value={selectedProject || ""}
-            onValueChange={(value) => setSelectedProject(value || null)}
+            value={selectedProject || "none"}
+            onValueChange={(value) => setSelectedProject(value === "none" ? null : value)}
           >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Project" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">No Project</SelectItem>
+              <SelectItem value="none">No Project</SelectItem>
               {store.projects.map((project) => (
                 <SelectItem key={project.id} value={project.id}>
                   <div className="flex items-center gap-2">
@@ -128,14 +121,14 @@ const Index = () => {
             </SelectContent>
           </Select>
           <Select
-            value={selectedContext || ""}
-            onValueChange={(value) => setSelectedContext(value || null)}
+            value={selectedContext || "none"}
+            onValueChange={(value) => setSelectedContext(value === "none" ? null : value)}
           >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Context" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">No Context</SelectItem>
+              <SelectItem value="none">No Context</SelectItem>
               {store.contexts.map((context) => (
                 <SelectItem key={context.id} value={context.id}>
                   <div className="flex items-center gap-2">
@@ -157,14 +150,14 @@ const Index = () => {
         {/* Filters */}
         <div className="flex gap-2">
           <Select
-            value={filterProject || ""}
-            onValueChange={(value) => setFilterProject(value || null)}
+            value={filterProject || "none"}
+            onValueChange={(value) => setFilterProject(value === "none" ? null : value)}
           >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by Project" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Projects</SelectItem>
+              <SelectItem value="none">All Projects</SelectItem>
               {store.projects.map((project) => (
                 <SelectItem key={project.id} value={project.id}>
                   <div className="flex items-center gap-2">
@@ -179,14 +172,14 @@ const Index = () => {
             </SelectContent>
           </Select>
           <Select
-            value={filterContext || ""}
-            onValueChange={(value) => setFilterContext(value || null)}
+            value={filterContext || "none"}
+            onValueChange={(value) => setFilterContext(value === "none" ? null : value)}
           >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by Context" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Contexts</SelectItem>
+              <SelectItem value="none">All Contexts</SelectItem>
               {store.contexts.map((context) => (
                 <SelectItem key={context.id} value={context.id}>
                   <div className="flex items-center gap-2">

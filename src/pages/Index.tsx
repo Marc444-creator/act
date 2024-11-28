@@ -52,22 +52,22 @@ const Index = () => {
       onTouchStart={handleTouchStart}
     >
       <div className="max-w-4xl mx-auto space-y-8">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-center items-center">
           <h1 className="text-4xl font-bold text-gray-900">Tasks</h1>
         </div>
 
         <TaskForm />
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex items-center gap-2 flex-nowrap overflow-x-auto">
           <Select
             value={filterProject || "none"}
             onValueChange={(value) =>
               setFilterProject(value === "none" ? null : value)
             }
           >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by Project" />
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Project" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">All Projects</SelectItem>
@@ -90,8 +90,8 @@ const Index = () => {
               setFilterContext(value === "none" ? null : value)
             }
           >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by Context" />
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Context" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">All Contexts</SelectItem>
@@ -114,8 +114,8 @@ const Index = () => {
               setFilterStatus(value === "none" ? null : value)
             }
           >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by Status" />
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">All Statuses</SelectItem>
@@ -132,14 +132,14 @@ const Index = () => {
               ))}
             </SelectContent>
           </Select>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 whitespace-nowrap">
             <Switch
               checked={showCompleted}
               onCheckedChange={setShowCompleted}
               id="show-completed"
             />
             <label htmlFor="show-completed" className="text-sm text-gray-600">
-              Show completed tasks
+              Show completed
             </label>
           </div>
         </div>

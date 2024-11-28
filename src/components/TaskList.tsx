@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useStore } from "../store/useStore";
 import { format } from "date-fns";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface TaskListProps {
   filterProject: string | null;
@@ -78,7 +85,7 @@ export const TaskList = ({
                 {task.title}
               </span>
             </div>
-            <div className="flex items-center gap-2 ml-6">
+            <div className="flex items-center gap-2 ml-6 flex-wrap">
               {task.deadline && (
                 <Badge variant="outline" className="gap-1">
                   <CalendarIcon className="w-3 h-3" />
@@ -108,15 +115,37 @@ export const TaskList = ({
                   {store.contexts.find((c) => c.id === task.contextId)?.name}
                 </Badge>
               )}
-              {status && (
-                <Badge
-                  style={{
-                    backgroundColor: status.color,
-                  }}
-                >
-                  {status.name}
-                </Badge>
-              )}
+              <Select
+                value={task.status}
+                onValueChange={(value) => store.updateTaskStatus(task.id, value)}
+              >
+                <SelectTrigger className="h-7 text-xs px-2">
+                  <SelectValue placeholder="Status">
+                    {status && (
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-2 h-2 rounded-full"
+                          style={{ backgroundColor: status.color }}
+                        />
+                        {status.name}
+                      </div>
+                    )}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {store.statuses.map((status) => (
+                    <SelectItem key={status.id} value={status.id}>
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: status.color }}
+                        />
+                        {status.name}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <Button
                 variant="ghost"
                 size="icon"

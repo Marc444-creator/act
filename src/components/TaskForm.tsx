@@ -45,7 +45,7 @@ export const TaskForm = () => {
   };
 
   return (
-    <form onSubmit={handleAddTask} className="flex flex-col gap-2 md:flex-row md:items-center">
+    <form onSubmit={handleAddTask} className="flex flex-col gap-2 md:gap-4">
       <Input
         type="text"
         value={newTask}
@@ -53,12 +53,12 @@ export const TaskForm = () => {
         placeholder="Add a new task..."
         className="flex-1"
       />
-      <div className="grid grid-cols-2 gap-2 md:flex md:flex-row">
+      <div className="flex flex-wrap gap-2 md:flex-nowrap md:items-center">
         <Select
           value={selectedProject || "none"}
           onValueChange={(value) => setSelectedProject(value === "none" ? null : value)}
         >
-          <SelectTrigger className="w-full md:w-[180px]">
+          <SelectTrigger className="w-full text-xs md:w-[140px]">
             <SelectValue placeholder="Project" />
           </SelectTrigger>
           <SelectContent>
@@ -67,10 +67,10 @@ export const TaskForm = () => {
               <SelectItem key={project.id} value={project.id}>
                 <div className="flex items-center gap-2">
                   <div
-                    className="w-3 h-3 rounded-full"
+                    className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: project.color }}
                   />
-                  {project.name}
+                  <span className="text-xs">{project.name}</span>
                 </div>
               </SelectItem>
             ))}
@@ -80,7 +80,7 @@ export const TaskForm = () => {
           value={selectedContext || "none"}
           onValueChange={(value) => setSelectedContext(value === "none" ? null : value)}
         >
-          <SelectTrigger className="w-full md:w-[180px]">
+          <SelectTrigger className="w-full text-xs md:w-[140px]">
             <SelectValue placeholder="Context" />
           </SelectTrigger>
           <SelectContent>
@@ -89,10 +89,10 @@ export const TaskForm = () => {
               <SelectItem key={context.id} value={context.id}>
                 <div className="flex items-center gap-2">
                   <div
-                    className="w-3 h-3 rounded-full"
+                    className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: context.color }}
                   />
-                  {context.name}
+                  <span className="text-xs">{context.name}</span>
                 </div>
               </SelectItem>
             ))}
@@ -100,9 +100,9 @@ export const TaskForm = () => {
         </Select>
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="w-full md:w-[180px]">
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {deadline ? format(deadline, 'PPP') : <span>Set deadline</span>}
+            <Button variant="outline" className="w-full text-xs md:w-[140px]">
+              <CalendarIcon className="mr-1 h-3 w-3" />
+              {deadline ? format(deadline, 'PP') : <span>Deadline</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
@@ -114,8 +114,8 @@ export const TaskForm = () => {
             />
           </PopoverContent>
         </Popover>
-        <Button type="submit" className="col-span-2 md:col-span-1">
-          <Plus className="w-4 h-4" />
+        <Button type="submit" size="icon" className="h-10 w-10 shrink-0">
+          <Plus className="h-4 w-4" />
         </Button>
       </div>
     </form>

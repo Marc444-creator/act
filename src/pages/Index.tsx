@@ -67,13 +67,13 @@ const Index = () => {
             }
           >
             <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Project" />
+              <SelectValue placeholder="Proj" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="none">All Projects</SelectItem>
+              <SelectItem value="none">Projects</SelectItem>
               {store.projects.map((project) => (
                 <SelectItem key={project.id} value={project.id}>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 text-xs">
                     <div
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: project.color }}
@@ -91,13 +91,13 @@ const Index = () => {
             }
           >
             <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Context" />
+              <SelectValue placeholder="Ctx" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="none">All Contexts</SelectItem>
+              <SelectItem value="none">Contexts</SelectItem>
               {store.contexts.map((context) => (
                 <SelectItem key={context.id} value={context.id}>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 text-xs">
                     <div
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: context.color }}
@@ -115,13 +115,13 @@ const Index = () => {
             }
           >
             <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Status" />
+              <SelectValue placeholder="Stat" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="none">All Statuses</SelectItem>
+              <SelectItem value="none">Statuses</SelectItem>
               {store.statuses.map((status) => (
                 <SelectItem key={status.id} value={status.id}>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 text-xs">
                     <div
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: status.color }}

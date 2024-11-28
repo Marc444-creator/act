@@ -26,11 +26,26 @@ export const TaskList = ({
 }: TaskListProps) => {
   const store = useStore();
 
+  console.log('TaskList render:', {
+    showCompleted,
+    totalTasks: store.tasks.length,
+    completedTasks: store.tasks.filter(t => t.completed).length
+  });
+
   const filteredTasks = store.tasks.filter((task) => {
     const matchesProject = !filterProject || task.projectId === filterProject;
     const matchesContext = !filterContext || task.contextId === filterContext;
     const matchesStatus = !filterStatus || task.status === filterStatus;
     const matchesCompleted = showCompleted || !task.completed;
+
+    console.log('Task filtering:', {
+      taskId: task.id,
+      completed: task.completed,
+      matchesCompleted,
+      showCompleted,
+      visible: matchesProject && matchesContext && matchesStatus && matchesCompleted
+    });
+
     return matchesProject && matchesContext && matchesStatus && matchesCompleted;
   });
 
@@ -48,7 +63,13 @@ export const TaskList = ({
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => store.toggleTask(task.id)}
+                onClick={() => {
+                  console.log('Toggling task:', {
+                    taskId: task.id,
+                    currentlyCompleted: task.completed
+                  });
+                  store.toggleTask(task.id);
+                }}
               >
                 {task.completed ? (
                   <Check className="w-4 h-4 text-green-500" />

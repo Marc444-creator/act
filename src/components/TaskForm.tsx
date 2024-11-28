@@ -45,7 +45,7 @@ export const TaskForm = () => {
   };
 
   return (
-    <form onSubmit={handleAddTask} className="flex flex-col gap-2 md:gap-4">
+    <form onSubmit={handleAddTask} className="flex flex-col gap-2">
       <Input
         type="text"
         value={newTask}
@@ -53,12 +53,12 @@ export const TaskForm = () => {
         placeholder="Add a new task..."
         className="flex-1"
       />
-      <div className="flex flex-wrap gap-2 md:flex-nowrap md:items-center">
+      <div className="flex gap-2 items-center">
         <Select
           value={selectedProject || "none"}
           onValueChange={(value) => setSelectedProject(value === "none" ? null : value)}
         >
-          <SelectTrigger className="w-full text-xs md:w-[140px]">
+          <SelectTrigger className="text-xs w-[140px]">
             <SelectValue placeholder="Project" />
           </SelectTrigger>
           <SelectContent>
@@ -80,7 +80,7 @@ export const TaskForm = () => {
           value={selectedContext || "none"}
           onValueChange={(value) => setSelectedContext(value === "none" ? null : value)}
         >
-          <SelectTrigger className="w-full text-xs md:w-[140px]">
+          <SelectTrigger className="text-xs w-[140px]">
             <SelectValue placeholder="Context" />
           </SelectTrigger>
           <SelectContent>
@@ -100,7 +100,7 @@ export const TaskForm = () => {
         </Select>
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="w-full text-xs md:w-[140px]">
+            <Button variant="outline" className="text-xs w-[140px]">
               <CalendarIcon className="mr-1 h-3 w-3" />
               {deadline ? format(deadline, 'PP') : <span>Deadline</span>}
             </Button>

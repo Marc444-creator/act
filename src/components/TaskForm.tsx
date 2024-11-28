@@ -23,7 +23,6 @@ export const TaskForm = () => {
   const [newTask, setNewTask] = useState("");
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [selectedContext, setSelectedContext] = useState<string | null>(null);
-  const [selectedStatus, setSelectedStatus] = useState<string>("not-started");
   const [deadline, setDeadline] = useState<Date | null>(null);
 
   const store = useStore();
@@ -36,7 +35,7 @@ export const TaskForm = () => {
       title: newTask,
       projectId: selectedProject,
       contextId: selectedContext,
-      status: selectedStatus,
+      status: "not-started",
       completed: false,
       deadline,
     });
@@ -94,27 +93,6 @@ export const TaskForm = () => {
                     style={{ backgroundColor: context.color }}
                   />
                   {context.name}
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select
-          value={selectedStatus}
-          onValueChange={setSelectedStatus}
-        >
-          <SelectTrigger className="w-full md:w-[180px]">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            {store.statuses.map((status) => (
-              <SelectItem key={status.id} value={status.id}>
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: status.color }}
-                  />
-                  {status.name}
                 </div>
               </SelectItem>
             ))}

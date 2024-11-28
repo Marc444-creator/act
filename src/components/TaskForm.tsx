@@ -45,20 +45,20 @@ export const TaskForm = () => {
   };
 
   return (
-    <form onSubmit={handleAddTask} className="flex flex-col gap-2">
+    <form onSubmit={handleAddTask} className="flex flex-col gap-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
       <Input
         type="text"
         value={newTask}
         onChange={(e) => setNewTask(e.target.value)}
         placeholder="Add a new task..."
-        className="flex-1"
+        className="flex-1 border-blue-300 focus:border-blue-500"
       />
       <div className="flex gap-2 items-center">
         <Select
           value={selectedProject || "none"}
           onValueChange={(value) => setSelectedProject(value === "none" ? null : value)}
         >
-          <SelectTrigger className="text-xs w-[140px]">
+          <SelectTrigger className="text-xs w-[140px] border-blue-300 focus:border-blue-500">
             <SelectValue placeholder="Project" />
           </SelectTrigger>
           <SelectContent>
@@ -80,7 +80,7 @@ export const TaskForm = () => {
           value={selectedContext || "none"}
           onValueChange={(value) => setSelectedContext(value === "none" ? null : value)}
         >
-          <SelectTrigger className="text-xs w-[140px]">
+          <SelectTrigger className="text-xs w-[140px] border-blue-300 focus:border-blue-500">
             <SelectValue placeholder="Context" />
           </SelectTrigger>
           <SelectContent>
@@ -100,7 +100,7 @@ export const TaskForm = () => {
         </Select>
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="text-xs w-[140px]">
+            <Button variant="outline" className="text-xs w-[140px] border-blue-300 hover:bg-blue-100">
               <CalendarIcon className="mr-1 h-3 w-3" />
               {deadline ? format(deadline, 'PP') : <span>Deadline</span>}
             </Button>
@@ -114,7 +114,7 @@ export const TaskForm = () => {
             />
           </PopoverContent>
         </Popover>
-        <Button type="submit" size="icon" className="h-10 w-10 shrink-0">
+        <Button type="submit" size="icon" className="h-10 w-10 shrink-0 bg-blue-500 hover:bg-blue-600">
           <Plus className="h-4 w-4" />
         </Button>
       </div>

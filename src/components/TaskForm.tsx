@@ -46,13 +46,18 @@ export const TaskForm = () => {
 
   return (
     <form onSubmit={handleAddTask} className="flex flex-col gap-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
-      <Input
-        type="text"
-        value={newTask}
-        onChange={(e) => setNewTask(e.target.value)}
-        placeholder="Add a new task..."
-        className="flex-1 border-blue-300 focus:border-blue-500"
-      />
+      <div className="flex gap-2">
+        <Input
+          type="text"
+          value={newTask}
+          onChange={(e) => setNewTask(e.target.value)}
+          placeholder="Add a new task..."
+          className="flex-1 border-blue-300 focus:border-blue-500"
+        />
+        <Button type="submit" size="icon" className="h-10 w-10 shrink-0 bg-blue-500 hover:bg-blue-600">
+          <Plus className="h-4 w-4" />
+        </Button>
+      </div>
       <div className="flex gap-2 items-center">
         <Select
           value={selectedProject || "none"}
@@ -114,9 +119,6 @@ export const TaskForm = () => {
             />
           </PopoverContent>
         </Popover>
-        <Button type="submit" size="icon" className="h-10 w-10 shrink-0 bg-blue-500 hover:bg-blue-600">
-          <Plus className="h-4 w-4" />
-        </Button>
       </div>
     </form>
   );

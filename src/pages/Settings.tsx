@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useStore } from "../store/useStore";
 import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
 
 const Settings = () => {
   const [showProjectModal, setShowProjectModal] = useState(false);
@@ -14,6 +15,14 @@ const Settings = () => {
   const [newContextColor, setNewContextColor] = useState("#D946EF");
   const navigate = useNavigate();
   const store = useStore();
+
+  const sortedProjects = [...store.projects].sort((a, b) => 
+    a.name.localeCompare(b.name)
+  );
+
+  const sortedContexts = [...store.contexts].sort((a, b) => 
+    a.name.localeCompare(b.name)
+  );
 
   const handleAddProject = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +50,16 @@ const Settings = () => {
     toast.success("Context added successfully!");
   };
 
+  const handleDeleteProject = (projectId: string) => {
+    store.deleteProject(projectId);
+    toast.success("Project deleted successfully!");
+  };
+
+  const handleDeleteContext = (contextId: string) => {
+    store.deleteContext(contextId);
+    toast.success("Context deleted successfully!");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -56,16 +75,26 @@ const Settings = () => {
             <h2 className="text-2xl font-semibold">Projects</h2>
             <Button onClick={() => setShowProjectModal(true)}>Add Project</Button>
             <div className="space-y-2">
-              {store.projects.map((project) => (
+              {sortedProjects.map((project) => (
                 <div
                   key={project.id}
-                  className="flex items-center gap-2 p-2 bg-white rounded-lg shadow"
+                  className="flex items-center justify-between gap-2 p-2 bg-white rounded-lg shadow group"
                 >
-                  <div
-                    className="w-4 h-4 rounded-full"
-                    style={{ backgroundColor: project.color }}
-                  />
-                  <span>{project.name}</span>
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-4 h-4 rounded-full"
+                      style={{ backgroundColor: project.color }}
+                    />
+                    <span>{project.name}</span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => handleDeleteProject(project.id)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
                 </div>
               ))}
             </div>
@@ -75,16 +104,26 @@ const Settings = () => {
             <h2 className="text-2xl font-semibold">Contexts</h2>
             <Button onClick={() => setShowContextModal(true)}>Add Context</Button>
             <div className="space-y-2">
-              {store.contexts.map((context) => (
+              {sortedContexts.map((context) => (
                 <div
                   key={context.id}
-                  className="flex items-center gap-2 p-2 bg-white rounded-lg shadow"
+                  className="flex items-center justify-between gap-2 p-2 bg-white rounded-lg shadow group"
                 >
-                  <div
-                    className="w-4 h-4 rounded-full"
-                    style={{ backgroundColor: context.color }}
-                  />
-                  <span>{context.name}</span>
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-4 h-4 rounded-full"
+                      style={{ backgroundColor: context.color }}
+                    />
+                    <span>{context.name}</span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => handleDeleteContext(context.id)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
                 </div>
               ))}
             </div>

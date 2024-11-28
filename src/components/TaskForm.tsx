@@ -62,7 +62,7 @@ export const TaskForm = () => {
             <SelectValue placeholder="Project" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="none">No Project</SelectItem>
+            <SelectItem value="none" className="text-[11px]">Projects</SelectItem>
             {store.projects.map((project) => (
               <SelectItem key={project.id} value={project.id}>
                 <div className="flex items-center gap-2">
@@ -84,7 +84,7 @@ export const TaskForm = () => {
             <SelectValue placeholder="Context" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="none">No Context</SelectItem>
+            <SelectItem value="none" className="text-[11px]">Contexts</SelectItem>
             {store.contexts.map((context) => (
               <SelectItem key={context.id} value={context.id}>
                 <div className="flex items-center gap-2">

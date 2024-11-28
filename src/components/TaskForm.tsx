@@ -106,7 +106,6 @@ export const TaskForm = () => {
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline" className="text-xs w-[140px] border-blue-300 hover:bg-blue-100">
-              <CalendarIcon className="mr-1 h-3 w-3" />
               {deadline ? format(deadline, 'PP') : <span>Deadline</span>}
             </Button>
           </PopoverTrigger>

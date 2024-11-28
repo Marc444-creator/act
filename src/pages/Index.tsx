@@ -12,10 +12,13 @@ import { toast } from "sonner";
 import { useStore } from "../store/useStore";
 import { TaskForm } from "../components/TaskForm";
 import { TaskList } from "../components/TaskList";
+import { Switch } from "@/components/ui/switch";
 
 const Index = () => {
   const [filterProject, setFilterProject] = useState<string | null>(null);
   const [filterContext, setFilterContext] = useState<string | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string | null>(null);
+  const [showCompleted, setShowCompleted] = useState(false);
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showContextModal, setShowContextModal] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
@@ -69,7 +72,7 @@ const Index = () => {
         <TaskForm />
 
         {/* Filters */}
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Select
             value={filterProject || "none"}
             onValueChange={(value) => setFilterProject(value === "none" ? null : value)}
@@ -114,9 +117,46 @@ const Index = () => {
               ))}
             </SelectContent>
           </Select>
+          <Select
+            value={filterStatus || "none"}
+            onValueChange={(value) => setFilterStatus(value === "none" ? null : value)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">All Statuses</SelectItem>
+              {store.statuses.map((status) => (
+                <SelectItem key={status.id} value={status.id}>
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: status.color }}
+                    />
+                    {status.name}
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={showCompleted}
+              onCheckedChange={setShowCompleted}
+              id="show-completed"
+            />
+            <label htmlFor="show-completed" className="text-sm text-gray-600">
+              Show completed tasks
+            </label>
+          </div>
         </div>
 
-        <TaskList filterProject={filterProject} filterContext={filterContext} />
+        <TaskList 
+          filterProject={filterProject} 
+          filterContext={filterContext} 
+          filterStatus={filterStatus}
+          showCompleted={showCompleted}
+        />
 
         {/* Project Modal */}
         {showProjectModal && (

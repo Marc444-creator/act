@@ -14,15 +14,24 @@ import {
 interface TaskListProps {
   filterProject: string | null;
   filterContext: string | null;
+  filterStatus: string | null;
+  showCompleted: boolean;
 }
 
-export const TaskList = ({ filterProject, filterContext }: TaskListProps) => {
+export const TaskList = ({ 
+  filterProject, 
+  filterContext, 
+  filterStatus,
+  showCompleted 
+}: TaskListProps) => {
   const store = useStore();
 
   const filteredTasks = store.tasks.filter((task) => {
     const matchesProject = !filterProject || task.projectId === filterProject;
     const matchesContext = !filterContext || task.contextId === filterContext;
-    return matchesProject && matchesContext;
+    const matchesStatus = !filterStatus || task.status === filterStatus;
+    const matchesCompleted = showCompleted || !task.completed;
+    return matchesProject && matchesContext && matchesStatus && matchesCompleted;
   });
 
   return (

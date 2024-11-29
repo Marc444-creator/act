@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Task, Project, Context, TaskStatus } from '../types';
+import { Task, Project, Context, TaskStatus, Habit } from '../types';
 import { persist } from 'zustand/middleware';
 
 interface Store {
@@ -7,6 +7,7 @@ interface Store {
   projects: Project[];
   contexts: Context[];
   statuses: TaskStatus[];
+  habits: Habit[];
   addTask: (task: Omit<Task, 'id' | 'createdAt'>) => void;
   addProject: (project: Omit<Project, 'id'>) => void;
   addContext: (context: Omit<Context, 'id'>) => void;
@@ -20,6 +21,9 @@ interface Store {
   updateContext: (id: string, name: string, color: string) => void;
   updateTaskStatus: (taskId: string, statusId: string) => void;
   updateTaskDeadline: (taskId: string, deadline: Date | null) => void;
+  addHabit: (habit: Omit<Habit, 'id'>) => void;
+  deleteHabit: (id: string) => void;
+  toggleHabitDay: (habitId: string, date: string) => void;
 }
 
 export const useStore = create<Store>()(
@@ -28,6 +32,7 @@ export const useStore = create<Store>()(
       tasks: [],
       projects: [],
       contexts: [],
+      habits: [],
       statuses: [
         { id: 'not-started', name: 'Not Started', color: '#64748b' },
         { id: 'in-progress', name: 'In Progress', color: '#3b82f6' },
@@ -103,6 +108,28 @@ export const useStore = create<Store>()(
         set((state) => ({
           tasks: state.tasks.map((task) =>
             task.id === taskId ? { ...task, deadline } : task
+          ),
+        })),
+      addHabit: (habit) =>
+        set((state) => ({
+          habits: [...state.habits, { ...habit, id: crypto.randomUUID() }],
+        })),
+      deleteHabit: (id) =>
+        set((state) => ({
+          habits: state.habits.filter((habit) => habit.id !== id),
+        })),
+      toggleHabitDay: (habitId, date) =>
+        set((state) => ({
+          habits: state.habits.map((habit) =>
+            habit.id === habitId
+              ? {
+                  ...habit,
+                  completedDays: {
+                    ...habit.completedDays,
+                    [date]: !habit.completedDays[date],
+                  },
+                }
+              : habit
           ),
         })),
     }),

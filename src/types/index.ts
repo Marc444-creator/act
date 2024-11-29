@@ -26,3 +26,11 @@ export interface TaskStatus {
   name: string;
   color: string;
 }
+
+export interface Habit {
+  id: string;
+  name: string;
+  completedDays: {
+    [key: string]: boolean; // Format: "YYYY-MM-DD"
+  };
+}

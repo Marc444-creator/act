@@ -1,4 +1,4 @@
-import { X, Check, Calendar as CalendarIcon } from "lucide-react";
+import { Check, Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useStore } from "../store/useStore";
@@ -146,13 +146,6 @@ export const TaskList = ({
                   ))}
                 </SelectContent>
               </Select>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => store.deleteTask(task.id)}
-              >
-                <X className="w-4 h-4 text-gray-400" />
-              </Button>
             </div>
           </div>
         );

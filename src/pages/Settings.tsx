@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useStore } from "../store/useStore";
 import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
+import { FormNavigation } from "../components/FormNavigation";
 
 const Settings = () => {
   const [showProjectModal, setShowProjectModal] = useState(false);
@@ -63,6 +64,8 @@ const Settings = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto space-y-8">
+        <FormNavigation />
+        
         <div className="flex justify-between items-center">
           <h1 className="text-4xl font-bold text-gray-900">Settings</h1>
           <Button variant="outline" onClick={() => navigate("/")}>

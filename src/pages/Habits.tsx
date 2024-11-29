@@ -6,6 +6,7 @@ import { format, startOfWeek, addDays } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FormNavigation } from "../components/FormNavigation";
 
 const Habits = () => {
   const [newHabitName, setNewHabitName] = useState('');
@@ -28,6 +29,8 @@ const Habits = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto space-y-8">
+        <FormNavigation />
+        
         <div className="bg-white p-6 rounded-lg shadow-sm space-y-6">
           <h1 className="text-3xl font-bold">Mes Habitudes</h1>
           

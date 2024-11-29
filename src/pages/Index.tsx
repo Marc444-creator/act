@@ -12,6 +12,7 @@ import { TaskForm } from "../components/TaskForm";
 import { TaskList } from "../components/TaskList";
 import { Switch } from "@/components/ui/switch";
 import { useNavigate } from "react-router-dom";
+import { FormNavigation } from "../components/FormNavigation";
 
 const Index = () => {
   const [filterProject, setFilterProject] = useState<string | null>(null);
@@ -52,6 +53,8 @@ const Index = () => {
       onTouchStart={handleTouchStart}
     >
       <div className="max-w-4xl mx-auto space-y-8">
+        <FormNavigation />
+        
         <div className="flex justify-center items-center">
           <h1 className="text-4xl font-bold text-gray-900">Tasks</h1>
         </div>

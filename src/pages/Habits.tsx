@@ -7,6 +7,7 @@ import { fr } from 'date-fns/locale';
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FormNavigation } from "../components/FormNavigation";
+import { Trash2 } from "lucide-react";
 
 const Habits = () => {
   const [newHabitName, setNewHabitName] = useState('');
@@ -21,6 +22,13 @@ const Habits = () => {
     addHabit({ name: newHabitName, completedDays: {} });
     setNewHabitName('');
     toast.success("Habitude ajoutée avec succès!");
+  };
+
+  const handleDeleteHabit = (habitId: string) => {
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette habitude ?")) {
+      deleteHabit(habitId);
+      toast.success("Habitude supprimée!");
+    }
   };
 
   const startDate = startOfWeek(new Date(), { weekStartsOn: 1 });
@@ -63,14 +71,10 @@ const Habits = () => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="opacity-0 group-hover:opacity-100 h-6 w-6"
-                      onClick={() => {
-                        deleteHabit(habit.id);
-                        toast.success("Habitude supprimée!");
-                      }}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                      onClick={() => handleDeleteHabit(habit.id)}
                     >
-                      <span className="sr-only">Supprimer</span>
-                      ×
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
                   {weekDays.map((day) => {

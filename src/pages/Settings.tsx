@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useStore } from "../store/useStore";
 import { useNavigate } from "react-router-dom";
-import { X } from "lucide-react";
+import { X, Trash2 } from "lucide-react";
 import { FormNavigation } from "../components/FormNavigation";
+import { ProjectModal } from "../components/modals/ProjectModal";
+import { ContextModal } from "../components/modals/ContextModal";
 
 const Settings = () => {
   const [showProjectModal, setShowProjectModal] = useState(false);
@@ -52,13 +53,17 @@ const Settings = () => {
   };
 
   const handleDeleteProject = (projectId: string) => {
-    store.deleteProject(projectId);
-    toast.success("Project deleted successfully!");
+    if (confirm("Are you sure you want to delete this project? This will remove the project from all associated tasks.")) {
+      store.deleteProject(projectId);
+      toast.success("Project deleted successfully!");
+    }
   };
 
   const handleDeleteContext = (contextId: string) => {
-    store.deleteContext(contextId);
-    toast.success("Context deleted successfully!");
+    if (confirm("Are you sure you want to delete this context? This will remove the context from all associated tasks.")) {
+      store.deleteContext(contextId);
+      toast.success("Context deleted successfully!");
+    }
   };
 
   return (
@@ -93,10 +98,10 @@ const Settings = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
                     onClick={() => handleDeleteProject(project.id)}
                   >
-                    <X className="h-4 w-4" />
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               ))}
@@ -122,10 +127,10 @@ const Settings = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
                     onClick={() => handleDeleteContext(context.id)}
                   >
-                    <X className="h-4 w-4" />
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               ))}
@@ -134,65 +139,25 @@ const Settings = () => {
         </div>
 
         {showProjectModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg w-96">
-              <h2 className="text-xl font-bold mb-4">Add Project</h2>
-              <form onSubmit={handleAddProject} className="space-y-4">
-                <Input
-                  type="text"
-                  value={newProjectName}
-                  onChange={(e) => setNewProjectName(e.target.value)}
-                  placeholder="Project name"
-                />
-                <Input
-                  type="color"
-                  value={newProjectColor}
-                  onChange={(e) => setNewProjectColor(e.target.value)}
-                />
-                <div className="flex justify-end gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setShowProjectModal(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit">Add Project</Button>
-                </div>
-              </form>
-            </div>
-          </div>
+          <ProjectModal
+            newProjectName={newProjectName}
+            setNewProjectName={setNewProjectName}
+            newProjectColor={newProjectColor}
+            setNewProjectColor={setNewProjectColor}
+            handleAddProject={handleAddProject}
+            setShowProjectModal={setShowProjectModal}
+          />
         )}
 
         {showContextModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg w-96">
-              <h2 className="text-xl font-bold mb-4">Add Context</h2>
-              <form onSubmit={handleAddContext} className="space-y-4">
-                <Input
-                  type="text"
-                  value={newContextName}
-                  onChange={(e) => setNewContextName(e.target.value)}
-                  placeholder="Context name"
-                />
-                <Input
-                  type="color"
-                  value={newContextColor}
-                  onChange={(e) => setNewContextColor(e.target.value)}
-                />
-                <div className="flex justify-end gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setShowContextModal(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit">Add Context</Button>
-                </div>
-              </form>
-            </div>
-          </div>
+          <ContextModal
+            newContextName={newContextName}
+            setNewContextName={setNewContextName}
+            newContextColor={newContextColor}
+            setNewContextColor={setNewContextColor}
+            handleAddContext={handleAddContext}
+            setShowContextModal={setShowContextModal}
+          />
         )}
       </div>
     </div>

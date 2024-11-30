@@ -58,6 +58,19 @@ export const Notes = () => {
     setProjectId(note.projectId);
   };
 
+  const handleClear = () => {
+    setTitle("");
+    setContent("");
+    setProjectId(null);
+    setSelectedNote(null);
+  };
+
+  const handleDelete = (noteId: string) => {
+    store.deleteNote(noteId);
+    handleClear();
+    toast.success("Note deleted successfully!");
+  };
+
   const sortedProjects = [...store.projects].sort((a, b) => 
     a.name.localeCompare(b.name)
   );
@@ -111,12 +124,22 @@ export const Notes = () => {
           />
         </div>
 
-        <Button 
-          type="submit"
-          className="w-full md:w-auto px-8 py-2 text-base font-medium bg-primary hover:bg-primary/90 text-white"
-        >
-          {selectedNote ? "Update Note" : "Create Note"}
-        </Button>
+        <div className="flex gap-4 pt-4">
+          <Button 
+            type="submit"
+            className="w-full md:w-auto px-8 py-2 text-base font-medium bg-primary hover:bg-primary/90 text-white"
+          >
+            {selectedNote ? "Update Note" : "Create Note"}
+          </Button>
+          <Button 
+            type="button"
+            variant="outline"
+            onClick={handleClear}
+            className="w-full md:w-auto"
+          >
+            Clear Form
+          </Button>
+        </div>
       </form>
 
       <div className="space-y-4">
@@ -125,7 +148,6 @@ export const Notes = () => {
           {store.notes.map((note) => (
             <div
               key={note.id}
-              onClick={() => handleNoteSelect(note)}
               className="p-4 bg-white rounded-lg shadow-sm cursor-pointer hover:shadow-md transition-shadow"
             >
               <div className="flex items-center justify-between mb-2">
@@ -142,6 +164,26 @@ export const Notes = () => {
                 )}
               </div>
               <p className="text-sm text-gray-600 line-clamp-3">{note.content}</p>
+              <div className="flex gap-2 mt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleNoteSelect(note)}
+                  className="flex-1"
+                >
+                  Edit
+                </Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => handleDelete(note.id)}
+                  className="flex-1"
+                >
+                  Delete
+                </Button>
+              </div>
             </div>
           ))}
         </div>

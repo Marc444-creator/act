@@ -22,6 +22,14 @@ const Index = () => {
   const navigate = useNavigate();
   const store = useStore();
 
+  // Sort projects and contexts alphabetically
+  const sortedProjects = [...store.projects].sort((a, b) => 
+    a.name.localeCompare(b.name)
+  );
+  const sortedContexts = [...store.contexts].sort((a, b) => 
+    a.name.localeCompare(b.name)
+  );
+
   // Handle swipe right
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
@@ -74,7 +82,7 @@ const Index = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Projects</SelectItem>
-              {store.projects.map((project) => (
+              {sortedProjects.map((project) => (
                 <SelectItem key={project.id} value={project.id}>
                   <div className="flex items-center gap-2 text-xs">
                     <div
@@ -98,7 +106,7 @@ const Index = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Contexts</SelectItem>
-              {store.contexts.map((context) => (
+              {sortedContexts.map((context) => (
                 <SelectItem key={context.id} value={context.id}>
                   <div className="flex items-center gap-2 text-xs">
                     <div
@@ -106,30 +114,6 @@ const Index = () => {
                       style={{ backgroundColor: context.color }}
                     />
                     {context.name}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select
-            value={filterStatus || "none"}
-            onValueChange={(value) =>
-              setFilterStatus(value === "none" ? null : value)
-            }
-          >
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Stat" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">Statuses</SelectItem>
-              {store.statuses.map((status) => (
-                <SelectItem key={status.id} value={status.id}>
-                  <div className="flex items-center gap-2 text-xs">
-                    <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: status.color }}
-                    />
-                    {status.name}
                   </div>
                 </SelectItem>
               ))}

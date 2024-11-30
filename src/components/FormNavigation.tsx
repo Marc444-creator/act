@@ -20,6 +20,12 @@ export const FormNavigation = () => {
       </Button>
       <Button 
         variant="outline"
+        onClick={() => navigate("/notes")}
+      >
+        Notes
+      </Button>
+      <Button 
+        variant="outline"
         onClick={() => navigate("/settings")}
       >
         Settings

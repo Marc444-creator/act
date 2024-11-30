@@ -111,7 +111,10 @@ export const Notes = () => {
           />
         </div>
 
-        <Button type="submit">
+        <Button 
+          type="submit"
+          className="w-full md:w-auto px-8 py-2 text-base font-medium bg-primary hover:bg-primary/90 text-white"
+        >
           {selectedNote ? "Update Note" : "Create Note"}
         </Button>
       </form>

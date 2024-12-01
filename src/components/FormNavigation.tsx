@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { NotesSheet } from "./NotesSheet";
 
 export const FormNavigation = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export const FormNavigation = () => {
       >
         Settings
       </Button>
+      <NotesSheet />
     </div>
   );
 };

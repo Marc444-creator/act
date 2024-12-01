@@ -34,3 +34,11 @@ export interface Habit {
     [key: string]: boolean; // Format: "YYYY-MM-DD"
   };
 }
+
+export interface Note {
+  id: string;
+  content: string;
+  projectId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Task, Project, Context, TaskStatus, Habit, Note } from '../types';
+import { Task, Project, Context, TaskStatus, Habit } from '../types';
 import { persist } from 'zustand/middleware';
 
 interface Store {
@@ -8,7 +8,6 @@ interface Store {
   contexts: Context[];
   statuses: TaskStatus[];
   habits: Habit[];
-  notes: Note[];
   addTask: (task: Omit<Task, 'id' | 'createdAt'>) => void;
   addProject: (project: Omit<Project, 'id'>) => void;
   addContext: (context: Omit<Context, 'id'>) => void;
@@ -25,9 +24,6 @@ interface Store {
   addHabit: (habit: Omit<Habit, 'id'>) => void;
   deleteHabit: (id: string) => void;
   toggleHabitDay: (habitId: string, date: string) => void;
-  addNote: (note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  updateNote: (id: string, updates: Partial<Omit<Note, 'id' | 'createdAt' | 'updatedAt'>>) => void;
-  deleteNote: (id: string) => void;
 }
 
 export const useStore = create<Store>()(
@@ -37,7 +33,6 @@ export const useStore = create<Store>()(
       projects: [],
       contexts: [],
       habits: [],
-      notes: [],
       statuses: [
         { id: 'not-started', name: 'Not Started', color: '#64748b' },
         { id: 'in-progress', name: 'In Progress', color: '#3b82f6' },
@@ -136,30 +131,6 @@ export const useStore = create<Store>()(
                 }
               : habit
           ),
-        })),
-      addNote: (note) =>
-        set((state) => ({
-          notes: [
-            ...state.notes,
-            {
-              ...note,
-              id: crypto.randomUUID(),
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          ],
-        })),
-      updateNote: (id, updates) =>
-        set((state) => ({
-          notes: state.notes.map((note) =>
-            note.id === id
-              ? { ...note, ...updates, updatedAt: new Date() }
-              : note
-          ),
-        })),
-      deleteNote: (id) =>
-        set((state) => ({
-          notes: state.notes.filter((note) => note.id !== id),
         })),
     }),
     {

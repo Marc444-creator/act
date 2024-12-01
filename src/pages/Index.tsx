@@ -37,11 +37,26 @@ const Index = () => {
     return acc;
   }, {} as Record<string, number>);
 
+  // Calculate tasks per project
+  const tasksPerProject = store.projects.reduce((acc, project) => {
+    const count = store.tasks.filter(task => task.projectId === project.id).length;
+    acc[project.id] = count;
+    return acc;
+  }, {} as Record<string, number>);
+
   // Get dot color based on task count
   const getContextDotColor = (contextId: string) => {
     const count = tasksPerContext[contextId] || 0;
     if (count === 0) return '#22c55e'; // green
-    if (count === 1) return '#f97316'; // orange
+    if (count === 1) return '#ff6b00'; // bright orange
+    return '#ef4444'; // red
+  };
+
+  // Get dot color based on project task count
+  const getProjectDotColor = (projectId: string) => {
+    const count = tasksPerProject[projectId] || 0;
+    if (count === 0) return '#22c55e'; // green
+    if (count === 1) return '#ff6b00'; // bright orange
     return '#ef4444'; // red
   };
 
@@ -102,7 +117,7 @@ const Index = () => {
                   <div className="flex items-center gap-2 text-xs">
                     <div
                       className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: project.color }}
+                      style={{ backgroundColor: getProjectDotColor(project.id) }}
                     />
                     {project.name}
                   </div>

@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useStore } from "../store/useStore";
 import { format } from "date-fns";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 interface TaskListProps {
   filterProject: string | null;
@@ -18,26 +21,28 @@ export const TaskList = ({
   showCompleted 
 }: TaskListProps) => {
   const store = useStore();
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [editedTitle, setEditedTitle] = useState("");
 
-  console.log('TaskList render:', {
-    showCompleted,
-    totalTasks: store.tasks.length,
-    completedTasks: store.tasks.filter(t => t.completed).length
-  });
+  const handleTaskClick = (taskId: string, currentTitle: string) => {
+    setEditingTaskId(taskId);
+    setEditedTitle(currentTitle);
+  };
+
+  const handleEditSubmit = (taskId: string) => {
+    if (editedTitle.trim()) {
+      store.updateTaskTitle(taskId, editedTitle.trim());
+      toast.success("Task updated successfully!");
+    }
+    setEditingTaskId(null);
+    setEditedTitle("");
+  };
 
   const filteredTasks = store.tasks.filter((task) => {
     const matchesProject = !filterProject || task.projectId === filterProject;
     const matchesContext = !filterContext || task.contextId === filterContext;
     const matchesStatus = !filterStatus || task.status === filterStatus;
     const matchesCompleted = showCompleted || !task.completed;
-
-    console.log('Task filtering:', {
-      taskId: task.id,
-      completed: task.completed,
-      matchesCompleted,
-      showCompleted,
-      visible: matchesProject && matchesContext && matchesStatus && matchesCompleted
-    });
 
     return matchesProject && matchesContext && matchesStatus && matchesCompleted;
   });
@@ -53,13 +58,7 @@ export const TaskList = ({
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => {
-                console.log('Toggling task:', {
-                  taskId: task.id,
-                  currentlyCompleted: task.completed
-                });
-                store.toggleTask(task.id);
-              }}
+              onClick={() => store.toggleTask(task.id)}
             >
               {task.completed ? (
                 <Check className="w-4 h-4 text-green-500" />
@@ -67,13 +66,31 @@ export const TaskList = ({
                 <X className="w-4 h-4" />
               )}
             </Button>
-            <span
-              className={`flex-1 ${
-                task.completed ? "line-through text-gray-400" : ""
-              }`}
-            >
-              {task.title}
-            </span>
+            {editingTaskId === task.id ? (
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleEditSubmit(task.id);
+                }}
+                className="flex-1"
+              >
+                <Input
+                  value={editedTitle}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                  onBlur={() => handleEditSubmit(task.id)}
+                  autoFocus
+                />
+              </form>
+            ) : (
+              <span
+                className={`flex-1 cursor-pointer ${
+                  task.completed ? "line-through text-gray-400" : ""
+                }`}
+                onClick={() => handleTaskClick(task.id, task.title)}
+              >
+                {task.title}
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-2 ml-6 flex-wrap">
             {task.deadline && (

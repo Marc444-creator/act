@@ -48,7 +48,7 @@ const Index = () => {
   const getContextDotColor = (contextId: string) => {
     const count = tasksPerContext[contextId] || 0;
     if (count === 0) return '#22c55e'; // green
-    if (count === 1) return '#ff6b00'; // bright orange
+    if (count === 1) return '#FFD700'; // yellow
     return '#ef4444'; // red
   };
 
@@ -56,7 +56,7 @@ const Index = () => {
   const getProjectDotColor = (projectId: string) => {
     const count = tasksPerProject[projectId] || 0;
     if (count === 0) return '#22c55e'; // green
-    if (count === 1) return '#ff6b00'; // bright orange
+    if (count === 1) return '#FFD700'; // yellow
     return '#ef4444'; // red
   };
 

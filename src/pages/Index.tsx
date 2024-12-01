@@ -30,6 +30,21 @@ const Index = () => {
     a.name.localeCompare(b.name)
   );
 
+  // Calculate tasks per context
+  const tasksPerContext = store.contexts.reduce((acc, context) => {
+    const count = store.tasks.filter(task => task.contextId === context.id).length;
+    acc[context.id] = count;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Get dot color based on task count
+  const getContextDotColor = (contextId: string) => {
+    const count = tasksPerContext[contextId] || 0;
+    if (count === 0) return '#22c55e'; // green
+    if (count === 1) return '#f97316'; // orange
+    return '#ef4444'; // red
+  };
+
   // Handle swipe right
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
@@ -111,7 +126,7 @@ const Index = () => {
                   <div className="flex items-center gap-2 text-xs">
                     <div
                       className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: context.color }}
+                      style={{ backgroundColor: getContextDotColor(context.id) }}
                     />
                     {context.name}
                   </div>

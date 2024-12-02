@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Trash2 } from "lucide-react";
+import { FormNavigation } from "./FormNavigation";
 import {
   Sheet,
   SheetContent,
@@ -27,10 +28,15 @@ export const NotesSheet = () => {
   const [selectedNote, setSelectedNote] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [selectedNoteType, setSelectedNoteType] = useState<string | null>(null);
   
   const store = useStore();
+
+  const filteredNotes = store.notes.filter(note => 
+    note.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleSave = () => {
     if (!title.trim()) {
@@ -107,6 +113,15 @@ export const NotesSheet = () => {
         </SheetHeader>
         
         <div className="mt-6 space-y-4">
+          <FormNavigation />
+          
+          <Input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search notes by title..."
+            className="mb-4"
+          />
+
           <div className="flex justify-between items-center">
             <Button
               variant="outline"
@@ -189,11 +204,11 @@ export const NotesSheet = () => {
             </Button>
           </div>
 
-          {store.notes.length > 0 && (
+          {filteredNotes.length > 0 && (
             <div className="mt-6">
               <h3 className="text-sm font-medium mb-2">Previous Notes</h3>
               <div className="space-y-2">
-                {store.notes.map((note) => (
+                {filteredNotes.map((note) => (
                   <div
                     key={note.id}
                     onClick={() => handleNoteSelect(note.id)}

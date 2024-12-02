@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useStore } from "../store/useStore";
-import { useNavigate } from "react-router-dom";
-import { X, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { FormNavigation } from "../components/FormNavigation";
 import { ProjectModal } from "../components/modals/ProjectModal";
 import { ContextModal } from "../components/modals/ContextModal";
@@ -15,7 +14,6 @@ const Settings = () => {
   const [newProjectColor, setNewProjectColor] = useState("#8B5CF6");
   const [newContextName, setNewContextName] = useState("");
   const [newContextColor, setNewContextColor] = useState("#D946EF");
-  const navigate = useNavigate();
   const store = useStore();
 
   const sortedProjects = [...store.projects].sort((a, b) => 
@@ -71,11 +69,8 @@ const Settings = () => {
       <div className="max-w-4xl mx-auto space-y-8">
         <FormNavigation />
         
-        <div className="flex justify-between items-center">
+        <div className="flex justify-center items-center">
           <h1 className="text-4xl font-bold text-gray-900">Settings</h1>
-          <Button variant="outline" onClick={() => navigate("/")}>
-            Back to Tasks
-          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

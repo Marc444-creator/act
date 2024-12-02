@@ -32,14 +32,18 @@ const Index = () => {
 
   // Calculate tasks per context
   const tasksPerContext = store.contexts.reduce((acc, context) => {
-    const count = store.tasks.filter(task => task.contextId === context.id).length;
+    const count = store.tasks.filter(task => 
+      task.contextId === context.id && !task.completed
+    ).length;
     acc[context.id] = count;
     return acc;
   }, {} as Record<string, number>);
 
   // Calculate tasks per project
   const tasksPerProject = store.projects.reduce((acc, project) => {
-    const count = store.tasks.filter(task => task.projectId === project.id).length;
+    const count = store.tasks.filter(task => 
+      task.projectId === project.id && !task.completed
+    ).length;
     acc[project.id] = count;
     return acc;
   }, {} as Record<string, number>);

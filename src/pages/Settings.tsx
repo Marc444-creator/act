@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useStore } from "../store/useStore";
-import { Trash2 } from "lucide-react";
 import { FormNavigation } from "../components/FormNavigation";
 import { ProjectModal } from "../components/modals/ProjectModal";
 import { ContextModal } from "../components/modals/ContextModal";
+import { ProjectSection } from "../components/settings/ProjectSection";
+import { ContextSection } from "../components/settings/ContextSection";
+import { NoteTypeSection } from "../components/settings/NoteTypeSection";
 
 const Settings = () => {
   const [showProjectModal, setShowProjectModal] = useState(false);
@@ -19,18 +20,6 @@ const Settings = () => {
   const [newNoteTypeColor, setNewNoteTypeColor] = useState("#10B981");
   
   const store = useStore();
-
-  const sortedProjects = [...store.projects].sort((a, b) => 
-    a.name.localeCompare(b.name)
-  );
-
-  const sortedContexts = [...store.contexts].sort((a, b) => 
-    a.name.localeCompare(b.name)
-  );
-
-  const sortedNoteTypes = [...store.noteTypes].sort((a, b) => 
-    a.name.localeCompare(b.name)
-  );
 
   const handleAddProject = (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,27 +60,6 @@ const Settings = () => {
     toast.success("Note type added successfully!");
   };
 
-  const handleDeleteProject = (projectId: string) => {
-    if (confirm("Are you sure you want to delete this project? This will remove the project from all associated tasks.")) {
-      store.deleteProject(projectId);
-      toast.success("Project deleted successfully!");
-    }
-  };
-
-  const handleDeleteContext = (contextId: string) => {
-    if (confirm("Are you sure you want to delete this context? This will remove the context from all associated tasks.")) {
-      store.deleteContext(contextId);
-      toast.success("Context deleted successfully!");
-    }
-  };
-
-  const handleDeleteNoteType = (noteTypeId: string) => {
-    if (confirm("Are you sure you want to delete this note type? This will remove the type from all associated notes.")) {
-      store.deleteNoteType(noteTypeId);
-      toast.success("Note type deleted successfully!");
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -102,92 +70,9 @@ const Settings = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">Projects</h2>
-            <Button onClick={() => setShowProjectModal(true)}>Add Project</Button>
-            <div className="space-y-2">
-              {sortedProjects.map((project) => (
-                <div
-                  key={project.id}
-                  className="flex items-center justify-between gap-2 p-2 bg-white rounded-lg shadow group"
-                >
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: project.color }}
-                    />
-                    <span>{project.name}</span>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                    onClick={() => handleDeleteProject(project.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">Contexts</h2>
-            <Button onClick={() => setShowContextModal(true)}>Add Context</Button>
-            <div className="space-y-2">
-              {sortedContexts.map((context) => (
-                <div
-                  key={context.id}
-                  className="flex items-center justify-between gap-2 p-2 bg-white rounded-lg shadow group"
-                >
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: context.color }}
-                    />
-                    <span>{context.name}</span>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                    onClick={() => handleDeleteContext(context.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">Note Types</h2>
-            <Button onClick={() => setShowNoteTypeModal(true)}>Add Note Type</Button>
-            <div className="space-y-2">
-              {sortedNoteTypes.map((noteType) => (
-                <div
-                  key={noteType.id}
-                  className="flex items-center justify-between gap-2 p-2 bg-white rounded-lg shadow group"
-                >
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: noteType.color }}
-                    />
-                    <span>{noteType.name}</span>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                    onClick={() => handleDeleteNoteType(noteType.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </div>
+          <ProjectSection onAddClick={() => setShowProjectModal(true)} />
+          <ContextSection onAddClick={() => setShowContextModal(true)} />
+          <NoteTypeSection onAddClick={() => setShowNoteTypeModal(true)} />
         </div>
 
         {showProjectModal && (

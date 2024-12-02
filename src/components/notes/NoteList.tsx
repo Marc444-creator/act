@@ -21,11 +21,8 @@ export const NoteList = ({ notes, onNoteSelect, onDeleteNote }: NoteListProps) =
           onClick={() => onNoteSelect(note.id)}
           className="p-3 border rounded-md cursor-pointer hover:bg-gray-50 relative group"
         >
-          <div className="flex justify-between items-start">
-            <div>
-              <h4 className="font-medium">{note.title}</h4>
-              <p className="text-sm line-clamp-2">{note.content}</p>
-            </div>
+          <div className="flex justify-between items-center">
+            <h4 className="font-medium">{note.title}</h4>
             <div className="flex items-center gap-2">
               {note.noteTypeId && (
                 <div

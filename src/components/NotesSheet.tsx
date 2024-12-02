@@ -15,6 +15,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { toast } from "sonner";
+import { Plus } from "lucide-react";
 
 export const NotesSheet = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +25,7 @@ export const NotesSheet = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [selectedNoteType, setSelectedNoteType] = useState<string | null>(null);
+  const [isCreatingNote, setIsCreatingNote] = useState(false);
   
   const store = useStore();
 
@@ -65,6 +67,7 @@ export const NotesSheet = () => {
     setSelectedProject(null);
     setSelectedNoteType(null);
     setSelectedNote(null);
+    setIsCreatingNote(false);
   };
 
   const handleNoteSelect = (noteId: string) => {
@@ -75,6 +78,7 @@ export const NotesSheet = () => {
       setContent(note.content);
       setSelectedProject(note.projectId);
       setSelectedNoteType(note.noteTypeId);
+      setIsCreatingNote(true);
     }
   };
 
@@ -86,6 +90,11 @@ export const NotesSheet = () => {
         resetForm();
       }
     }
+  };
+
+  const handleNewNote = () => {
+    setIsCreatingNote(true);
+    resetForm();
   };
 
   return (
@@ -104,36 +113,42 @@ export const NotesSheet = () => {
         <div className="flex flex-col h-[calc(100vh-8rem)]">
           <FormNavigation />
           
-          <Input
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search notes by title..."
-            className="mb-4"
-          />
+          <div className="flex justify-between items-center mb-4">
+            <Input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search notes by title..."
+              className="flex-1 mr-2"
+            />
+            <Button onClick={handleNewNote} size="icon">
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
 
           <ScrollArea className="flex-1 -mx-6 px-6">
-            <NoteForm
-              title={title}
-              setTitle={setTitle}
-              content={content}
-              setContent={setContent}
-              selectedProject={selectedProject}
-              setSelectedProject={setSelectedProject}
-              selectedNoteType={selectedNoteType}
-              setSelectedNoteType={setSelectedNoteType}
-              onSave={handleSave}
-              isEditing={!!selectedNote}
-            />
-
-            {filteredNotes.length > 0 && (
-              <div className="mt-6">
-                <h3 className="text-sm font-medium mb-2">Previous Notes</h3>
-                <NoteList
-                  notes={filteredNotes}
-                  onNoteSelect={handleNoteSelect}
-                  onDeleteNote={handleDeleteNote}
-                />
-              </div>
+            {isCreatingNote ? (
+              <NoteForm
+                title={title}
+                setTitle={setTitle}
+                content={content}
+                setContent={setContent}
+                selectedProject={selectedProject}
+                setSelectedProject={setSelectedProject}
+                selectedNoteType={selectedNoteType}
+                setSelectedNoteType={setSelectedNoteType}
+                onSave={handleSave}
+                isEditing={!!selectedNote}
+              />
+            ) : (
+              filteredNotes.length > 0 && (
+                <div>
+                  <NoteList
+                    notes={filteredNotes}
+                    onNoteSelect={handleNoteSelect}
+                    onDeleteNote={handleDeleteNote}
+                  />
+                </div>
+              )
             )}
           </ScrollArea>
         </div>

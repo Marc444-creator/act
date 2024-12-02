@@ -31,30 +31,15 @@ export const NoteForm = ({
 }: NoteFormProps) => {
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <Button
-          variant="outline"
-          onClick={() => {
-            setTitle("");
-            setContent("");
-            setSelectedProject(null);
-            setSelectedNoteType(null);
-          }}
-          className="text-sm"
-        >
-          New Note
-        </Button>
-        
-        <div className="flex gap-2">
-          <NoteTypeSelect
-            selectedNoteType={selectedNoteType}
-            setSelectedNoteType={setSelectedNoteType}
-          />
-          <ProjectSelect
-            selectedProject={selectedProject}
-            setSelectedProject={setSelectedProject}
-          />
-        </div>
+      <div className="flex gap-2">
+        <NoteTypeSelect
+          selectedNoteType={selectedNoteType}
+          setSelectedNoteType={setSelectedNoteType}
+        />
+        <ProjectSelect
+          selectedProject={selectedProject}
+          setSelectedProject={setSelectedProject}
+        />
       </div>
 
       <Input

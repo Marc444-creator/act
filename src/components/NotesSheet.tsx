@@ -103,16 +103,16 @@ export const NotesSheet = () => {
         <Button variant="outline">Notes</Button>
       </SheetTrigger>
       <SheetContent className="w-[400px] sm:w-[540px] overflow-hidden">
-        <SheetHeader className="mb-6">
-          <SheetTitle className="text-2xl font-bold">Notes</SheetTitle>
-          <SheetDescription className="text-muted-foreground">
-            Write down your ideas and link them to projects
-          </SheetDescription>
-        </SheetHeader>
-        
-        <div className="flex flex-col h-[calc(100vh-8rem)]">
+        <div className="flex flex-col h-full">
           <FormNavigation />
           
+          <SheetHeader className="mb-6">
+            <SheetTitle className="text-2xl font-bold">Notes</SheetTitle>
+            <SheetDescription className="text-muted-foreground">
+              Write down your ideas and link them to projects
+            </SheetDescription>
+          </SheetHeader>
+
           <div className="flex justify-between items-center mb-4">
             <Input
               value={searchQuery}

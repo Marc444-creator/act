@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { FormNavigation } from "./FormNavigation";
 import { NoteForm } from "./notes/NoteForm";
 import { NoteList } from "./notes/NoteList";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -92,15 +93,15 @@ export const NotesSheet = () => {
       <SheetTrigger asChild>
         <Button variant="outline">Notes</Button>
       </SheetTrigger>
-      <SheetContent className="w-[400px] sm:w-[540px]">
-        <SheetHeader>
-          <SheetTitle>Notes</SheetTitle>
-          <SheetDescription>
+      <SheetContent className="w-[400px] sm:w-[540px] overflow-hidden">
+        <SheetHeader className="mb-6">
+          <SheetTitle className="text-2xl font-bold">Notes</SheetTitle>
+          <SheetDescription className="text-muted-foreground">
             Write down your ideas and link them to projects
           </SheetDescription>
         </SheetHeader>
         
-        <div className="mt-6 space-y-4">
+        <div className="flex flex-col h-[calc(100vh-8rem)]">
           <FormNavigation />
           
           <Input
@@ -110,29 +111,31 @@ export const NotesSheet = () => {
             className="mb-4"
           />
 
-          <NoteForm
-            title={title}
-            setTitle={setTitle}
-            content={content}
-            setContent={setContent}
-            selectedProject={selectedProject}
-            setSelectedProject={setSelectedProject}
-            selectedNoteType={selectedNoteType}
-            setSelectedNoteType={setSelectedNoteType}
-            onSave={handleSave}
-            isEditing={!!selectedNote}
-          />
+          <ScrollArea className="flex-1 -mx-6 px-6">
+            <NoteForm
+              title={title}
+              setTitle={setTitle}
+              content={content}
+              setContent={setContent}
+              selectedProject={selectedProject}
+              setSelectedProject={setSelectedProject}
+              selectedNoteType={selectedNoteType}
+              setSelectedNoteType={setSelectedNoteType}
+              onSave={handleSave}
+              isEditing={!!selectedNote}
+            />
 
-          {filteredNotes.length > 0 && (
-            <div className="mt-6">
-              <h3 className="text-sm font-medium mb-2">Previous Notes</h3>
-              <NoteList
-                notes={filteredNotes}
-                onNoteSelect={handleNoteSelect}
-                onDeleteNote={handleDeleteNote}
-              />
-            </div>
-          )}
+            {filteredNotes.length > 0 && (
+              <div className="mt-6">
+                <h3 className="text-sm font-medium mb-2">Previous Notes</h3>
+                <NoteList
+                  notes={filteredNotes}
+                  onNoteSelect={handleNoteSelect}
+                  onDeleteNote={handleDeleteNote}
+                />
+              </div>
+            )}
+          </ScrollArea>
         </div>
       </SheetContent>
     </Sheet>

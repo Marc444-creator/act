@@ -35,10 +35,18 @@ export interface Habit {
   };
 }
 
+export interface NoteType {
+  id: string;
+  name: string;
+  color: string;
+}
+
 export interface Note {
   id: string;
+  title: string;
   content: string;
   projectId: string | null;
+  noteTypeId: string | null;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Task, Project, Context, TaskStatus, Habit, Note } from '../types';
+import { Task, Project, Context, TaskStatus, Habit, Note, NoteType } from '../types';
 import { persist } from 'zustand/middleware';
 
 interface Store {
@@ -9,6 +9,7 @@ interface Store {
   statuses: TaskStatus[];
   habits: Habit[];
   notes: Note[];
+  noteTypes: NoteType[];
   addTask: (task: Omit<Task, 'id' | 'createdAt'>) => void;
   addProject: (project: Omit<Project, 'id'>) => void;
   addContext: (context: Omit<Context, 'id'>) => void;
@@ -27,8 +28,10 @@ interface Store {
   deleteHabit: (id: string) => void;
   toggleHabitDay: (habitId: string, date: string) => void;
   addNote: (note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  updateNote: (id: string, content: string) => void;
+  updateNote: (id: string, content: string, title: string, noteTypeId: string | null) => void;
   deleteNote: (id: string) => void;
+  addNoteType: (noteType: Omit<NoteType, 'id'>) => void;
+  deleteNoteType: (id: string) => void;
 }
 
 export const useStore = create<Store>()(
@@ -39,6 +42,7 @@ export const useStore = create<Store>()(
       contexts: [],
       habits: [],
       notes: [],
+      noteTypes: [],
       statuses: [
         { id: 'not-started', name: 'Not Started', color: '#64748b' },
         { id: 'in-progress', name: 'In Progress', color: '#3b82f6' },
@@ -158,17 +162,28 @@ export const useStore = create<Store>()(
             },
           ],
         })),
-      updateNote: (id, content) =>
+      updateNote: (id, content, title, noteTypeId) =>
         set((state) => ({
           notes: state.notes.map((note) =>
             note.id === id
-              ? { ...note, content, updatedAt: new Date() }
+              ? { ...note, content, title, noteTypeId, updatedAt: new Date() }
               : note
           ),
         })),
       deleteNote: (id) =>
         set((state) => ({
           notes: state.notes.filter((note) => note.id !== id),
+        })),
+      addNoteType: (noteType) =>
+        set((state) => ({
+          noteTypes: [...state.noteTypes, { ...noteType, id: crypto.randomUUID() }],
+        })),
+      deleteNoteType: (id) =>
+        set((state) => ({
+          noteTypes: state.noteTypes.filter((noteType) => noteType.id !== id),
+          notes: state.notes.map((note) =>
+            note.noteTypeId === id ? { ...note, noteTypeId: null } : note
+          ),
         })),
     }),
     {

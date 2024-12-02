@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useStore } from "../store/useStore";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Trash2 } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -23,31 +25,46 @@ import { toast } from "sonner";
 export const NotesSheet = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<string | null>(null);
+  const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
+  const [selectedNoteType, setSelectedNoteType] = useState<string | null>(null);
   
   const store = useStore();
 
   const handleSave = () => {
+    if (!title.trim()) {
+      toast.error("Please enter a title");
+      return;
+    }
+
     if (!content.trim()) {
       toast.error("Please enter some content");
       return;
     }
 
     if (selectedNote) {
-      store.updateNote(selectedNote, content);
+      store.updateNote(selectedNote, content, title, selectedNoteType);
       toast.success("Note updated successfully!");
     } else {
       store.addNote({
+        title,
         content,
         projectId: selectedProject,
+        noteTypeId: selectedNoteType,
       });
       toast.success("Note added successfully!");
     }
     
     setIsOpen(false);
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setTitle("");
     setContent("");
     setSelectedProject(null);
+    setSelectedNoteType(null);
     setSelectedNote(null);
   };
 
@@ -55,15 +72,25 @@ export const NotesSheet = () => {
     const note = store.notes.find((n) => n.id === noteId);
     if (note) {
       setSelectedNote(note.id);
+      setTitle(note.title);
       setContent(note.content);
       setSelectedProject(note.projectId);
+      setSelectedNoteType(note.noteTypeId);
     }
   };
 
   const handleNewNote = () => {
-    setSelectedNote(null);
-    setContent("");
-    setSelectedProject(null);
+    resetForm();
+  };
+
+  const handleDeleteNote = (noteId: string) => {
+    if (confirm("Are you sure you want to delete this note?")) {
+      store.deleteNote(noteId);
+      toast.success("Note deleted successfully!");
+      if (selectedNote === noteId) {
+        resetForm();
+      }
+    }
   };
 
   return (
@@ -89,31 +116,65 @@ export const NotesSheet = () => {
               New Note
             </Button>
             
-            <Select
-              value={selectedProject || "none"}
-              onValueChange={(value) =>
-                setSelectedProject(value === "none" ? null : value)
-              }
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select Project" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">No Project</SelectItem>
-                {store.projects.map((project) => (
-                  <SelectItem key={project.id} value={project.id}>
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-2 h-2 rounded-full"
-                        style={{ backgroundColor: project.color }}
-                      />
-                      {project.name}
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex gap-2">
+              <Select
+                value={selectedNoteType || "none"}
+                onValueChange={(value) =>
+                  setSelectedNoteType(value === "none" ? null : value)
+                }
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select Note Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">No Type</SelectItem>
+                  {store.noteTypes.map((type) => (
+                    <SelectItem key={type.id} value={type.id}>
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-2 h-2 rounded-full"
+                          style={{ backgroundColor: type.color }}
+                        />
+                        {type.name}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={selectedProject || "none"}
+                onValueChange={(value) =>
+                  setSelectedProject(value === "none" ? null : value)
+                }
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select Project" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">No Project</SelectItem>
+                  {store.projects.map((project) => (
+                    <SelectItem key={project.id} value={project.id}>
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-2 h-2 rounded-full"
+                          style={{ backgroundColor: project.color }}
+                        />
+                        {project.name}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+
+          <Input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Note title..."
+            className="mb-2"
+          />
 
           <Textarea
             value={content}
@@ -122,13 +183,7 @@ export const NotesSheet = () => {
             className="min-h-[200px]"
           />
 
-          <div className="flex justify-end gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setIsOpen(false)}
-            >
-              Cancel
-            </Button>
+          <div className="flex justify-end">
             <Button onClick={handleSave}>
               {selectedNote ? "Update" : "Save"}
             </Button>
@@ -142,24 +197,50 @@ export const NotesSheet = () => {
                   <div
                     key={note.id}
                     onClick={() => handleNoteSelect(note.id)}
-                    className="p-3 border rounded-md cursor-pointer hover:bg-gray-50"
+                    className="p-3 border rounded-md cursor-pointer hover:bg-gray-50 relative group"
                   >
                     <div className="flex justify-between items-start">
-                      <p className="text-sm line-clamp-2">{note.content}</p>
-                      {note.projectId && (
-                        <div
-                          className="w-2 h-2 rounded-full flex-shrink-0 mt-1"
-                          style={{
-                            backgroundColor:
-                              store.projects.find((p) => p.id === note.projectId)
-                                ?.color,
-                          }}
-                        />
-                      )}
+                      <div>
+                        <h4 className="font-medium">{note.title}</h4>
+                        <p className="text-sm line-clamp-2">{note.content}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {note.noteTypeId && (
+                          <div
+                            className="w-2 h-2 rounded-full flex-shrink-0"
+                            style={{
+                              backgroundColor:
+                                store.noteTypes.find((t) => t.id === note.noteTypeId)
+                                  ?.color,
+                            }}
+                          />
+                        )}
+                        {note.projectId && (
+                          <div
+                            className="w-2 h-2 rounded-full flex-shrink-0"
+                            style={{
+                              backgroundColor:
+                                store.projects.find((p) => p.id === note.projectId)
+                                  ?.color,
+                            }}
+                          />
+                        )}
+                      </div>
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
                       {format(new Date(note.updatedAt), "PPp")}
                     </p>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteNote(note.id);
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </Button>
                   </div>
                 ))}
               </div>

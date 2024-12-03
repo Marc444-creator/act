@@ -1,6 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { NotesSheet } from "./NotesSheet";
 
 export const FormNavigation = () => {
   const navigate = useNavigate();
@@ -32,7 +31,6 @@ export const FormNavigation = () => {
           Settings
         </Button>
       )}
-      {!location.pathname.includes("notes") && <NotesSheet />}
     </div>
   );
 };

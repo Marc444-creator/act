@@ -35,12 +35,6 @@ export const FormNavigation = () => {
             Settings
           </Button>
         )}
-        <Button
-          variant="outline"
-          onClick={() => setIsNotesOpen(true)}
-        >
-          Notes
-        </Button>
       </div>
       <NotesSheet isOpen={isNotesOpen} onClose={() => setIsNotesOpen(false)} />
     </>

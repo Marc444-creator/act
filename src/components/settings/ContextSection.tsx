@@ -22,7 +22,6 @@ export const ContextSection = ({ onAddClick }: ContextSectionProps) => {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Contexts</h2>
       <Button onClick={onAddClick}>Add Context</Button>
       <div className="space-y-2">
         {sortedContexts.map((context) => (

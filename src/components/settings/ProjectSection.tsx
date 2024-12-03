@@ -22,7 +22,6 @@ export const ProjectSection = ({ onAddClick }: ProjectSectionProps) => {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Projects</h2>
       <Button onClick={onAddClick}>Add Project</Button>
       <div className="space-y-2">
         {sortedProjects.map((project) => (

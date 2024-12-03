@@ -22,7 +22,6 @@ export const NoteTypeSection = ({ onAddClick }: NoteTypeSectionProps) => {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Note Types</h2>
       <Button onClick={onAddClick}>Add Note Type</Button>
       <div className="space-y-2">
         {sortedNoteTypes.map((noteType) => (

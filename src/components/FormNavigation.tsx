@@ -11,7 +11,15 @@ export const FormNavigation = () => {
   return (
     <>
       <div className="flex justify-center gap-4 mb-6">
-        {location.pathname !== "/" && (
+        {location.pathname !== "/" && !isNotesOpen && (
+          <Button 
+            variant="outline"
+            onClick={() => navigate("/")}
+          >
+            Tasks
+          </Button>
+        )}
+        {isNotesOpen && (
           <Button 
             variant="outline"
             onClick={() => navigate("/")}
@@ -33,6 +41,14 @@ export const FormNavigation = () => {
             onClick={() => navigate("/settings")}
           >
             Settings
+          </Button>
+        )}
+        {!isNotesOpen && (
+          <Button
+            variant="outline"
+            onClick={() => setIsNotesOpen(true)}
+          >
+            Notes
           </Button>
         )}
       </div>

@@ -19,6 +19,7 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedNoteType, setSelectedNoteType] = useState<string | null>(null);
+  const [filterNoteType, setFilterNoteType] = useState<string | null>(null);
   
   const store = useStore();
 
@@ -58,6 +59,10 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
       setSelectedNoteType(note.noteTypeId);
     }
   };
+
+  const filteredNotes = store.notes.filter(
+    (note) => !filterNoteType || note.noteTypeId === filterNoteType
+  );
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
@@ -110,8 +115,32 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
           </form>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Your Notes</h3>
-            {store.notes.map((note) => (
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Your Notes</h3>
+              <Select
+                value={filterNoteType || "all"}
+                onValueChange={(value) => setFilterNoteType(value === "all" ? null : value)}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Filter by type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All types</SelectItem>
+                  {store.noteTypes.map((type) => (
+                    <SelectItem key={type.id} value={type.id}>
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-2 h-2 rounded-full"
+                          style={{ backgroundColor: type.color }}
+                        />
+                        <span>{type.name}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {filteredNotes.map((note) => (
               <div
                 key={note.id}
                 onClick={() => handleNoteSelect(note.id)}
@@ -130,7 +159,6 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
                   )}
                   <h4 className="font-medium">{note.title}</h4>
                 </div>
-                <p className="text-sm text-gray-600 mt-2 line-clamp-2">{note.content}</p>
               </div>
             ))}
           </div>

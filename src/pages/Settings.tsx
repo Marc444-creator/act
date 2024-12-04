@@ -7,11 +7,16 @@ import { ContextModal } from "../components/modals/ContextModal";
 import { ProjectSection } from "../components/settings/ProjectSection";
 import { ContextSection } from "../components/settings/ContextSection";
 import { NoteTypeSection } from "../components/settings/NoteTypeSection";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Settings = () => {
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showContextModal, setShowContextModal] = useState(false);
   const [showNoteTypeModal, setShowNoteTypeModal] = useState(false);
+  const [showProjects, setShowProjects] = useState(false);
+  const [showContexts, setShowContexts] = useState(false);
+  const [showNoteTypes, setShowNoteTypes] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
   const [newProjectColor, setNewProjectColor] = useState("#8B5CF6");
   const [newContextName, setNewContextName] = useState("");
@@ -70,9 +75,47 @@ const Settings = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <ProjectSection onAddClick={() => setShowProjectModal(true)} />
-          <ContextSection onAddClick={() => setShowContextModal(true)} />
-          <NoteTypeSection onAddClick={() => setShowNoteTypeModal(true)} />
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Projects</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowProjects(!showProjects)}
+              >
+                {showProjects ? <ChevronUp /> : <ChevronDown />}
+              </Button>
+            </div>
+            {showProjects && <ProjectSection onAddClick={() => setShowProjectModal(true)} />}
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Contexts</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowContexts(!showContexts)}
+              >
+                {showContexts ? <ChevronUp /> : <ChevronDown />}
+              </Button>
+            </div>
+            {showContexts && <ContextSection onAddClick={() => setShowContextModal(true)} />}
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Note Types</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowNoteTypes(!showNoteTypes)}
+              >
+                {showNoteTypes ? <ChevronUp /> : <ChevronDown />}
+              </Button>
+            </div>
+            {showNoteTypes && <NoteTypeSection onAddClick={() => setShowNoteTypeModal(true)} />}
+          </div>
         </div>
 
         {showProjectModal && (

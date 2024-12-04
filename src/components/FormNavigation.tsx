@@ -35,7 +35,7 @@ export const FormNavigation = () => {
             Habits
           </Button>
         )}
-        {location.pathname !== "/settings" && (
+        {!isNotesOpen && location.pathname !== "/settings" && (
           <Button 
             variant="outline"
             onClick={() => navigate("/settings")}
@@ -49,6 +49,14 @@ export const FormNavigation = () => {
             onClick={() => setIsNotesOpen(true)}
           >
             Notes
+          </Button>
+        )}
+        {isNotesOpen && (
+          <Button 
+            variant="outline"
+            onClick={() => navigate("/settings")}
+          >
+            Settings
           </Button>
         )}
       </div>

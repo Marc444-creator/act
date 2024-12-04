@@ -11,53 +11,60 @@ export const FormNavigation = () => {
   return (
     <>
       <div className="flex justify-center gap-4 mb-6">
-        {location.pathname !== "/" && !isNotesOpen && (
-          <Button 
-            variant="outline"
-            onClick={() => navigate("/")}
-          >
-            Tasks
-          </Button>
-        )}
-        {isNotesOpen && (
-          <Button 
-            variant="outline"
-            onClick={() => navigate("/")}
-          >
-            Tasks
-          </Button>
-        )}
-        {location.pathname !== "/habits" && (
-          <Button 
-            variant="outline"
-            onClick={() => navigate("/habits")}
-          >
-            Habits
-          </Button>
-        )}
-        {!isNotesOpen && location.pathname !== "/settings" && (
-          <Button 
-            variant="outline"
-            onClick={() => navigate("/settings")}
-          >
-            Settings
-          </Button>
-        )}
-        {!isNotesOpen && (
-          <Button
-            variant="outline"
-            onClick={() => setIsNotesOpen(true)}
-          >
-            Notes
-          </Button>
-        )}
-        {isNotesOpen && (
-          <Button 
-            variant="outline"
-            onClick={() => navigate("/settings")}
-          >
-            Settings
-          </Button>
+        {isNotesOpen ? (
+          <>
+            <Button 
+              variant="outline"
+              onClick={() => navigate("/habits")}
+            >
+              Habits
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => navigate("/settings")}
+            >
+              Settings
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => navigate("/")}
+            >
+              Tasks
+            </Button>
+          </>
+        ) : (
+          <>
+            {location.pathname !== "/" && (
+              <Button 
+                variant="outline"
+                onClick={() => navigate("/")}
+              >
+                Tasks
+              </Button>
+            )}
+            {location.pathname !== "/habits" && (
+              <Button 
+                variant="outline"
+                onClick={() => navigate("/habits")}
+              >
+                Habits
+              </Button>
+            )}
+            {location.pathname !== "/settings" && (
+              <Button 
+                variant="outline"
+                onClick={() => navigate("/settings")}
+              >
+                Settings
+              </Button>
+            )}
+            <Button
+              variant="outline"
+              onClick={() => setIsNotesOpen(true)}
+            >
+              Notes
+            </Button>
+          </>
         )}
       </div>
       <NotesSheet isOpen={isNotesOpen} onClose={() => setIsNotesOpen(false)} />

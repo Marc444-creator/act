@@ -7,7 +7,7 @@ import { ContextModal } from "../components/modals/ContextModal";
 import { ProjectSection } from "../components/settings/ProjectSection";
 import { ContextSection } from "../components/settings/ContextSection";
 import { NoteTypeSection } from "../components/settings/NoteTypeSection";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Settings = () => {
@@ -76,43 +76,76 @@ const Settings = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2 bg-white p-3 rounded-lg shadow">
               <h2 className="text-xl font-semibold">Projects</h2>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowProjects(!showProjects)}
-              >
-                {showProjects ? <ChevronUp /> : <ChevronDown />}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowProjectModal(true)}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  <Plus className="h-5 w-5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowProjects(!showProjects)}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  {showProjects ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                </Button>
+              </div>
             </div>
             {showProjects && <ProjectSection onAddClick={() => setShowProjectModal(true)} />}
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2 bg-white p-3 rounded-lg shadow">
               <h2 className="text-xl font-semibold">Contexts</h2>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowContexts(!showContexts)}
-              >
-                {showContexts ? <ChevronUp /> : <ChevronDown />}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowContextModal(true)}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  <Plus className="h-5 w-5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowContexts(!showContexts)}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  {showContexts ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                </Button>
+              </div>
             </div>
             {showContexts && <ContextSection onAddClick={() => setShowContextModal(true)} />}
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2 bg-white p-3 rounded-lg shadow">
               <h2 className="text-xl font-semibold">Note Types</h2>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowNoteTypes(!showNoteTypes)}
-              >
-                {showNoteTypes ? <ChevronUp /> : <ChevronDown />}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowNoteTypeModal(true)}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  <Plus className="h-5 w-5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowNoteTypes(!showNoteTypes)}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  {showNoteTypes ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                </Button>
+              </div>
             </div>
             {showNoteTypes && <NoteTypeSection onAddClick={() => setShowNoteTypeModal(true)} />}
           </div>

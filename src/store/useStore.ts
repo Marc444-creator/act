@@ -27,6 +27,7 @@ interface Store {
   addHabit: (habit: Omit<Habit, 'id'>) => void;
   deleteHabit: (id: string) => void;
   toggleHabitDay: (habitId: string, date: string) => void;
+  updateHabit: (id: string, name: string) => void;
   addNote: (note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateNote: (id: string, content: string, title: string, noteTypeId: string | null) => void;
   deleteNote: (id: string) => void;
@@ -120,14 +121,12 @@ export const useStore = create<Store>()(
             task.id === taskId ? { ...task, deadline } : task
           ),
         })),
-
       updateTaskTitle: (taskId, title) =>
         set((state) => ({
           tasks: state.tasks.map((task) =>
             task.id === taskId ? { ...task, title } : task
           ),
         })),
-
       addHabit: (habit) =>
         set((state) => ({
           habits: [...state.habits, { ...habit, id: crypto.randomUUID() }],
@@ -148,6 +147,12 @@ export const useStore = create<Store>()(
                   },
                 }
               : habit
+          ),
+        })),
+      updateHabit: (id, name) =>
+        set((state) => ({
+          habits: state.habits.map((habit) =>
+            habit.id === id ? { ...habit, name } : habit
           ),
         })),
       addNote: (note) =>

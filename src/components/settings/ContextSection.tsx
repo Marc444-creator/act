@@ -21,32 +21,29 @@ export const ContextSection = ({ onAddClick }: ContextSectionProps) => {
   };
 
   return (
-    <div className="space-y-4">
-      <Button onClick={onAddClick}>Add Context</Button>
-      <div className="space-y-2">
-        {sortedContexts.map((context) => (
-          <div
-            key={context.id}
-            className="flex items-center justify-between gap-2 p-2 bg-white rounded-lg shadow group"
-          >
-            <div className="flex items-center gap-2">
-              <div
-                className="w-4 h-4 rounded-full"
-                style={{ backgroundColor: context.color }}
-              />
-              <span>{context.name}</span>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-red-500 hover:text-red-700 hover:bg-red-50"
-              onClick={() => handleDeleteContext(context.id)}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
+    <div className="space-y-2">
+      {sortedContexts.map((context) => (
+        <div
+          key={context.id}
+          className="flex items-center justify-between gap-2 p-2 bg-white rounded-lg shadow group"
+        >
+          <div className="flex items-center gap-2">
+            <div
+              className="w-4 h-4 rounded-full"
+              style={{ backgroundColor: context.color }}
+            />
+            <span>{context.name}</span>
           </div>
-        ))}
-      </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-red-500 hover:text-red-700 hover:bg-red-50"
+            onClick={() => handleDeleteContext(context.id)}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ))}
     </div>
   );
 };

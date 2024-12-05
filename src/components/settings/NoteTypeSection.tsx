@@ -21,32 +21,29 @@ export const NoteTypeSection = ({ onAddClick }: NoteTypeSectionProps) => {
   };
 
   return (
-    <div className="space-y-4">
-      <Button onClick={onAddClick}>Add Note Type</Button>
-      <div className="space-y-2">
-        {sortedNoteTypes.map((noteType) => (
-          <div
-            key={noteType.id}
-            className="flex items-center justify-between gap-2 p-2 bg-white rounded-lg shadow group"
-          >
-            <div className="flex items-center gap-2">
-              <div
-                className="w-4 h-4 rounded-full"
-                style={{ backgroundColor: noteType.color }}
-              />
-              <span>{noteType.name}</span>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-red-500 hover:text-red-700 hover:bg-red-50"
-              onClick={() => handleDeleteNoteType(noteType.id)}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
+    <div className="space-y-2">
+      {sortedNoteTypes.map((noteType) => (
+        <div
+          key={noteType.id}
+          className="flex items-center justify-between gap-2 p-2 bg-white rounded-lg shadow group"
+        >
+          <div className="flex items-center gap-2">
+            <div
+              className="w-4 h-4 rounded-full"
+              style={{ backgroundColor: noteType.color }}
+            />
+            <span>{noteType.name}</span>
           </div>
-        ))}
-      </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-red-500 hover:text-red-700 hover:bg-red-50"
+            onClick={() => handleDeleteNoteType(noteType.id)}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ))}
     </div>
   );
 };

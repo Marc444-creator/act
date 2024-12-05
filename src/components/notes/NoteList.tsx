@@ -94,10 +94,10 @@ export const NoteList = ({ onNoteSelect }: NoteListProps) => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                className="text-destructive hover:text-destructive/90"
                 onClick={(e) => handleDeleteNote(note.id, e)}
               >
-                <Trash2 className="h-4 w-4 text-destructive" />
+                <Trash2 className="h-4 w-4" />
               </Button>
             </div>
           </div>

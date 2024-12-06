@@ -58,6 +58,14 @@ export const FormNavigation = () => {
                 Settings
               </Button>
             )}
+            {location.pathname !== "/for-later" && (
+              <Button 
+                variant="outline"
+                onClick={() => navigate("/for-later")}
+              >
+                For Later
+              </Button>
+            )}
             <Button
               variant="outline"
               onClick={() => setIsNotesOpen(true)}

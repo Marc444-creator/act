@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Plus, Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
@@ -8,6 +7,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -17,130 +19,94 @@ import {
 } from "@/components/ui/select";
 import { useStore } from "../store/useStore";
 import { toast } from "sonner";
-import { format } from "date-fns";
-
-const TaskFormSelects = ({
-  selectedProject,
-  setSelectedProject,
-  selectedContext,
-  setSelectedContext,
-  deadline,
-  setDeadline,
-  store
-}) => {
-  return (
-    <div className="flex gap-2 items-center">
-      <Select
-        value={selectedProject || "none"}
-        onValueChange={(value) => setSelectedProject(value === "none" ? null : value)}
-      >
-        <SelectTrigger className="text-xs w-[140px] border-blue-300 focus:border-blue-500">
-          <SelectValue placeholder="Project" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="none" className="text-[11px]">Projects</SelectItem>
-          {store.projects.map((project) => (
-            <SelectItem key={project.id} value={project.id}>
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: project.color }}
-                />
-                <span className="text-xs">{project.name}</span>
-              </div>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select
-        value={selectedContext || "none"}
-        onValueChange={(value) => setSelectedContext(value === "none" ? null : value)}
-      >
-        <SelectTrigger className="text-xs w-[140px] border-blue-300 focus:border-blue-500">
-          <SelectValue placeholder="Context" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="none" className="text-[11px]">Contexts</SelectItem>
-          {store.contexts.map((context) => (
-            <SelectItem key={context.id} value={context.id}>
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: context.color }}
-                />
-                <span className="text-xs">{context.name}</span>
-              </div>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="outline" className="text-xs w-[140px] border-blue-300 hover:bg-blue-100">
-            {deadline ? format(deadline, 'PP') : <span>Deadline</span>}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0">
-          <Calendar
-            mode="single"
-            selected={deadline}
-            onSelect={setDeadline}
-            initialFocus
-          />
-        </PopoverContent>
-      </Popover>
-    </div>
-  );
-};
 
 export const TaskForm = () => {
-  const [newTask, setNewTask] = useState("");
-  const [selectedProject, setSelectedProject] = useState<string | null>(null);
-  const [selectedContext, setSelectedContext] = useState<string | null>(null);
+  const [title, setTitle] = useState("");
+  const [projectId, setProjectId] = useState<string | null>(null);
+  const [contextId, setContextId] = useState<string | null>(null);
   const [deadline, setDeadline] = useState<Date | null>(null);
-
   const store = useStore();
 
-  const handleAddTask = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTask.trim()) return;
+    if (!title.trim()) return;
 
     store.addTask({
-      title: newTask,
-      projectId: selectedProject,
-      contextId: selectedContext,
+      title: title.trim(),
+      projectId: projectId || null,
+      contextId: contextId || null,
       status: "not-started",
       completed: false,
-      deadline,
+      deadline: deadline,
+      isForLater: false
     });
-    setNewTask("");
+
+    setTitle("");
+    setProjectId(null);
+    setContextId(null);
     setDeadline(null);
     toast.success("Task added successfully!");
   };
 
   return (
-    <form onSubmit={handleAddTask} className="flex flex-col gap-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
-      <div className="flex gap-2">
-        <Button type="submit" size="icon" className="h-10 w-10 shrink-0 bg-blue-500 hover:bg-blue-600">
-          <Plus className="h-4 w-4" />
-        </Button>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="flex flex-col gap-4 md:flex-row">
         <Input
-          type="text"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          placeholder="Add a new task..."
-          className="flex-1 border-blue-300 focus:border-blue-500"
+          placeholder="Add a task..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="flex-1"
         />
+        <Select value={projectId || "none"} onValueChange={setProjectId}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Project" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">No Project</SelectItem>
+            {store.projects.map((project) => (
+              <SelectItem key={project.id} value={project.id}>
+                {project.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={contextId || "none"} onValueChange={setContextId}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Context" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">No Context</SelectItem>
+            {store.contexts.map((context) => (
+              <SelectItem key={context.id} value={context.id}>
+                {context.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={cn(
+                "w-[180px] justify-start text-left font-normal",
+                !deadline && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {deadline ? format(deadline, "PPP") : <span>Deadline</span>}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={deadline || undefined}
+              onSelect={setDeadline}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+        <Button type="submit">Add Task</Button>
       </div>
-      <TaskFormSelects
-        selectedProject={selectedProject}
-        setSelectedProject={setSelectedProject}
-        selectedContext={selectedContext}
-        setSelectedContext={setSelectedContext}
-        deadline={deadline}
-        setDeadline={setDeadline}
-        store={store}
-      />
     </form>
   );
 };

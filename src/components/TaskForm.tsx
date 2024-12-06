@@ -50,62 +50,64 @@ export const TaskForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="flex flex-col gap-4 md:flex-row">
+      <div className="flex flex-col gap-4 md:flex-row items-center">
+        <Button type="submit" className="w-10 h-10 rounded-full p-0">+</Button>
         <Input
           placeholder="Add a task..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="flex-1"
         />
-        <Select value={projectId || "none"} onValueChange={setProjectId}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Project" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">No Project</SelectItem>
-            {store.projects.map((project) => (
-              <SelectItem key={project.id} value={project.id}>
-                {project.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={contextId || "none"} onValueChange={setContextId}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Context" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">No Context</SelectItem>
-            {store.contexts.map((context) => (
-              <SelectItem key={context.id} value={context.id}>
-                {context.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"outline"}
-              className={cn(
-                "w-[180px] justify-start text-left font-normal",
-                !deadline && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {deadline ? format(deadline, "PPP") : <span>Deadline</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={deadline || undefined}
-              onSelect={setDeadline}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
-        <Button type="submit">Add Task</Button>
+        <div className="flex gap-2 flex-wrap md:flex-nowrap">
+          <Select value={projectId || "none"} onValueChange={setProjectId}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Project" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">No Project</SelectItem>
+              {store.projects.map((project) => (
+                <SelectItem key={project.id} value={project.id}>
+                  {project.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={contextId || "none"} onValueChange={setContextId}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Context" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">No Context</SelectItem>
+              {store.contexts.map((context) => (
+                <SelectItem key={context.id} value={context.id}>
+                  {context.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+                className={cn(
+                  "w-[140px] justify-start text-left font-normal",
+                  !deadline && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {deadline ? format(deadline, "PPP") : <span>Deadline</span>}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={deadline || undefined}
+                onSelect={setDeadline}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
     </form>
   );

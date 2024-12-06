@@ -50,15 +50,17 @@ export const TaskForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="flex flex-col gap-4 md:flex-row items-center">
-        <Button type="submit" className="w-10 h-10 rounded-full p-0">+</Button>
-        <Input
-          placeholder="Add a task..."
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="flex-1"
-        />
-        <div className="flex gap-2 flex-wrap md:flex-nowrap">
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-2 w-full">
+          <Button type="submit" className="w-10 h-10 rounded-full p-0 shrink-0">+</Button>
+          <Input
+            placeholder="Add a task..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="flex-1"
+          />
+        </div>
+        <div className="flex gap-2 flex-wrap justify-start w-full">
           <Select value={projectId || "none"} onValueChange={setProjectId}>
             <SelectTrigger className="w-[140px]">
               <SelectValue placeholder="Project" />

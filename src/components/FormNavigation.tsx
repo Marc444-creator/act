@@ -31,6 +31,12 @@ export const FormNavigation = () => {
             >
               Tasks
             </Button>
+            <Button 
+              variant="outline"
+              onClick={() => navigate("/for-later")}
+            >
+              For Later
+            </Button>
           </>
         ) : (
           <>

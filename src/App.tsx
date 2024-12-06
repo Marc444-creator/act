@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Settings from "./pages/Settings";
 import Habits from "./pages/Habits";
+import ForLater from "./pages/ForLater";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/habits" element={<Habits />} />
+          <Route path="/for-later" element={<ForLater />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

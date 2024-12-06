@@ -24,6 +24,7 @@ interface Store {
   updateTaskStatus: (taskId: string, statusId: string) => void;
   updateTaskDeadline: (taskId: string, deadline: Date | null) => void;
   updateTaskTitle: (taskId: string, title: string) => void;
+  moveTaskToLater: (taskId: string) => void;
   addHabit: (habit: Omit<Habit, 'id'>) => void;
   deleteHabit: (id: string) => void;
   toggleHabitDay: (habitId: string, date: string) => void;
@@ -54,7 +55,7 @@ export const useStore = create<Store>()(
         set((state) => ({
           tasks: [
             ...state.tasks,
-            { ...task, id: crypto.randomUUID(), createdAt: new Date() },
+            { ...task, id: crypto.randomUUID(), createdAt: new Date(), isForLater: false },
           ],
         })),
       addProject: (project) =>
@@ -125,6 +126,12 @@ export const useStore = create<Store>()(
         set((state) => ({
           tasks: state.tasks.map((task) =>
             task.id === taskId ? { ...task, title } : task
+          ),
+        })),
+      moveTaskToLater: (taskId) =>
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === taskId ? { ...task, isForLater: !task.isForLater } : task
           ),
         })),
       addHabit: (habit) =>

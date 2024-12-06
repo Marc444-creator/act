@@ -1,4 +1,4 @@
-import { Check, Calendar as CalendarIcon, X } from "lucide-react";
+import { Check, Calendar as CalendarIcon, X, SendHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useStore } from "../store/useStore";
@@ -12,13 +12,15 @@ interface TaskListProps {
   filterContext: string | null;
   filterStatus: string | null;
   showCompleted: boolean;
+  isForLater?: boolean;
 }
 
 export const TaskList = ({ 
   filterProject, 
   filterContext, 
   filterStatus,
-  showCompleted 
+  showCompleted,
+  isForLater = false
 }: TaskListProps) => {
   const store = useStore();
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
@@ -38,13 +40,19 @@ export const TaskList = ({
     setEditedTitle("");
   };
 
+  const handleMoveToLater = (taskId: string) => {
+    store.moveTaskToLater(taskId);
+    toast.success("Task moved successfully!");
+  };
+
   const filteredTasks = store.tasks.filter((task) => {
     const matchesProject = !filterProject || task.projectId === filterProject;
     const matchesContext = !filterContext || task.contextId === filterContext;
     const matchesStatus = !filterStatus || task.status === filterStatus;
     const matchesCompleted = showCompleted || !task.completed;
+    const matchesForLater = task.isForLater === isForLater;
 
-    return matchesProject && matchesContext && matchesStatus && matchesCompleted;
+    return matchesProject && matchesContext && matchesStatus && matchesCompleted && matchesForLater;
   });
 
   return (
@@ -65,6 +73,14 @@ export const TaskList = ({
               ) : (
                 <X className="w-4 h-4" />
               )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => handleMoveToLater(task.id)}
+              className="hover:bg-gray-100"
+            >
+              <SendHorizontal className="w-4 h-4 text-blue-500" />
             </Button>
             {editingTaskId === task.id ? (
               <form 

@@ -7,6 +7,7 @@ export interface Task {
   createdAt: Date;
   status: string;
   deadline: Date | null;
+  isForLater: boolean;
 }
 
 export interface Project {

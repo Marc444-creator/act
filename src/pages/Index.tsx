@@ -22,13 +22,15 @@ const Index = () => {
   const navigate = useNavigate();
   const store = useStore();
 
-  // Sort projects and contexts alphabetically
-  const sortedProjects = [...store.projects].sort((a, b) => 
-    a.name.localeCompare(b.name)
-  );
-  const sortedContexts = [...store.contexts].sort((a, b) => 
-    a.name.localeCompare(b.name)
-  );
+  // Get only projects that have tasks assigned
+  const projectsWithTasks = store.projects.filter(project =>
+    store.tasks.some(task => task.projectId === project.id)
+  ).sort((a, b) => a.name.localeCompare(b.name));
+
+  // Get only contexts that have tasks assigned
+  const contextsWithTasks = store.contexts.filter(context =>
+    store.tasks.some(task => task.contextId === context.id)
+  ).sort((a, b) => a.name.localeCompare(b.name));
 
   // Calculate tasks per context
   const tasksPerContext = store.contexts.reduce((acc, context) => {
@@ -116,7 +118,7 @@ const Index = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Projects</SelectItem>
-              {sortedProjects.map((project) => (
+              {projectsWithTasks.map((project) => (
                 <SelectItem key={project.id} value={project.id}>
                   <div className="flex items-center gap-2 text-xs">
                     <div
@@ -140,7 +142,7 @@ const Index = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Contexts</SelectItem>
-              {sortedContexts.map((context) => (
+              {contextsWithTasks.map((context) => (
                 <SelectItem key={context.id} value={context.id}>
                   <div className="flex items-center gap-2 text-xs">
                     <div

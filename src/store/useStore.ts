@@ -34,6 +34,7 @@ interface Store {
   deleteNote: (id: string) => void;
   addNoteType: (noteType: Omit<NoteType, 'id'>) => void;
   deleteNoteType: (id: string) => void;
+  updateTask: (id: string, updates: Partial<Task>) => void;
 }
 
 export const useStore = create<Store>()(
@@ -195,6 +196,12 @@ export const useStore = create<Store>()(
           noteTypes: state.noteTypes.filter((noteType) => noteType.id !== id),
           notes: state.notes.map((note) =>
             note.noteTypeId === id ? { ...note, noteTypeId: null } : note
+          ),
+        })),
+      updateTask: (id, updates) =>
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === id ? { ...task, ...updates } : task
           ),
         })),
     }),

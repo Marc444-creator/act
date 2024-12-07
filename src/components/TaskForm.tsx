@@ -60,7 +60,7 @@ export const TaskForm = () => {
             className="flex-1"
           />
         </div>
-        <div className="flex gap-2 flex-wrap justify-start w-full">
+        <div className="flex gap-2 items-center">
           <Select value={projectId || "none"} onValueChange={setProjectId}>
             <SelectTrigger className="w-[140px]">
               <SelectValue placeholder="Project" />
@@ -92,12 +92,11 @@ export const TaskForm = () => {
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-[140px] justify-start text-left font-normal",
+                  "w-[40px] p-0",
                   !deadline && "text-muted-foreground"
                 )}
               >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {deadline ? format(deadline, "PPP") : <span>Deadline</span>}
+                <CalendarIcon className="h-4 w-4" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">

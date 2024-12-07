@@ -6,6 +6,20 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
 
 interface TaskListProps {
   filterProject: string | null;
@@ -27,19 +41,33 @@ export const TaskList = ({
   const store = useStore();
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [editedTitle, setEditedTitle] = useState("");
+  const [editedProjectId, setEditedProjectId] = useState<string | null>(null);
+  const [editedContextId, setEditedContextId] = useState<string | null>(null);
+  const [editedDeadline, setEditedDeadline] = useState<Date | null>(null);
 
-  const handleTaskClick = (taskId: string, currentTitle: string) => {
-    setEditingTaskId(taskId);
-    setEditedTitle(currentTitle);
+  const handleTaskClick = (task: Task) => {
+    setEditingTaskId(task.id);
+    setEditedTitle(task.title);
+    setEditedProjectId(task.projectId);
+    setEditedContextId(task.contextId);
+    setEditedDeadline(task.deadline);
   };
 
   const handleEditSubmit = (taskId: string) => {
     if (editedTitle.trim()) {
-      store.updateTaskTitle(taskId, editedTitle.trim());
+      store.updateTask(taskId, {
+        title: editedTitle.trim(),
+        projectId: editedProjectId,
+        contextId: editedContextId,
+        deadline: editedDeadline,
+      });
       toast.success("Task updated successfully!");
     }
     setEditingTaskId(null);
     setEditedTitle("");
+    setEditedProjectId(null);
+    setEditedContextId(null);
+    setEditedDeadline(null);
   };
 
   const handleMoveToLater = (taskId: string) => {
@@ -57,7 +85,6 @@ export const TaskList = ({
     return matchesProject && matchesContext && matchesStatus && matchesCompleted && matchesForLater;
   });
 
-  // Sort tasks by deadline if they have one
   if (isForLater && sortOrder) {
     filteredTasks.sort((a, b) => {
       if (!a.deadline && !b.deadline) return 0;
@@ -97,26 +124,68 @@ export const TaskList = ({
               <SendHorizontal className="w-4 h-4 text-blue-500" />
             </Button>
             {editingTaskId === task.id ? (
-              <form 
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleEditSubmit(task.id);
-                }}
-                className="flex-1"
-              >
+              <div className="flex-1 flex gap-2 items-center">
                 <Input
                   value={editedTitle}
                   onChange={(e) => setEditedTitle(e.target.value)}
                   onBlur={() => handleEditSubmit(task.id)}
                   autoFocus
+                  className="flex-1"
                 />
-              </form>
+                <Select value={editedProjectId || "none"} onValueChange={setEditedProjectId}>
+                  <SelectTrigger className="w-[140px]">
+                    <SelectValue placeholder="Project" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">No Project</SelectItem>
+                    {store.projects.map((project) => (
+                      <SelectItem key={project.id} value={project.id}>
+                        {project.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={editedContextId || "none"} onValueChange={setEditedContextId}>
+                  <SelectTrigger className="w-[140px]">
+                    <SelectValue placeholder="Context" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">No Context</SelectItem>
+                    {store.contexts.map((context) => (
+                      <SelectItem key={context.id} value={context.id}>
+                        {context.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[40px] p-0",
+                        !editedDeadline && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="h-4 w-4" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={editedDeadline || undefined}
+                      onSelect={setEditedDeadline}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
             ) : (
               <span
                 className={`flex-1 cursor-pointer ${
                   task.completed ? "line-through text-gray-400" : ""
                 }`}
-                onClick={() => handleTaskClick(task.id, task.title)}
+                onClick={() => handleTaskClick(task)}
               >
                 {task.title}
               </span>

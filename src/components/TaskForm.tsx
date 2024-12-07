@@ -49,7 +49,7 @@ export const TaskForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 bg-blue-50 p-4 rounded-lg">
       <div className="flex flex-col gap-4">
         <div className="flex gap-2 w-full">
           <Button type="submit" className="w-10 h-10 rounded-full p-0 shrink-0">+</Button>

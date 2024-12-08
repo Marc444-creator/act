@@ -32,7 +32,7 @@ const Index = () => {
     store.tasks.some(task => task.contextId === context.id)
   ).sort((a, b) => a.name.localeCompare(b.name));
 
-  // Calculate tasks per context
+  // Calculate incomplete tasks per context
   const tasksPerContext = store.contexts.reduce((acc, context) => {
     const count = store.tasks.filter(task => 
       task.contextId === context.id && !task.completed
@@ -41,7 +41,7 @@ const Index = () => {
     return acc;
   }, {} as Record<string, number>);
 
-  // Calculate tasks per project
+  // Calculate incomplete tasks per project
   const tasksPerProject = store.projects.reduce((acc, project) => {
     const count = store.tasks.filter(task => 
       task.projectId === project.id && !task.completed
@@ -50,17 +50,8 @@ const Index = () => {
     return acc;
   }, {} as Record<string, number>);
 
-  // Get dot color based on task count
-  const getContextDotColor = (contextId: string) => {
-    const count = tasksPerContext[contextId] || 0;
-    if (count === 0) return '#22c55e'; // green
-    if (count === 1) return '#FFD700'; // yellow
-    return '#ef4444'; // red
-  };
-
-  // Get dot color based on project task count
-  const getProjectDotColor = (projectId: string) => {
-    const count = tasksPerProject[projectId] || 0;
+  // Get dot color based on incomplete task count
+  const getDotColor = (count: number) => {
     if (count === 0) return '#22c55e'; // green
     if (count === 1) return '#FFD700'; // yellow
     return '#ef4444'; // red
@@ -123,7 +114,7 @@ const Index = () => {
                   <div className="flex items-center gap-2 text-xs">
                     <div
                       className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: getProjectDotColor(project.id) }}
+                      style={{ backgroundColor: getDotColor(tasksPerProject[project.id]) }}
                     />
                     {project.name}
                   </div>
@@ -147,7 +138,7 @@ const Index = () => {
                   <div className="flex items-center gap-2 text-xs">
                     <div
                       className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: getContextDotColor(context.id) }}
+                      style={{ backgroundColor: getDotColor(tasksPerContext[context.id]) }}
                     />
                     {context.name}
                   </div>

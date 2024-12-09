@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useStore } from "../store/useStore";
-import { format, startOfWeek, addDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
+import { format, subDays } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FormNavigation } from "../components/FormNavigation";
-import { Trash2, Edit2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 const Habits = () => {
@@ -59,8 +59,13 @@ const Habits = () => {
     return completedCount;
   };
 
-  const startDate = startOfWeek(new Date(), { weekStartsOn: 1 });
-  const weekDays = Array.from({ length: 7 }, (_, i) => addDays(startDate, i));
+  // Generate array of last 3 days (today and 2 days before)
+  const today = new Date();
+  const displayDays = [
+    subDays(today, 2),
+    subDays(today, 1),
+    today
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -81,10 +86,10 @@ const Habits = () => {
           </form>
 
           <div className="mt-8">
-            <div className="grid grid-cols-[200px_80px_repeat(7,1fr)] gap-4">
+            <div className="grid grid-cols-[200px_80px_repeat(3,1fr)] gap-4">
               <div className="font-semibold">Habitude</div>
               <div className="font-semibold text-center">Score</div>
-              {weekDays.map((day) => (
+              {displayDays.map((day) => (
                 <div key={day.toISOString()} className="text-center font-semibold">
                   {format(day, 'EEE', { locale: fr })}
                   <div className="text-sm text-gray-500">
@@ -115,7 +120,7 @@ const Habits = () => {
                   <div className="text-center font-semibold text-blue-600">
                     {calculateMonthlyScore(habit.completedDays)}
                   </div>
-                  {weekDays.map((day) => {
+                  {displayDays.map((day) => {
                     const dateStr = format(day, 'yyyy-MM-dd');
                     return (
                       <div key={dateStr} className="flex justify-center items-center">

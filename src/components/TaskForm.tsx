@@ -33,6 +33,12 @@ export const TaskForm = () => {
     e.preventDefault();
     if (!title.trim()) return;
 
+    // For recurring tasks, we require a deadline as the first occurrence date
+    if (isRecurring && !deadline) {
+      toast.error("Please set a date for the first occurrence");
+      return;
+    }
+
     store.addTask({
       title: title.trim(),
       projectId: projectId || null,
@@ -43,7 +49,7 @@ export const TaskForm = () => {
       isForLater: false,
       recurring: isRecurring ? {
         frequency,
-        lastGenerated: new Date()
+        lastGenerated: deadline || new Date() // Use deadline as the first occurrence date
       } : null
     });
 
@@ -103,6 +109,7 @@ export const TaskForm = () => {
                   "w-[40px] p-0",
                   !deadline && "text-muted-foreground"
                 )}
+                title={isRecurring ? "Set first occurrence date" : "Set deadline"}
               >
                 <CalendarIcon className="h-4 w-4" />
               </Button>

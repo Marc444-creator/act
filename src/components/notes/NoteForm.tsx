@@ -24,6 +24,9 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
   const [selectedNoteType, setSelectedNoteType] = useState<string | null>(
     selectedNote?.noteTypeId || null
   );
+  const [selectedProject, setSelectedProject] = useState<string | null>(
+    selectedNote?.projectId || null
+  );
 
   const store = useStore();
 
@@ -44,11 +47,12 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
         title,
         content,
         noteTypeId: selectedNoteType,
-        projectId: null,
+        projectId: selectedProject,
       });
       setTitle("");
       setContent("");
       setSelectedNoteType(null);
+      setSelectedProject(null);
       toast.success("Note created successfully!");
     }
   };
@@ -62,28 +66,53 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
         className="text-xl font-semibold"
       />
       
-      <Select
-        value={selectedNoteType || "none"}
-        onValueChange={(value) => setSelectedNoteType(value === "none" ? null : value)}
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="Select note type" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="none">No type</SelectItem>
-          {store.noteTypes.map((type) => (
-            <SelectItem key={type.id} value={type.id}>
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: type.color }}
-                />
-                <span>{type.name}</span>
-              </div>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <div className="flex gap-2">
+        <Select
+          value={selectedNoteType || "none"}
+          onValueChange={(value) => setSelectedNoteType(value === "none" ? null : value)}
+        >
+          <SelectTrigger className="flex-1">
+            <SelectValue placeholder="Select note type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">No type</SelectItem>
+            {store.noteTypes.map((type) => (
+              <SelectItem key={type.id} value={type.id}>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: type.color }}
+                  />
+                  <span>{type.name}</span>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={selectedProject || "none"}
+          onValueChange={(value) => setSelectedProject(value === "none" ? null : value)}
+        >
+          <SelectTrigger className="flex-1">
+            <SelectValue placeholder="Select project" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">No project</SelectItem>
+            {store.projects.map((project) => (
+              <SelectItem key={project.id} value={project.id}>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: project.color }}
+                  />
+                  <span>{project.name}</span>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
       <Textarea
         placeholder="Write your note here..."

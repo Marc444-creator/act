@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useStore } from "../store/useStore";
-import { format, subDays } from 'date-fns';
+import { format, subDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";

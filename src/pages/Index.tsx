@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -21,6 +21,21 @@ const Index = () => {
   const [showCompleted, setShowCompleted] = useState(false);
   const navigate = useNavigate();
   const store = useStore();
+
+  // Check for recurring tasks every minute
+  useEffect(() => {
+    const checkRecurringTasks = () => {
+      store.generateRecurringTasks();
+    };
+
+    // Check immediately when component mounts
+    checkRecurringTasks();
+
+    // Set up interval to check every minute
+    const interval = setInterval(checkRecurringTasks, 60000);
+
+    return () => clearInterval(interval);
+  }, [store]);
 
   // Get only projects that have tasks assigned
   const projectsWithTasks = store.projects.filter(project =>

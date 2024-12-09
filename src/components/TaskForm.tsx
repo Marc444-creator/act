@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, RotateCw } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import {
@@ -25,6 +25,8 @@ export const TaskForm = () => {
   const [projectId, setProjectId] = useState<string | null>(null);
   const [contextId, setContextId] = useState<string | null>(null);
   const [deadline, setDeadline] = useState<Date | null>(null);
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [frequency, setFrequency] = useState<'daily' | 'weekly' | 'monthly'>('daily');
   const store = useStore();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -38,13 +40,19 @@ export const TaskForm = () => {
       status: "not-started",
       completed: false,
       deadline: deadline,
-      isForLater: false
+      isForLater: false,
+      recurring: isRecurring ? {
+        frequency,
+        lastGenerated: new Date()
+      } : null
     });
 
     setTitle("");
     setProjectId(null);
     setContextId(null);
     setDeadline(null);
+    setIsRecurring(false);
+    setFrequency('daily');
     toast.success("Task added successfully!");
   };
 
@@ -60,7 +68,7 @@ export const TaskForm = () => {
             className="flex-1"
           />
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center flex-wrap">
           <Select value={projectId || "none"} onValueChange={setProjectId}>
             <SelectTrigger className="w-[140px]">
               <SelectValue placeholder="Project" />
@@ -108,6 +116,27 @@ export const TaskForm = () => {
               />
             </PopoverContent>
           </Popover>
+          <Button
+            type="button"
+            variant={isRecurring ? "default" : "outline"}
+            size="icon"
+            onClick={() => setIsRecurring(!isRecurring)}
+            className="w-[40px] p-0"
+          >
+            <RotateCw className="h-4 w-4" />
+          </Button>
+          {isRecurring && (
+            <Select value={frequency} onValueChange={(value: 'daily' | 'weekly' | 'monthly') => setFrequency(value)}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Frequency" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="daily">Daily</SelectItem>
+                <SelectItem value="weekly">Weekly</SelectItem>
+                <SelectItem value="monthly">Monthly</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
         </div>
       </div>
     </form>

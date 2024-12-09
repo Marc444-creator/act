@@ -8,6 +8,10 @@ export interface Task {
   status: string;
   deadline: Date | null;
   isForLater: boolean;
+  recurring?: {
+    frequency: 'daily' | 'weekly' | 'monthly';
+    lastGenerated: Date;
+  } | null;
 }
 
 export interface Project {

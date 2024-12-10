@@ -53,17 +53,17 @@ const Habits = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
       <div className="max-w-4xl mx-auto space-y-8">
         <FormNavigation />
         
-        <div className="bg-white p-6 rounded-lg shadow-sm space-y-6">
+        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm space-y-6">
           <h1 className="text-3xl font-bold">Mes Habitudes</h1>
           
           <HabitForm />
 
-          <div className="mt-8">
-            <div className="grid grid-cols-[200px_80px_repeat(3,1fr)] gap-4">
+          <div className="mt-8 overflow-x-auto">
+            <div className="grid grid-cols-[minmax(120px,1fr)_50px_repeat(3,40px)] sm:grid-cols-[minmax(150px,1fr)_60px_repeat(3,50px)] gap-2 sm:gap-4">
               <HabitsGridHeader displayDays={displayDays} />
 
               {habits.map((habit) => (

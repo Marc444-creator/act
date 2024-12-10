@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Trash2 } from "lucide-react";
 import { format } from 'date-fns';
-import { Habit } from "../../store/useStore";
+import type { Habit } from "../../types";
 
 interface HabitRowProps {
   habit: Habit;
@@ -25,23 +25,23 @@ export const HabitRow = ({
   return (
     <>
       <div 
-        className="flex items-center justify-between pr-4 cursor-pointer hover:bg-gray-50 rounded-md"
+        className="flex items-center justify-between pr-2 cursor-pointer hover:bg-gray-50 rounded-md text-sm sm:text-base truncate"
         onClick={() => onEdit({ id: habit.id, name: habit.name })}
       >
-        <span>{habit.name}</span>
+        <span className="truncate">{habit.name}</span>
         <Button
           variant="ghost"
           size="icon"
-          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+          className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8"
           onClick={(e) => {
             e.stopPropagation();
             onDelete(habit.id);
           }}
         >
-          <Trash2 className="h-4 w-4" />
+          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
         </Button>
       </div>
-      <div className="text-center font-semibold text-blue-600">
+      <div className="text-center font-semibold text-blue-600 text-sm sm:text-base">
         {monthlyScore}
       </div>
       {displayDays.map((day) => {
@@ -51,6 +51,7 @@ export const HabitRow = ({
             <Checkbox
               checked={habit.completedDays[dateStr] || false}
               onCheckedChange={() => onToggleDay(habit.id, dateStr)}
+              className="h-4 w-4 sm:h-5 sm:w-5"
             />
           </div>
         );

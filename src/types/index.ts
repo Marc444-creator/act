@@ -11,6 +11,9 @@ export interface Task {
   recurring?: {
     frequency: 'daily' | 'weekly' | 'monthly';
     lastGenerated: Date;
+    daysOfWeek?: number[]; // 0-6 for Sunday-Saturday
+    daysOfMonth?: number[]; // 1-31
+    interval?: number; // For daily: every X days
   } | null;
 }
 

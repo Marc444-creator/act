@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useStore } from "../store/useStore";
 import { toast } from "sonner";
 
@@ -27,15 +28,46 @@ export const TaskForm = () => {
   const [deadline, setDeadline] = useState<Date | null>(null);
   const [isRecurring, setIsRecurring] = useState(false);
   const [frequency, setFrequency] = useState<'daily' | 'weekly' | 'monthly'>('daily');
+  const [selectedDays, setSelectedDays] = useState<number[]>([]);
+  const [dailyInterval, setDailyInterval] = useState(1);
   const store = useStore();
+
+  const daysOfWeek = [
+    { value: 0, label: "Sunday" },
+    { value: 1, label: "Monday" },
+    { value: 2, label: "Tuesday" },
+    { value: 3, label: "Wednesday" },
+    { value: 4, label: "Thursday" },
+    { value: 5, label: "Friday" },
+    { value: 6, label: "Saturday" },
+  ];
+
+  const daysOfMonth = Array.from({ length: 31 }, (_, i) => ({
+    value: i + 1,
+    label: `${i + 1}${getOrdinalSuffix(i + 1)}`,
+  }));
+
+  function getOrdinalSuffix(day: number) {
+    if (day > 3 && day < 21) return 'th';
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
 
-    // For recurring tasks, we require a deadline as the first occurrence date
     if (isRecurring && !deadline) {
       toast.error("Please set a date for the first occurrence");
+      return;
+    }
+
+    if (isRecurring && frequency !== 'daily' && selectedDays.length === 0) {
+      toast.error(`Please select at least one ${frequency === 'weekly' ? 'day of the week' : 'day of the month'}`);
       return;
     }
 
@@ -49,7 +81,10 @@ export const TaskForm = () => {
       isForLater: false,
       recurring: isRecurring ? {
         frequency,
-        lastGenerated: deadline || new Date() // Use deadline as the first occurrence date
+        lastGenerated: deadline || new Date(),
+        daysOfWeek: frequency === 'weekly' ? selectedDays : undefined,
+        daysOfMonth: frequency === 'monthly' ? selectedDays : undefined,
+        interval: frequency === 'daily' ? dailyInterval : undefined
       } : null
     });
 
@@ -59,7 +94,17 @@ export const TaskForm = () => {
     setDeadline(null);
     setIsRecurring(false);
     setFrequency('daily');
+    setSelectedDays([]);
+    setDailyInterval(1);
     toast.success("Task added successfully!");
+  };
+
+  const toggleDay = (day: number) => {
+    setSelectedDays(prev => 
+      prev.includes(day) 
+        ? prev.filter(d => d !== day)
+        : [...prev, day].sort((a, b) => a - b)
+    );
   };
 
   return (
@@ -133,18 +178,81 @@ export const TaskForm = () => {
             <RotateCw className="h-4 w-4" />
           </Button>
           {isRecurring && (
-            <Select value={frequency} onValueChange={(value: 'daily' | 'weekly' | 'monthly') => setFrequency(value)}>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="Frequency" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="daily">Daily</SelectItem>
-                <SelectItem value="weekly">Weekly</SelectItem>
-                <SelectItem value="monthly">Monthly</SelectItem>
-              </SelectContent>
-            </Select>
+            <>
+              <Select value={frequency} onValueChange={(value: 'daily' | 'weekly' | 'monthly') => {
+                setFrequency(value);
+                setSelectedDays([]);
+              }}>
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder="Frequency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {frequency === 'daily' && (
+                <Select 
+                  value={dailyInterval.toString()} 
+                  onValueChange={(value) => setDailyInterval(parseInt(value))}
+                >
+                  <SelectTrigger className="w-[140px]">
+                    <SelectValue placeholder="Interval" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[1, 2, 3, 4, 5, 6, 7].map((interval) => (
+                      <SelectItem key={interval} value={interval.toString()}>
+                        Every {interval} day{interval > 1 ? 's' : ''}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            </>
           )}
         </div>
+        
+        {isRecurring && frequency === 'weekly' && (
+          <div className="flex flex-wrap gap-2">
+            {daysOfWeek.map((day) => (
+              <div key={day.value} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`day-${day.value}`}
+                  checked={selectedDays.includes(day.value)}
+                  onCheckedChange={() => toggleDay(day.value)}
+                />
+                <label
+                  htmlFor={`day-${day.value}`}
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {day.label}
+                </label>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {isRecurring && frequency === 'monthly' && (
+          <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
+            {daysOfMonth.map((day) => (
+              <div key={day.value} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`day-${day.value}`}
+                  checked={selectedDays.includes(day.value)}
+                  onCheckedChange={() => toggleDay(day.value)}
+                />
+                <label
+                  htmlFor={`day-${day.value}`}
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {day.label}
+                </label>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </form>
   );

@@ -1,5 +1,5 @@
 import { Task } from "@/types";
-import { addDays, addWeeks, addMonths } from "date-fns";
+import { addDays, addWeeks, addMonths, getDay, getDate } from "date-fns";
 
 export interface TaskStore {
   tasks: Task[];
@@ -57,20 +57,46 @@ export const createTaskStore = (set: any, get: any): TaskStore => ({
 
       switch (task.recurring.frequency) {
         case 'daily':
-          shouldGenerate = daysSinceLastGenerated >= 1;
-          nextDeadline = task.deadline ? addDays(new Date(task.deadline), 1) : null;
+          const interval = task.recurring.interval || 1;
+          shouldGenerate = daysSinceLastGenerated >= interval;
+          nextDeadline = task.deadline ? addDays(new Date(task.deadline), interval) : null;
           break;
+
         case 'weekly':
-          shouldGenerate = daysSinceLastGenerated >= 7;
-          nextDeadline = task.deadline ? addWeeks(new Date(task.deadline), 1) : null;
+          if (task.recurring.daysOfWeek && task.recurring.daysOfWeek.length > 0) {
+            const currentDayOfWeek = getDay(now);
+            shouldGenerate = task.recurring.daysOfWeek.includes(currentDayOfWeek) &&
+              daysSinceLastGenerated >= 1;
+            if (task.deadline) {
+              const nextOccurrence = task.recurring.daysOfWeek
+                .find(day => day > currentDayOfWeek) || task.recurring.daysOfWeek[0];
+              const daysToAdd = nextOccurrence > currentDayOfWeek
+                ? nextOccurrence - currentDayOfWeek
+                : 7 - (currentDayOfWeek - nextOccurrence);
+              nextDeadline = addDays(new Date(task.deadline), daysToAdd);
+            }
+          }
           break;
+
         case 'monthly':
-          shouldGenerate = daysSinceLastGenerated >= 30;
-          nextDeadline = task.deadline ? addMonths(new Date(task.deadline), 1) : null;
+          if (task.recurring.daysOfMonth && task.recurring.daysOfMonth.length > 0) {
+            const currentDayOfMonth = getDate(now);
+            shouldGenerate = task.recurring.daysOfMonth.includes(currentDayOfMonth) &&
+              daysSinceLastGenerated >= 1;
+            if (task.deadline) {
+              nextDeadline = addMonths(new Date(task.deadline), 1);
+            }
+          }
           break;
       }
 
       if (shouldGenerate) {
+        console.log('Generating new recurring task:', {
+          title: task.title,
+          frequency: task.recurring.frequency,
+          nextDeadline
+        });
+        
         state.addTask({
           ...task,
           completed: false,

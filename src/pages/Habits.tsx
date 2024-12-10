@@ -63,7 +63,7 @@ const Habits = () => {
           <HabitForm />
 
           <div className="mt-8 overflow-x-auto">
-            <div className="grid grid-cols-[minmax(120px,1fr)_50px_repeat(3,40px)] sm:grid-cols-[minmax(150px,1fr)_60px_repeat(3,50px)] gap-2 sm:gap-4">
+            <div className="grid grid-cols-[minmax(120px,1fr)_repeat(3,40px)_50px_40px] sm:grid-cols-[minmax(150px,1fr)_repeat(3,50px)_60px_50px] gap-2 sm:gap-4">
               <HabitsGridHeader displayDays={displayDays} />
 
               {habits.map((habit) => (

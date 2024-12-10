@@ -10,7 +10,6 @@ export const HabitsGridHeader = ({ displayDays }: HabitsGridHeaderProps) => {
   return (
     <>
       <div className="font-semibold text-sm sm:text-base">Habitude</div>
-      <div className="font-semibold text-center text-sm sm:text-base">Score</div>
       {displayDays.map((day) => (
         <div key={day.toISOString()} className="text-center font-semibold">
           <div className="text-xs sm:text-sm">
@@ -21,6 +20,8 @@ export const HabitsGridHeader = ({ displayDays }: HabitsGridHeaderProps) => {
           </div>
         </div>
       ))}
+      <div className="font-semibold text-center text-sm sm:text-base">Score</div>
+      <div className="font-semibold text-center text-sm sm:text-base">Action</div>
     </>
   );
 };

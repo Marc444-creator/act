@@ -29,20 +29,6 @@ export const HabitRow = ({
         onClick={() => onEdit({ id: habit.id, name: habit.name })}
       >
         <span className="truncate">{habit.name}</span>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8"
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete(habit.id);
-          }}
-        >
-          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
-        </Button>
-      </div>
-      <div className="text-center font-semibold text-blue-600 text-sm sm:text-base">
-        {monthlyScore}
       </div>
       {displayDays.map((day) => {
         const dateStr = format(day, 'yyyy-MM-dd');
@@ -56,6 +42,22 @@ export const HabitRow = ({
           </div>
         );
       })}
+      <div className="text-center font-semibold text-blue-600 text-sm sm:text-base">
+        {monthlyScore}
+      </div>
+      <div className="flex justify-center">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(habit.id);
+          }}
+        >
+          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+        </Button>
+      </div>
     </>
   );
 };

@@ -121,7 +121,7 @@ export const TaskForm = () => {
         </div>
         <div className="flex gap-2 items-center flex-wrap">
           <Select value={projectId || "none"} onValueChange={setProjectId}>
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="w-[100px]">
               <SelectValue placeholder="Project" />
             </SelectTrigger>
             <SelectContent>
@@ -134,7 +134,7 @@ export const TaskForm = () => {
             </SelectContent>
           </Select>
           <Select value={contextId || "none"} onValueChange={setContextId}>
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="w-[100px]">
               <SelectValue placeholder="Context" />
             </SelectTrigger>
             <SelectContent>

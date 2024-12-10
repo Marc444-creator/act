@@ -111,7 +111,7 @@ export const TaskForm = () => {
     <form onSubmit={handleSubmit} className="space-y-4 bg-blue-50 p-4 rounded-lg">
       <div className="flex flex-col gap-4">
         <div className="flex gap-2 w-full">
-          <Button type="submit" className="w-10 h-10 rounded-full p-0 shrink-0">+</Button>
+          <Button type="submit" className="w-8 h-8 rounded-full p-0 shrink-0 text-sm">+</Button>
           <Input
             placeholder="Add a task..."
             value={title}
@@ -119,10 +119,10 @@ export const TaskForm = () => {
             className="flex-1"
           />
         </div>
-        <div className="flex gap-2 items-center flex-wrap">
+        <div className="flex gap-1 items-center flex-wrap">
           <Select value={projectId || "none"} onValueChange={setProjectId}>
-            <SelectTrigger className="w-[100px]">
-              <SelectValue placeholder="Project" />
+            <SelectTrigger className="w-[80px]">
+              <SelectValue placeholder="Proj" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Project</SelectItem>
@@ -134,8 +134,8 @@ export const TaskForm = () => {
             </SelectContent>
           </Select>
           <Select value={contextId || "none"} onValueChange={setContextId}>
-            <SelectTrigger className="w-[100px]">
-              <SelectValue placeholder="Context" />
+            <SelectTrigger className="w-[80px]">
+              <SelectValue placeholder="Ctx" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Context</SelectItem>
@@ -151,7 +151,7 @@ export const TaskForm = () => {
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-[40px] p-0",
+                  "w-8 h-8 p-0",
                   !deadline && "text-muted-foreground"
                 )}
                 title={isRecurring ? "Set first occurrence date" : "Set deadline"}
@@ -173,7 +173,7 @@ export const TaskForm = () => {
             variant={isRecurring ? "default" : "outline"}
             size="icon"
             onClick={() => setIsRecurring(!isRecurring)}
-            className="w-[40px] p-0"
+            className="w-8 h-8 p-0"
           >
             <RotateCw className="h-4 w-4" />
           </Button>
@@ -183,8 +183,8 @@ export const TaskForm = () => {
                 setFrequency(value);
                 setSelectedDays([]);
               }}>
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Frequency" />
+                <SelectTrigger className="w-[90px]">
+                  <SelectValue placeholder="Freq" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="daily">Daily</SelectItem>
@@ -198,8 +198,8 @@ export const TaskForm = () => {
                   value={dailyInterval.toString()} 
                   onValueChange={(value) => setDailyInterval(parseInt(value))}
                 >
-                  <SelectTrigger className="w-[140px]">
-                    <SelectValue placeholder="Interval" />
+                  <SelectTrigger className="w-[90px]">
+                    <SelectValue placeholder="Every" />
                   </SelectTrigger>
                   <SelectContent>
                     {[1, 2, 3, 4, 5, 6, 7].map((interval) => (

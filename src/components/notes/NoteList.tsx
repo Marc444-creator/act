@@ -20,6 +20,7 @@ interface NoteListProps {
 export const NoteList = ({ onNoteSelect }: NoteListProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterNoteType, setFilterNoteType] = useState<string | null>(null);
+  const [filterProject, setFilterProject] = useState<string | null>(null);
   const store = useStore();
 
   const handleDeleteNote = (noteId: string, e: React.MouseEvent) => {
@@ -30,6 +31,7 @@ export const NoteList = ({ onNoteSelect }: NoteListProps) => {
 
   const filteredNotes = store.notes
     .filter((note) => !filterNoteType || note.noteTypeId === filterNoteType)
+    .filter((note) => !filterProject || note.projectId === filterProject)
     .filter(
       (note) =>
         searchQuery === "" ||
@@ -39,7 +41,7 @@ export const NoteList = ({ onNoteSelect }: NoteListProps) => {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 flex-wrap">
         <Input
           placeholder="Search notes..."
           value={searchQuery}
@@ -50,7 +52,7 @@ export const NoteList = ({ onNoteSelect }: NoteListProps) => {
           value={filterNoteType || "all"}
           onValueChange={(value) => setFilterNoteType(value === "all" ? null : value)}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Filter by type" />
           </SelectTrigger>
           <SelectContent>
@@ -63,6 +65,28 @@ export const NoteList = ({ onNoteSelect }: NoteListProps) => {
                     style={{ backgroundColor: type.color }}
                   />
                   <span>{type.name}</span>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select
+          value={filterProject || "all"}
+          onValueChange={(value) => setFilterProject(value === "all" ? null : value)}
+        >
+          <SelectTrigger className="w-[140px]">
+            <SelectValue placeholder="Filter by project" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All projects</SelectItem>
+            {store.projects.map((project) => (
+              <SelectItem key={project.id} value={project.id}>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: project.color }}
+                  />
+                  <span>{project.name}</span>
                 </div>
               </SelectItem>
             ))}
@@ -85,6 +109,16 @@ export const NoteList = ({ onNoteSelect }: NoteListProps) => {
                     style={{
                       backgroundColor:
                         store.noteTypes.find((t) => t.id === note.noteTypeId)?.color ||
+                        "#gray",
+                    }}
+                  />
+                )}
+                {note.projectId && (
+                  <div
+                    className="w-2 h-2 rounded-full flex-shrink-0"
+                    style={{
+                      backgroundColor:
+                        store.projects.find((p) => p.id === note.projectId)?.color ||
                         "#gray",
                     }}
                   />

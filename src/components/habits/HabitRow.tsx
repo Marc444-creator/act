@@ -25,10 +25,15 @@ export const HabitRow = ({
   return (
     <>
       <div 
-        className="flex items-center justify-between pr-2 cursor-pointer hover:bg-gray-50 rounded-md text-sm sm:text-base truncate"
+        className="flex flex-col justify-center pr-2 cursor-pointer hover:bg-gray-50 rounded-md"
         onClick={() => onEdit({ id: habit.id, name: habit.name })}
       >
-        <span className="truncate">{habit.name}</span>
+        <span className="text-sm sm:text-base font-medium">{habit.name}</span>
+        {habit.description && (
+          <span className="text-xs sm:text-sm text-gray-600 mt-0.5 line-clamp-2">
+            {habit.description}
+          </span>
+        )}
       </div>
       {displayDays.map((day) => {
         const dateStr = format(day, 'yyyy-MM-dd');

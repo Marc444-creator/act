@@ -1,5 +1,5 @@
 import { Task } from "@/types";
-import { addDays, addWeeks, addMonths, getDay, getDate } from "date-fns";
+import { addDays, addWeeks, addMonths, getDay, getDate, isBefore, startOfDay, endOfDay } from "date-fns";
 
 export interface TaskStore {
   tasks: Task[];
@@ -13,13 +13,15 @@ export interface TaskStore {
 
 export const createTaskStore = (set: any, get: any): TaskStore => ({
   tasks: [],
-  addTask: (task) =>
+  addTask: (task) => {
+    console.log("Adding new task:", task);
     set((state: any) => ({
       tasks: [
         ...state.tasks,
         { ...task, id: crypto.randomUUID(), createdAt: new Date() },
       ],
-    })),
+    }));
+  },
   deleteTask: (id) =>
     set((state: any) => ({
       tasks: state.tasks.filter((task: Task) => task.id !== id),
@@ -45,12 +47,17 @@ export const createTaskStore = (set: any, get: any): TaskStore => ({
   generateRecurringTasks: () => {
     const state = get();
     const now = new Date();
-    
-    state.tasks.forEach((task: Task) => {
-      if (!task.recurring || task.completed) return;
+    const today = startOfDay(now);
+    const tomorrow = endOfDay(now);
+    let newTasks: Task[] = [];
 
-      const timeSinceLastGenerated = now.getTime() - new Date(task.recurring.lastGenerated).getTime();
-      const daysSinceLastGenerated = timeSinceLastGenerated / (1000 * 60 * 60 * 24);
+    console.log("Checking for recurring tasks to generate...");
+
+    state.tasks.forEach((task: Task) => {
+      if (!task.recurring) return;
+
+      const lastGenerated = new Date(task.recurring.lastGenerated);
+      console.log(`Checking task "${task.title}" - Last generated: ${lastGenerated}`);
 
       let shouldGenerate = false;
       let nextDeadline = null;
@@ -58,22 +65,21 @@ export const createTaskStore = (set: any, get: any): TaskStore => ({
       switch (task.recurring.frequency) {
         case 'daily':
           const interval = task.recurring.interval || 1;
+          const daysSinceLastGenerated = Math.floor((now.getTime() - lastGenerated.getTime()) / (1000 * 60 * 60 * 24));
           shouldGenerate = daysSinceLastGenerated >= interval;
-          nextDeadline = task.deadline ? addDays(new Date(task.deadline), interval) : null;
+          if (shouldGenerate && task.deadline) {
+            nextDeadline = addDays(new Date(task.deadline), interval);
+          }
           break;
 
         case 'weekly':
           if (task.recurring.daysOfWeek && task.recurring.daysOfWeek.length > 0) {
             const currentDayOfWeek = getDay(now);
             shouldGenerate = task.recurring.daysOfWeek.includes(currentDayOfWeek) &&
-              daysSinceLastGenerated >= 1;
-            if (task.deadline) {
-              const nextOccurrence = task.recurring.daysOfWeek
-                .find(day => day > currentDayOfWeek) || task.recurring.daysOfWeek[0];
-              const daysToAdd = nextOccurrence > currentDayOfWeek
-                ? nextOccurrence - currentDayOfWeek
-                : 7 - (currentDayOfWeek - nextOccurrence);
-              nextDeadline = addDays(new Date(task.deadline), daysToAdd);
+              isBefore(lastGenerated, today);
+            
+            if (shouldGenerate && task.deadline) {
+              nextDeadline = addWeeks(new Date(task.deadline), 1);
             }
           }
           break;
@@ -82,8 +88,9 @@ export const createTaskStore = (set: any, get: any): TaskStore => ({
           if (task.recurring.daysOfMonth && task.recurring.daysOfMonth.length > 0) {
             const currentDayOfMonth = getDate(now);
             shouldGenerate = task.recurring.daysOfMonth.includes(currentDayOfMonth) &&
-              daysSinceLastGenerated >= 1;
-            if (task.deadline) {
+              isBefore(lastGenerated, today);
+            
+            if (shouldGenerate && task.deadline) {
               nextDeadline = addMonths(new Date(task.deadline), 1);
             }
           }
@@ -91,22 +98,44 @@ export const createTaskStore = (set: any, get: any): TaskStore => ({
       }
 
       if (shouldGenerate) {
-        console.log('Generating new recurring task:', {
-          title: task.title,
-          frequency: task.recurring.frequency,
-          nextDeadline
-        });
+        console.log(`Generating new occurrence for task "${task.title}"`);
         
-        state.addTask({
+        const newTask: Task = {
           ...task,
+          id: crypto.randomUUID(),
           completed: false,
           deadline: nextDeadline,
+          createdAt: new Date(),
           recurring: {
             ...task.recurring,
             lastGenerated: now
           }
-        });
+        };
+
+        newTasks.push(newTask);
+
+        // Update the lastGenerated date of the original task
+        set((state: any) => ({
+          tasks: state.tasks.map((t: Task) =>
+            t.id === task.id
+              ? {
+                  ...t,
+                  recurring: {
+                    ...t.recurring!,
+                    lastGenerated: now
+                  }
+                }
+              : t
+          ),
+        }));
       }
     });
+
+    if (newTasks.length > 0) {
+      console.log(`Adding ${newTasks.length} new recurring tasks`);
+      set((state: any) => ({
+        tasks: [...state.tasks, ...newTasks],
+      }));
+    }
   },
 });

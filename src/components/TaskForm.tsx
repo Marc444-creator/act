@@ -66,8 +66,8 @@ export const TaskForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-blue-100/80 p-4 rounded-lg">
-      <div className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="space-y-2 bg-blue-100/80 p-4 rounded-lg">
+      <div className="flex flex-col gap-2">
         <TaskFormHeader title={title} setTitle={setTitle} />
         <TaskFormControls
           title={title}

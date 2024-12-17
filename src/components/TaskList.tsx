@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useStore } from "../store/useStore";
 import { TaskItem } from "./TaskItem";
 import { toast } from "sonner";
+import { Calendar } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 
 interface TaskListProps {
   filterProject: string | null;
@@ -18,7 +20,7 @@ export const TaskList = ({
   filterStatus,
   showCompleted,
   isForLater = false,
-  sortOrder = "asc"
+  sortOrder: propsSortOrder,
 }: TaskListProps) => {
   const store = useStore();
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
@@ -26,6 +28,7 @@ export const TaskList = ({
   const [editedProjectId, setEditedProjectId] = useState<string | null>(null);
   const [editedContextId, setEditedContextId] = useState<string | null>(null);
   const [editedDeadline, setEditedDeadline] = useState<Date | null>(null);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const handleTaskClick = (task: any) => {
     setEditingTaskId(task.id);
@@ -62,19 +65,38 @@ export const TaskList = ({
     return matchesProject && matchesContext && matchesStatus && matchesCompleted && matchesForLater;
   });
 
-  if (isForLater && sortOrder) {
-    filteredTasks.sort((a, b) => {
-      if (!a.deadline && !b.deadline) return 0;
-      if (!a.deadline) return 1;
-      if (!b.deadline) return -1;
-      return sortOrder === "asc" 
-        ? new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-        : new Date(b.deadline).getTime() - new Date(a.deadline).getTime();
-    });
-  }
+  // Sort tasks by date if they have deadlines
+  const currentSortOrder = isForLater ? propsSortOrder : sortOrder;
+  filteredTasks.sort((a, b) => {
+    if (!a.deadline && !b.deadline) return 0;
+    if (!a.deadline) return 1;
+    if (!b.deadline) return -1;
+    return currentSortOrder === "asc" 
+      ? new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+      : new Date(b.deadline).getTime() - new Date(a.deadline).getTime();
+  });
 
   return (
     <div className="space-y-2">
+      {!isForLater && (
+        <div className="flex items-center gap-4 mb-4">
+          <Select
+            value={sortOrder}
+            onValueChange={(value: "asc" | "desc") => setSortOrder(value)}
+          >
+            <SelectTrigger className="w-[60px]">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="asc">Earliest First</SelectItem>
+              <SelectItem value="desc">Latest First</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
       {filteredTasks.map((task) => (
         <TaskItem
           key={task.id}

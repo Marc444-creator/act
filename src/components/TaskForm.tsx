@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { useStore } from "../store/useStore";
 import { toast } from "sonner";
-import { TaskFormInputs } from "./tasks/TaskFormInputs";
-import { DatePicker } from "./tasks/DatePicker";
-import { RecurringTaskControls } from "./tasks/RecurringTaskControls";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { TaskFormHeader } from "./tasks/TaskFormHeader";
+import { TaskFormControls } from "./tasks/TaskFormControls";
 
 export const TaskForm = () => {
   const [title, setTitle] = useState("");
@@ -71,40 +68,25 @@ export const TaskForm = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 bg-blue-50/50 p-4 rounded-lg">
       <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-2">
-          <Button type="submit" className="w-8 h-8 rounded-full p-0 shrink-0 text-sm">+</Button>
-          <Input
-            placeholder="Add a task..."
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="flex-1"
-          />
-        </div>
-        <div className="flex items-center gap-2 flex-nowrap overflow-x-auto bg-blue-50/50 p-2 rounded-md">
-          <TaskFormInputs
-            title={title}
-            setTitle={setTitle}
-            projectId={projectId}
-            setProjectId={setProjectId}
-            contextId={contextId}
-            setContextId={setContextId}
-          />
-          <DatePicker
-            deadline={deadline}
-            setDeadline={setDeadline}
-            isRecurring={isRecurring}
-          />
-          <RecurringTaskControls
-            isRecurring={isRecurring}
-            setIsRecurring={setIsRecurring}
-            frequency={frequency}
-            setFrequency={setFrequency}
-            selectedDays={selectedDays}
-            toggleDay={toggleDay}
-            dailyInterval={dailyInterval}
-            setDailyInterval={setDailyInterval}
-          />
-        </div>
+        <TaskFormHeader title={title} setTitle={setTitle} />
+        <TaskFormControls
+          title={title}
+          setTitle={setTitle}
+          projectId={projectId}
+          setProjectId={setProjectId}
+          contextId={contextId}
+          setContextId={setContextId}
+          deadline={deadline}
+          setDeadline={setDeadline}
+          isRecurring={isRecurring}
+          setIsRecurring={setIsRecurring}
+          frequency={frequency}
+          setFrequency={setFrequency}
+          selectedDays={selectedDays}
+          toggleDay={toggleDay}
+          dailyInterval={dailyInterval}
+          setDailyInterval={setDailyInterval}
+        />
       </div>
     </form>
   );

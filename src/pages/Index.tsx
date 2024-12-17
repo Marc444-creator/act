@@ -5,6 +5,7 @@ import { TaskList } from "../components/TaskList";
 import { useNavigate } from "react-router-dom";
 import { FormNavigation } from "../components/FormNavigation";
 import { FilterBar } from "../components/filters/FilterBar";
+import { SearchBar } from "../components/filters/SearchBar";
 
 const Index = () => {
   const [filterProject, setFilterProject] = useState<string | null>(null);
@@ -12,6 +13,7 @@ const Index = () => {
   const [filterStatus, setFilterStatus] = useState<string | null>(null);
   const [showCompleted, setShowCompleted] = useState(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const store = useStore();
 
@@ -80,12 +82,15 @@ const Index = () => {
           setShowCompleted={setShowCompleted}
         />
 
+        <SearchBar value={searchTerm} onChange={setSearchTerm} />
+
         <TaskList
           filterProject={filterProject}
           filterContext={filterContext}
           filterStatus={filterStatus}
           showCompleted={showCompleted}
           sortOrder={sortOrder}
+          searchTerm={searchTerm}
         />
       </div>
     </div>

@@ -10,6 +10,7 @@ interface TaskListProps {
   showCompleted: boolean;
   isForLater?: boolean;
   sortOrder?: "asc" | "desc";
+  searchTerm?: string;
 }
 
 export const TaskList = ({ 
@@ -19,6 +20,7 @@ export const TaskList = ({
   showCompleted,
   isForLater = false,
   sortOrder = "asc",
+  searchTerm = "",
 }: TaskListProps) => {
   const store = useStore();
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
@@ -58,8 +60,11 @@ export const TaskList = ({
     const matchesStatus = !filterStatus || task.status === filterStatus;
     const matchesCompleted = showCompleted || !task.completed;
     const matchesForLater = task.isForLater === isForLater;
+    const matchesSearch = !searchTerm || 
+      task.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return matchesProject && matchesContext && matchesStatus && matchesCompleted && matchesForLater;
+    return matchesProject && matchesContext && matchesStatus && 
+           matchesCompleted && matchesForLater && matchesSearch;
   });
 
   // Sort tasks by date if they have deadlines

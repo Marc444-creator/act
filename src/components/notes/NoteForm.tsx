@@ -128,8 +128,8 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
         placeholder="Write your note here..."
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className={`min-h-[200px] text-lg ${
-          selectedNote ? "min-h-[calc(100vh-300px)]" : ""
+        className={`min-h-[42px] text-lg transition-all duration-200 focus:min-h-[200px] ${
+          selectedNote ? "focus:min-h-[calc(100vh-300px)]" : ""
         }`}
       />
 

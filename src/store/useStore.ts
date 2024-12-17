@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
 import { Task, Project, Context, Note, NoteType, Habit } from '@/types';
+import { createTaskStore } from './taskStore';
 
 interface Store {
   habits: Habit[];
@@ -20,6 +21,7 @@ interface Store {
   updateTask: (id: string, updates: Partial<Task>) => void;
   moveTaskToLater: (id: string) => void;
   generateRecurringTasks: () => void;
+  checkAndMoveForLaterTasks: () => void;
   addProject: (project: Omit<Project, "id">) => void;
   deleteProject: (id: string) => void;
   addContext: (context: Omit<Context, "id">) => void;
@@ -33,9 +35,9 @@ interface Store {
 
 export const useStore = create<Store>()(
   persist(
-    (set) => ({
+    (set, get) => ({
+      ...createTaskStore(set, get),
       habits: [],
-      tasks: [],
       projects: [],
       contexts: [],
       notes: [],
@@ -71,50 +73,6 @@ export const useStore = create<Store>()(
             habit.id === id ? { ...habit, name } : habit
           ),
         })),
-
-      // Task methods
-      addTask: (task) => {
-        set((state) => ({
-          tasks: [...state.tasks, { ...task, id: uuidv4(), createdAt: new Date() }],
-        }));
-      },
-      deleteTask: (id) =>
-        set((state) => ({
-          tasks: state.tasks.filter((task) => task.id !== id),
-        })),
-      toggleTask: (id) =>
-        set((state) => ({
-          tasks: state.tasks.map((task) =>
-            task.id === id ? { ...task, completed: !task.completed } : task
-          ),
-        })),
-      updateTask: (id, updates) =>
-        set((state) => ({
-          tasks: state.tasks.map((task) =>
-            task.id === id ? { ...task, ...updates } : task
-          ),
-        })),
-      moveTaskToLater: (id) =>
-        set((state) => ({
-          tasks: state.tasks.map((task) =>
-            task.id === id ? { ...task, isForLater: !task.isForLater } : task
-          ),
-        })),
-      generateRecurringTasks: () => {
-        set((state) => {
-          const now = new Date();
-          const newTasks = state.tasks
-            .filter((task) => task.recurring)
-            .map((task) => {
-              if (!task.recurring) return null;
-              const lastGenerated = new Date(task.recurring.lastGenerated);
-              // Implementation of recurring task generation logic
-              return null;
-            })
-            .filter(Boolean);
-          return { tasks: [...state.tasks, ...newTasks] };
-        });
-      },
 
       // Project methods
       addProject: (project) => {

@@ -11,7 +11,6 @@ const ForLater = () => {
   const [selectedContext, setSelectedContext] = useState<string | null>(null);
   const store = useStore();
 
-  // Check for tasks to move every minute
   useEffect(() => {
     store.checkAndMoveForLaterTasks(); // Initial check
     
@@ -22,7 +21,6 @@ const ForLater = () => {
     return () => clearInterval(interval);
   }, [store]);
 
-  // Get only projects and contexts that have "for later" tasks assigned
   const projectsWithTasks = store.projects
     .map(project => ({
       ...project,

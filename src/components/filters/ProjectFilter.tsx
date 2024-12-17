@@ -21,9 +21,13 @@ interface ProjectFilterProps {
 export const ProjectFilter = ({ value, onChange }: ProjectFilterProps) => {
   const store = useStore();
   
-  // Get only projects that have tasks assigned
+  // Get only projects that have tasks assigned and count their tasks
   const projectsWithTasks = store.projects
-    .filter(project => store.tasks.some(task => task.projectId === project.id))
+    .map(project => ({
+      ...project,
+      taskCount: store.tasks.filter(task => task.projectId === project.id).length
+    }))
+    .filter(project => project.taskCount > 0)
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
@@ -50,7 +54,9 @@ export const ProjectFilter = ({ value, onChange }: ProjectFilterProps) => {
             <div className="flex items-center gap-2">
               <div
                 className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: project.color }}
+                style={{ 
+                  backgroundColor: project.taskCount === 1 ? '#F2FCE2' : '#ea384c'
+                }}
               />
               {project.name}
             </div>

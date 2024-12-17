@@ -21,9 +21,13 @@ interface ContextFilterProps {
 export const ContextFilter = ({ value, onChange }: ContextFilterProps) => {
   const store = useStore();
   
-  // Get only contexts that have tasks assigned
+  // Get only contexts that have tasks assigned and count their tasks
   const contextsWithTasks = store.contexts
-    .filter(context => store.tasks.some(task => task.contextId === context.id))
+    .map(context => ({
+      ...context,
+      taskCount: store.tasks.filter(task => task.contextId === context.id).length
+    }))
+    .filter(context => context.taskCount > 0)
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
@@ -50,7 +54,9 @@ export const ContextFilter = ({ value, onChange }: ContextFilterProps) => {
             <div className="flex items-center gap-2">
               <div
                 className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: context.color }}
+                style={{ 
+                  backgroundColor: context.taskCount === 1 ? '#F2FCE2' : '#ea384c'
+                }}
               />
               {context.name}
             </div>

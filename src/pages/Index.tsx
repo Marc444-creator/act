@@ -35,7 +35,7 @@ const Index = () => {
     const interval = setInterval(checkRecurringTasks, 60000);
 
     return () => clearInterval(interval);
-  }, [store]);
+  }, []); // Remove store from dependencies to prevent infinite loop
 
   // Get only projects that have tasks assigned
   const projectsWithTasks = store.projects.filter(project =>

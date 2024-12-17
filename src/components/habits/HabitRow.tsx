@@ -29,11 +29,6 @@ export const HabitRow = ({
         onClick={() => onEdit({ id: habit.id, name: habit.name })}
       >
         <span className="text-sm sm:text-base font-medium">{habit.name}</span>
-        {habit.description && (
-          <span className="text-xs sm:text-sm text-gray-600 mt-0.5 line-clamp-2">
-            {habit.description}
-          </span>
-        )}
       </div>
       {displayDays.map((day) => {
         const dateStr = format(day, 'yyyy-MM-dd');

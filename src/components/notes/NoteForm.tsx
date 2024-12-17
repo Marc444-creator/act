@@ -39,7 +39,7 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
     }
 
     if (selectedNote) {
-      store.updateNote(selectedNote.id, content, title, selectedNoteType);
+      store.updateNote(selectedNote.id, { content, title, noteTypeId: selectedNoteType });
       toast.success("Note updated successfully!");
       if (onBack) onBack();
     } else {

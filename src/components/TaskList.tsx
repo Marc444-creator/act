@@ -79,15 +79,14 @@ export const TaskList = ({
   return (
     <div className="space-y-2">
       {!isForLater && (
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-2 mb-4 flex-nowrap overflow-x-auto">
+          {/* Project and Context filters are rendered from the parent component */}
           <Select
             value={sortOrder}
             onValueChange={(value: "asc" | "desc") => setSortOrder(value)}
           >
-            <SelectTrigger className="w-[60px]">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-              </div>
+            <SelectTrigger className="w-8 h-8 p-0">
+              <Calendar className="h-4 w-4" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="asc">Earliest First</SelectItem>

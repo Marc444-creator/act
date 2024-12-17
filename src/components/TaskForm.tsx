@@ -4,6 +4,8 @@ import { toast } from "sonner";
 import { TaskFormInputs } from "./tasks/TaskFormInputs";
 import { DatePicker } from "./tasks/DatePicker";
 import { RecurringTaskControls } from "./tasks/RecurringTaskControls";
+import { Button } from "@/components/ui/button";  // Add this import
+import { Input } from "@/components/ui/input";    // Add this import
 
 export const TaskForm = () => {
   const [title, setTitle] = useState("");

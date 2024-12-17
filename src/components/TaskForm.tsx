@@ -4,8 +4,8 @@ import { toast } from "sonner";
 import { TaskFormInputs } from "./tasks/TaskFormInputs";
 import { DatePicker } from "./tasks/DatePicker";
 import { RecurringTaskControls } from "./tasks/RecurringTaskControls";
-import { Button } from "@/components/ui/button";  // Add this import
-import { Input } from "@/components/ui/input";    // Add this import
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export const TaskForm = () => {
   const [title, setTitle] = useState("");
@@ -80,7 +80,7 @@ export const TaskForm = () => {
             className="flex-1"
           />
         </div>
-        <div className="flex items-center gap-2 flex-nowrap overflow-x-auto">
+        <div className="flex items-center gap-2 flex-nowrap overflow-x-auto bg-[#ea384c]/10 p-2 rounded-md">
           <TaskFormInputs
             title={title}
             setTitle={setTitle}

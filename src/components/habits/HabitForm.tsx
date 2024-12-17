@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useStore } from "../../store/useStore";
+import { Plus } from 'lucide-react';
 
 export const HabitForm = () => {
   const [newHabitName, setNewHabitName] = useState('');
-  const [newHabitDescription, setNewHabitDescription] = useState('');
   const { addHabit } = useStore();
 
   const handleAddHabit = (e: React.FormEvent) => {
@@ -18,28 +17,23 @@ export const HabitForm = () => {
     }
     addHabit({ 
       name: newHabitName, 
-      description: newHabitDescription.trim() || undefined, 
       completedDays: {} 
     });
     setNewHabitName('');
-    setNewHabitDescription('');
     toast.success("Habitude ajoutée avec succès!");
   };
 
   return (
-    <form onSubmit={handleAddHabit} className="space-y-4">
+    <form onSubmit={handleAddHabit} className="flex items-center space-x-2">
       <Input
         value={newHabitName}
         onChange={(e) => setNewHabitName(e.target.value)}
         placeholder="Nom de l'habitude..."
+        className="flex-grow"
       />
-      <Textarea
-        value={newHabitDescription}
-        onChange={(e) => setNewHabitDescription(e.target.value)}
-        placeholder="Description de l'habitude (optionnel)..."
-        className="min-h-[100px]"
-      />
-      <Button type="submit" className="w-full">Ajouter</Button>
+      <Button type="submit" variant="outline" size="icon">
+        <Plus className="h-4 w-4" />
+      </Button>
     </form>
   );
 };

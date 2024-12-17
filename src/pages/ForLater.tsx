@@ -3,8 +3,7 @@ import { FormNavigation } from "../components/FormNavigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState, useEffect } from "react";
 import { useStore } from "../store/useStore";
-import { Button } from "@/components/ui/button";
-import { Folder, MapPin } from "lucide-react";
+import { Folder, MapPin, Calendar } from "lucide-react";
 
 const ForLater = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -89,7 +88,10 @@ const ForLater = () => {
               onValueChange={(value: "asc" | "desc") => setSortOrder(value)}
             >
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Sort by date" />
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  <SelectValue placeholder="Sort by date" />
+                </div>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="asc">Earliest First</SelectItem>

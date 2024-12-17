@@ -22,6 +22,27 @@ const ForLater = () => {
     return () => clearInterval(interval);
   }, [store]);
 
+  // Get only projects and contexts that have "for later" tasks assigned
+  const projectsWithTasks = store.projects
+    .map(project => ({
+      ...project,
+      taskCount: store.tasks.filter(task => 
+        task.projectId === project.id && task.isForLater
+      ).length
+    }))
+    .filter(project => project.taskCount > 0)
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  const contextsWithTasks = store.contexts
+    .map(context => ({
+      ...context,
+      taskCount: store.tasks.filter(task => 
+        task.contextId === context.id && task.isForLater
+      ).length
+    }))
+    .filter(context => context.taskCount > 0)
+    .sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -41,12 +62,15 @@ const ForLater = () => {
                 </div>
               </SelectTrigger>
               <SelectContent>
-                {store.projects.map((project) => (
+                <SelectItem value="">All Projects</SelectItem>
+                {projectsWithTasks.map((project) => (
                   <SelectItem key={project.id} value={project.id}>
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: project.color }}
+                        className="w-2 h-2 rounded-full"
+                        style={{ 
+                          backgroundColor: project.taskCount === 1 ? '#4ade80' : '#ea384c'
+                        }}
                       />
                       {project.name}
                     </div>
@@ -65,12 +89,15 @@ const ForLater = () => {
                 </div>
               </SelectTrigger>
               <SelectContent>
-                {store.contexts.map((context) => (
+                <SelectItem value="">All Contexts</SelectItem>
+                {contextsWithTasks.map((context) => (
                   <SelectItem key={context.id} value={context.id}>
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: context.color }}
+                        className="w-2 h-2 rounded-full"
+                        style={{ 
+                          backgroundColor: context.taskCount === 1 ? '#4ade80' : '#ea384c'
+                        }}
                       />
                       {context.name}
                     </div>

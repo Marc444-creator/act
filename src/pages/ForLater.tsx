@@ -1,10 +1,23 @@
 import { TaskList } from "../components/TaskList";
 import { FormNavigation } from "../components/FormNavigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useStore } from "../store/useStore";
 
 const ForLater = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const store = useStore();
+
+  // Check for tasks to move every minute
+  useEffect(() => {
+    store.checkAndMoveForLaterTasks(); // Initial check
+    
+    const interval = setInterval(() => {
+      store.checkAndMoveForLaterTasks();
+    }, 60000); // Check every minute
+
+    return () => clearInterval(interval);
+  }, [store]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">

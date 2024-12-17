@@ -1,5 +1,6 @@
 import { Task } from "@/types";
-import { addDays, addWeeks, addMonths, getDay, getDate, isBefore, startOfDay, endOfDay } from "date-fns";
+import { addDays, addWeeks, addMonths, getDay, getDate, isBefore, startOfDay, endOfDay, isWithinInterval, subDays } from "date-fns";
+import { toast } from "sonner";
 
 export interface TaskStore {
   tasks: Task[];
@@ -9,10 +10,12 @@ export interface TaskStore {
   updateTask: (id: string, updates: Partial<Task>) => void;
   moveTaskToLater: (id: string) => void;
   generateRecurringTasks: () => void;
+  checkAndMoveForLaterTasks: () => void;
 }
 
 export const createTaskStore = (set: any, get: any): TaskStore => ({
   tasks: [],
+  
   addTask: (task) => {
     console.log("Adding new task:", task);
     set((state: any) => ({
@@ -22,28 +25,69 @@ export const createTaskStore = (set: any, get: any): TaskStore => ({
       ],
     }));
   },
+
   deleteTask: (id) =>
     set((state: any) => ({
       tasks: state.tasks.filter((task: Task) => task.id !== id),
     })),
+
   toggleTask: (id) =>
     set((state: any) => ({
       tasks: state.tasks.map((task: Task) =>
         task.id === id ? { ...task, completed: !task.completed } : task
       ),
     })),
+
   updateTask: (id, updates) =>
     set((state: any) => ({
       tasks: state.tasks.map((task: Task) =>
         task.id === id ? { ...task, ...updates } : task
       ),
     })),
+
   moveTaskToLater: (id) =>
     set((state: any) => ({
       tasks: state.tasks.map((task: Task) =>
         task.id === id ? { ...task, isForLater: !task.isForLater } : task
       ),
     })),
+
+  checkAndMoveForLaterTasks: () => {
+    const state = get();
+    const now = new Date();
+    let tasksToMove: Task[] = [];
+
+    state.tasks.forEach((task: Task) => {
+      if (task.isForLater && task.deadline) {
+        const deadlineDate = new Date(task.deadline);
+        const oneDayBefore = subDays(deadlineDate, 1);
+        
+        // Check if current date is within the day before deadline
+        if (isWithinInterval(now, { 
+          start: startOfDay(oneDayBefore),
+          end: endOfDay(oneDayBefore)
+        })) {
+          tasksToMove.push(task);
+        }
+      }
+    });
+
+    if (tasksToMove.length > 0) {
+      set((state: any) => ({
+        tasks: state.tasks.map((task: Task) =>
+          tasksToMove.some(t => t.id === task.id)
+            ? { ...task, isForLater: false }
+            : task
+        ),
+      }));
+
+      // Notify user about moved tasks
+      tasksToMove.forEach(task => {
+        toast.info(`Task "${task.title}" was moved to main list as deadline approaches`);
+      });
+    }
+  },
+
   generateRecurringTasks: () => {
     const state = get();
     const now = new Date();

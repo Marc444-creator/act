@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { format, subDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
+import { subDays } from 'date-fns';
 import { toast } from "sonner";
 import { FormNavigation } from "../components/FormNavigation";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useStore } from "../store/useStore";
 import { HabitForm } from "../components/habits/HabitForm";
-import { HabitsGridHeader } from "../components/habits/HabitsGridHeader";
-import { HabitRow } from "../components/habits/HabitRow";
+import { HabitsHeader } from "../components/habits/HabitsHeader";
+import { HabitsGrid } from "../components/habits/HabitsGrid";
 
 const Habits = () => {
   const [editingHabit, setEditingHabit] = useState<{ id: string; name: string } | null>(null);
@@ -33,18 +33,6 @@ const Habits = () => {
     }
   };
 
-  const calculateMonthlyScore = (completedDays: { [key: string]: boolean }) => {
-    const today = new Date();
-    const monthStart = startOfMonth(today);
-    const monthEnd = endOfMonth(today);
-    const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
-    
-    return daysInMonth.reduce((count, day) => {
-      const dateStr = format(day, 'yyyy-MM-dd');
-      return completedDays[dateStr] ? count + 1 : count;
-    }, 0);
-  };
-
   const today = new Date();
   const displayDays = [
     subDays(today, 2),
@@ -58,29 +46,19 @@ const Habits = () => {
         <FormNavigation />
         
         <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm space-y-6">
-          <h1 className="text-3xl font-bold text-center">Mes Habitudes</h1>
+          <HabitsHeader />
           
           <div className="bg-blue-100/80 p-4 rounded-lg">
             <HabitForm />
           </div>
 
-          <div className="mt-8 overflow-x-auto">
-            <div className="grid grid-cols-[minmax(120px,1fr)_repeat(3,40px)_50px_40px] sm:grid-cols-[minmax(150px,1fr)_repeat(3,50px)_60px_50px] gap-2 sm:gap-4">
-              <HabitsGridHeader displayDays={displayDays} />
-
-              {habits.map((habit) => (
-                <HabitRow
-                  key={habit.id}
-                  habit={habit}
-                  displayDays={displayDays}
-                  monthlyScore={calculateMonthlyScore(habit.completedDays)}
-                  onDelete={handleDeleteHabit}
-                  onEdit={setEditingHabit}
-                  onToggleDay={toggleHabitDay}
-                />
-              ))}
-            </div>
-          </div>
+          <HabitsGrid
+            habits={habits}
+            displayDays={displayDays}
+            onDeleteHabit={handleDeleteHabit}
+            onEditHabit={setEditingHabit}
+            onToggleHabitDay={toggleHabitDay}
+          />
         </div>
       </div>
 

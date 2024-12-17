@@ -25,15 +25,19 @@ export const HabitForm = () => {
 
   return (
     <form onSubmit={handleAddHabit} className="flex items-center space-x-2">
+      <Button 
+        type="submit" 
+        size="icon" 
+        className="bg-[#9b87f5] hover:bg-[#8b77e5] text-white rounded-full h-8 w-8 flex items-center justify-center"
+      >
+        <Plus className="h-4 w-4" />
+      </Button>
       <Input
         value={newHabitName}
         onChange={(e) => setNewHabitName(e.target.value)}
         placeholder="Nom de l'habitude..."
         className="flex-grow"
       />
-      <Button type="submit" variant="outline" size="icon">
-        <Plus className="h-4 w-4" />
-      </Button>
     </form>
   );
 };

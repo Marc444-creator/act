@@ -4,10 +4,7 @@ import App from './App'
 import './index.css'
 import { registerServiceWorker } from './serviceWorkerRegistration'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+const root = ReactDOM.createRoot(document.getElementById('root')!)
+root.render(<App />)
 
 registerServiceWorker()

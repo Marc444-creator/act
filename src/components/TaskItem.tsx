@@ -74,11 +74,13 @@ export const TaskItem = ({
     <>
       <div className="flex flex-col gap-2 p-4 bg-white rounded-lg shadow-sm md:flex-row md:items-center">
         <div className="flex items-center gap-2 flex-1">
-          <TaskActions
-            taskId={task.id}
-            completed={task.completed}
-            isRecurring={!!task.recurring}
-          />
+          <div className="bg-[#ea384c]/20 p-2 rounded-md">
+            <TaskActions
+              taskId={task.id}
+              completed={task.completed}
+              isRecurring={!!task.recurring}
+            />
+          </div>
           <span
             className={`flex-1 cursor-pointer ${
               task.completed ? "line-through text-gray-400" : ""

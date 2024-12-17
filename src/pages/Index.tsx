@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -13,6 +12,13 @@ import { TaskList } from "../components/TaskList";
 import { Switch } from "@/components/ui/switch";
 import { useNavigate } from "react-router-dom";
 import { FormNavigation } from "../components/FormNavigation";
+import { Folder, MapPin } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const Index = () => {
   const [filterProject, setFilterProject] = useState<string | null>(null);
@@ -113,23 +119,27 @@ const Index = () => {
 
         {/* Filters */}
         <div className="flex items-center gap-2 flex-nowrap overflow-x-auto">
-          <Select
-            value={filterProject || "none"}
-            onValueChange={(value) =>
-              setFilterProject(value === "none" ? null : value)
-            }
-          >
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Proj" />
-            </SelectTrigger>
+          <Select value={filterProject || "none"} onValueChange={(value) => setFilterProject(value === "none" ? null : value)}>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <SelectTrigger className="w-8 h-8 p-0">
+                    <Folder className="h-4 w-4" />
+                  </SelectTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Project</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <SelectContent>
-              <SelectItem value="none">Projects</SelectItem>
+              <SelectItem value="none">All Projects</SelectItem>
               {projectsWithTasks.map((project) => (
                 <SelectItem key={project.id} value={project.id}>
-                  <div className="flex items-center gap-2 text-xs">
+                  <div className="flex items-center gap-2">
                     <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: getDotColor(tasksPerProject[project.id]) }}
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: project.color }}
                     />
                     {project.name}
                   </div>
@@ -137,23 +147,28 @@ const Index = () => {
               ))}
             </SelectContent>
           </Select>
-          <Select
-            value={filterContext || "none"}
-            onValueChange={(value) =>
-              setFilterContext(value === "none" ? null : value)
-            }
-          >
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Ctx" />
-            </SelectTrigger>
+
+          <Select value={filterContext || "none"} onValueChange={(value) => setFilterContext(value === "none" ? null : value)}>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <SelectTrigger className="w-8 h-8 p-0">
+                    <MapPin className="h-4 w-4" />
+                  </SelectTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Context</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <SelectContent>
-              <SelectItem value="none">Contexts</SelectItem>
+              <SelectItem value="none">All Contexts</SelectItem>
               {contextsWithTasks.map((context) => (
                 <SelectItem key={context.id} value={context.id}>
-                  <div className="flex items-center gap-2 text-xs">
+                  <div className="flex items-center gap-2">
                     <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: getDotColor(tasksPerContext[context.id]) }}
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: context.color }}
                     />
                     {context.name}
                   </div>
@@ -161,6 +176,7 @@ const Index = () => {
               ))}
             </SelectContent>
           </Select>
+
           <div className="flex items-center gap-2 whitespace-nowrap">
             <Switch
               checked={showCompleted}

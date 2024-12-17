@@ -8,6 +8,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useStore } from "../../store/useStore";
+import { Folder, MapPin } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface TaskFormInputsProps {
   title: string;
@@ -41,9 +48,18 @@ export const TaskFormInputs = ({
       </div>
       <div className="flex items-center gap-2 flex-nowrap">
         <Select value={projectId || "none"} onValueChange={setProjectId}>
-          <SelectTrigger className="w-[80px]">
-            <SelectValue placeholder="Proj" />
-          </SelectTrigger>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <SelectTrigger className="w-8 h-8 p-0">
+                  <Folder className="h-4 w-4" />
+                </SelectTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Project</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <SelectContent>
             <SelectItem value="none">Project</SelectItem>
             {store.projects.map((project) => (
@@ -54,9 +70,18 @@ export const TaskFormInputs = ({
           </SelectContent>
         </Select>
         <Select value={contextId || "none"} onValueChange={setContextId}>
-          <SelectTrigger className="w-[80px]">
-            <SelectValue placeholder="Ctx" />
-          </SelectTrigger>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <SelectTrigger className="w-8 h-8 p-0">
+                  <MapPin className="h-4 w-4" />
+                </SelectTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Context</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <SelectContent>
             <SelectItem value="none">Context</SelectItem>
             {store.contexts.map((context) => (

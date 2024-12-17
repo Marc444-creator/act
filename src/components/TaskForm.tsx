@@ -69,7 +69,7 @@ export const TaskForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-blue-50/20 p-4 rounded-lg">
+    <form onSubmit={handleSubmit} className="space-y-4 bg-blue-50/50 p-4 rounded-lg">
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
           <Button type="submit" className="w-8 h-8 rounded-full p-0 shrink-0 text-sm">+</Button>
@@ -80,7 +80,7 @@ export const TaskForm = () => {
             className="flex-1"
           />
         </div>
-        <div className="flex items-center gap-2 flex-nowrap overflow-x-auto bg-blue-50/20 p-2 rounded-md">
+        <div className="flex items-center gap-2 flex-nowrap overflow-x-auto bg-blue-50/50 p-2 rounded-md">
           <TaskFormInputs
             title={title}
             setTitle={setTitle}

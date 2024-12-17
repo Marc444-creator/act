@@ -74,7 +74,7 @@ export const TaskItem = ({
     <>
       <div className="flex flex-col gap-2 p-4 bg-white rounded-lg shadow-sm md:flex-row md:items-center">
         <div className="flex items-center gap-2 flex-1">
-          <div className="bg-[#ea384c]/20 p-2 rounded-md">
+          <div>
             <TaskActions
               taskId={task.id}
               completed={task.completed}

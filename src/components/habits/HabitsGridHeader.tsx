@@ -9,19 +9,22 @@ interface HabitsGridHeaderProps {
 export const HabitsGridHeader = ({ displayDays }: HabitsGridHeaderProps) => {
   return (
     <>
-      <div className="font-semibold text-sm sm:text-base">Habitude</div>
+      <div className="font-semibold text-gray-500">Habitude</div>
       {displayDays.map((day) => (
-        <div key={day.toISOString()} className="text-center font-semibold">
-          <div className="text-xs sm:text-sm">
-            {format(day, 'EEE', { locale: fr })}
-          </div>
-          <div className="text-xs text-gray-500">
-            {format(day, 'd MMM')}
-          </div>
+        <div key={day.toString()} className="text-center font-medium text-gray-500 text-sm">
+          {format(day, 'E', { locale: fr })}
         </div>
       ))}
-      <div className="font-semibold text-center text-sm sm:text-base">Score</div>
-      <div className="font-semibold text-center text-sm sm:text-base">Action</div>
+      <div className="text-center font-medium text-gray-500 text-sm">
+        Mois
+      </div>
+      <div className="text-center font-medium text-gray-500 text-sm">
+        Sem.
+      </div>
+      <div className="text-center font-medium text-gray-500 text-sm">
+        An
+      </div>
+      <div></div>
     </>
   );
 };

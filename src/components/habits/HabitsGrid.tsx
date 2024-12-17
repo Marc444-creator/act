@@ -1,5 +1,5 @@
 import React from 'react';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfYear, endOfYear, startOfWeek, endOfWeek, differenceInWeeks } from 'date-fns';
 import { HabitsGridHeader } from './HabitsGridHeader';
 import { HabitRow } from './HabitRow';
 import type { Habit } from "../../types";
@@ -31,9 +31,38 @@ export const HabitsGrid = ({
     }, 0);
   };
 
+  const calculateYearlyScore = (completedDays: { [key: string]: boolean }) => {
+    const today = new Date();
+    const yearStart = startOfYear(today);
+    const yearEnd = endOfYear(today);
+    const daysInYear = eachDayOfInterval({ start: yearStart, end: yearEnd });
+    
+    return daysInYear.reduce((count, day) => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      return completedDays[dateStr] ? count + 1 : count;
+    }, 0);
+  };
+
+  const calculateWeeklyAverage = (completedDays: { [key: string]: boolean }) => {
+    const today = new Date();
+    const yearStart = startOfYear(today);
+    let totalWeeks = differenceInWeeks(today, yearStart) + 1;
+    let totalCompletedDays = 0;
+
+    const days = eachDayOfInterval({ start: yearStart, end: today });
+    days.forEach(day => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      if (completedDays[dateStr]) {
+        totalCompletedDays++;
+      }
+    });
+
+    return totalWeeks > 0 ? (totalCompletedDays / totalWeeks).toFixed(1) : '0';
+  };
+
   return (
     <div className="mt-8 overflow-x-auto">
-      <div className="grid grid-cols-[minmax(120px,1fr)_repeat(3,40px)_50px_40px] sm:grid-cols-[minmax(150px,1fr)_repeat(3,50px)_60px_50px] gap-2 sm:gap-4">
+      <div className="grid grid-cols-[minmax(120px,1fr)_repeat(3,40px)_50px_50px_50px_40px] sm:grid-cols-[minmax(150px,1fr)_repeat(3,50px)_60px_60px_60px_50px] gap-2 sm:gap-4">
         <HabitsGridHeader displayDays={displayDays} />
         {habits.map((habit) => (
           <HabitRow
@@ -41,6 +70,8 @@ export const HabitsGrid = ({
             habit={habit}
             displayDays={displayDays}
             monthlyScore={calculateMonthlyScore(habit.completedDays)}
+            weeklyAverage={calculateWeeklyAverage(habit.completedDays)}
+            yearlyScore={calculateYearlyScore(habit.completedDays)}
             onDelete={onDeleteHabit}
             onEdit={onEditHabit}
             onToggleDay={onToggleHabitDay}

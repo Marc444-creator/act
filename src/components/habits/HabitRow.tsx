@@ -9,6 +9,8 @@ interface HabitRowProps {
   habit: Habit;
   displayDays: Date[];
   monthlyScore: number;
+  weeklyAverage: string;
+  yearlyScore: number;
   onDelete: (id: string) => void;
   onEdit: (habit: { id: string; name: string }) => void;
   onToggleDay: (habitId: string, dateStr: string) => void;
@@ -18,6 +20,8 @@ export const HabitRow = ({
   habit,
   displayDays,
   monthlyScore,
+  weeklyAverage,
+  yearlyScore,
   onDelete,
   onEdit,
   onToggleDay
@@ -42,8 +46,14 @@ export const HabitRow = ({
           </div>
         );
       })}
-      <div className="text-center font-semibold text-blue-600 text-sm sm:text-base">
+      <div className="text-center font-semibold text-blue-600 text-sm sm:text-base" title="Monthly Score">
         {monthlyScore}
+      </div>
+      <div className="text-center font-semibold text-green-600 text-sm sm:text-base" title="Weekly Average">
+        {weeklyAverage}
+      </div>
+      <div className="text-center font-semibold text-purple-600 text-sm sm:text-base" title="Yearly Score">
+        {yearlyScore}
       </div>
       <div className="flex justify-center">
         <Button

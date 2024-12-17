@@ -12,6 +12,7 @@ import {
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Plus } from "lucide-react";
 
 interface NoteFormProps {
   selectedNote?: Note;
@@ -59,12 +60,21 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <Input
-        placeholder="Note title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="text-xl font-semibold"
-      />
+      <div className="flex items-center gap-2">
+        <Button 
+          type="submit" 
+          size="icon"
+          className="bg-[#9b87f5] hover:bg-[#9b87f5]/90"
+        >
+          <Plus className="h-4 w-4" />
+        </Button>
+        <Input
+          placeholder="Note title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="text-xl font-semibold"
+        />
+      </div>
       
       <div className="flex gap-2">
         <Select
@@ -123,9 +133,11 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
         }`}
       />
 
-      <Button type="submit" className="w-full">
-        {selectedNote ? "Update Note" : "Create Note"}
-      </Button>
+      {selectedNote && (
+        <Button type="submit" className="w-full">
+          Update Note
+        </Button>
+      )}
     </form>
   );
 };

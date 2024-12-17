@@ -55,7 +55,7 @@ export const ProjectFilter = ({ value, onChange }: ProjectFilterProps) => {
               <div
                 className="w-2 h-2 rounded-full"
                 style={{ 
-                  backgroundColor: project.taskCount === 1 ? '#F2FCE2' : '#ea384c'
+                  backgroundColor: project.taskCount === 1 ? '#4ade80' : '#ea384c'
                 }}
               />
               {project.name}

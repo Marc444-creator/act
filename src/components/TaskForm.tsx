@@ -69,16 +69,14 @@ export const TaskForm = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 bg-blue-50 p-4 rounded-lg">
       <div className="flex flex-col gap-4">
-        <div className="flex gap-2">
-          <TaskFormInputs
-            title={title}
-            setTitle={setTitle}
-            projectId={projectId}
-            setProjectId={setProjectId}
-            contextId={contextId}
-            setContextId={setContextId}
-          />
-        </div>
+        <TaskFormInputs
+          title={title}
+          setTitle={setTitle}
+          projectId={projectId}
+          setProjectId={setProjectId}
+          contextId={contextId}
+          setContextId={setContextId}
+        />
         <div className="flex items-center gap-2 flex-nowrap overflow-x-auto">
           <DatePicker
             deadline={deadline}

@@ -40,7 +40,7 @@ export const TaskFormControls = ({
   setDailyInterval,
 }: TaskFormControlsProps) => {
   return (
-    <div className="flex items-center gap-2 flex-nowrap overflow-x-auto bg-blue-50/50 p-2 rounded-md">
+    <div className="flex items-center justify-center gap-2 flex-nowrap overflow-x-auto bg-blue-50/50 p-2 rounded-md">
       <TaskFormInputs
         title={title}
         setTitle={setTitle}

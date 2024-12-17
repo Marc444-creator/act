@@ -69,15 +69,24 @@ export const TaskForm = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 bg-blue-50 p-4 rounded-lg">
       <div className="flex flex-col gap-4">
-        <TaskFormInputs
-          title={title}
-          setTitle={setTitle}
-          projectId={projectId}
-          setProjectId={setProjectId}
-          contextId={contextId}
-          setContextId={setContextId}
-        />
+        <div className="flex items-center gap-2">
+          <Button type="submit" className="w-8 h-8 rounded-full p-0 shrink-0 text-sm">+</Button>
+          <Input
+            placeholder="Add a task..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="flex-1"
+          />
+        </div>
         <div className="flex items-center gap-2 flex-nowrap overflow-x-auto">
+          <TaskFormInputs
+            title={title}
+            setTitle={setTitle}
+            projectId={projectId}
+            setProjectId={setProjectId}
+            contextId={contextId}
+            setContextId={setContextId}
+          />
           <DatePicker
             deadline={deadline}
             setDeadline={setDeadline}

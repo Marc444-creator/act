@@ -21,11 +21,13 @@ interface ProjectFilterProps {
 export const ProjectFilter = ({ value, onChange }: ProjectFilterProps) => {
   const store = useStore();
   
-  // Get only projects that have tasks assigned and count their tasks
+  // Get only projects that have uncompleted tasks assigned and count their tasks
   const projectsWithTasks = store.projects
     .map(project => ({
       ...project,
-      taskCount: store.tasks.filter(task => task.projectId === project.id).length
+      taskCount: store.tasks.filter(task => 
+        task.projectId === project.id && !task.completed
+      ).length
     }))
     .filter(project => project.taskCount > 0)
     .sort((a, b) => a.name.localeCompare(b.name));

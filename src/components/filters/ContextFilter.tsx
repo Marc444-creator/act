@@ -21,11 +21,13 @@ interface ContextFilterProps {
 export const ContextFilter = ({ value, onChange }: ContextFilterProps) => {
   const store = useStore();
   
-  // Get only contexts that have tasks assigned and count their tasks
+  // Get only contexts that have uncompleted tasks assigned and count their tasks
   const contextsWithTasks = store.contexts
     .map(context => ({
       ...context,
-      taskCount: store.tasks.filter(task => task.contextId === context.id).length
+      taskCount: store.tasks.filter(task => 
+        task.contextId === context.id && !task.completed
+      ).length
     }))
     .filter(context => context.taskCount > 0)
     .sort((a, b) => a.name.localeCompare(b.name));

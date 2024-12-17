@@ -39,7 +39,7 @@ export const TaskFormInputs = ({
           className="flex-1"
         />
       </div>
-      <div className="flex gap-2 w-full">
+      <div className="flex items-center gap-2 flex-nowrap">
         <Select value={projectId || "none"} onValueChange={setProjectId}>
           <SelectTrigger className="w-[80px]">
             <SelectValue placeholder="Proj" />

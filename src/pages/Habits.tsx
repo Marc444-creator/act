@@ -58,9 +58,11 @@ const Habits = () => {
         <FormNavigation />
         
         <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm space-y-6">
-          <h1 className="text-3xl font-bold">Mes Habitudes</h1>
+          <h1 className="text-3xl font-bold text-center">Mes Habitudes</h1>
           
-          <HabitForm />
+          <div className="bg-blue-100/80 p-4 rounded-lg">
+            <HabitForm />
+          </div>
 
           <div className="mt-8 overflow-x-auto">
             <div className="grid grid-cols-[minmax(120px,1fr)_repeat(3,40px)_50px_40px] sm:grid-cols-[minmax(150px,1fr)_repeat(3,50px)_60px_50px] gap-2 sm:gap-4">

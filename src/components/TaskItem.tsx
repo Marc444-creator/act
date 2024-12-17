@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
+import { RecurringTaskControls } from "./tasks/RecurringTaskControls";
 import {
   Dialog,
   DialogContent,
@@ -24,6 +25,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useStore } from "../store/useStore";
+import { useState } from "react";
 
 interface TaskItemProps {
   task: any;
@@ -55,6 +57,41 @@ export const TaskItem = ({
   setEditedDeadline,
 }: TaskItemProps) => {
   const store = useStore();
+  const [isRecurring, setIsRecurring] = useState(!!task.recurring);
+  const [frequency, setFrequency] = useState<'daily' | 'weekly' | 'monthly'>(
+    task.recurring?.frequency || 'daily'
+  );
+  const [selectedDays, setSelectedDays] = useState<number[]>(
+    task.recurring?.daysOfWeek || task.recurring?.daysOfMonth || []
+  );
+  const [dailyInterval, setDailyInterval] = useState(task.recurring?.interval || 1);
+
+  const handleEditSubmit = () => {
+    const updates: any = {
+      title: editedTitle,
+      projectId: editedProjectId,
+      contextId: editedContextId,
+      deadline: editedDeadline,
+      recurring: isRecurring ? {
+        frequency,
+        lastGenerated: editedDeadline || new Date(),
+        daysOfWeek: frequency === 'weekly' ? selectedDays : undefined,
+        daysOfMonth: frequency === 'monthly' ? selectedDays : undefined,
+        interval: frequency === 'daily' ? dailyInterval : undefined
+      } : null
+    };
+
+    store.updateTask(task.id, updates);
+    onEditSubmit(task.id);
+  };
+
+  const toggleDay = (day: number) => {
+    setSelectedDays(prev => 
+      prev.includes(day) 
+        ? prev.filter(d => d !== day)
+        : [...prev, day].sort((a, b) => a - b)
+    );
+  };
 
   return (
     <>
@@ -121,7 +158,7 @@ export const TaskItem = ({
         </div>
       </div>
 
-      <Dialog open={editingTaskId === task.id} onOpenChange={() => onEditSubmit(task.id)}>
+      <Dialog open={editingTaskId === task.id} onOpenChange={() => handleEditSubmit()}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Edit Task</DialogTitle>
@@ -188,6 +225,18 @@ export const TaskItem = ({
                   />
                 </PopoverContent>
               </Popover>
+              <div className="flex items-center gap-2 flex-nowrap overflow-x-auto">
+                <RecurringTaskControls
+                  isRecurring={isRecurring}
+                  setIsRecurring={setIsRecurring}
+                  frequency={frequency}
+                  setFrequency={setFrequency}
+                  selectedDays={selectedDays}
+                  toggleDay={toggleDay}
+                  dailyInterval={dailyInterval}
+                  setDailyInterval={setDailyInterval}
+                />
+              </div>
             </div>
           </div>
         </DialogContent>

@@ -32,17 +32,15 @@ const ForLater = () => {
           
           <div className="flex items-center gap-4">
             <Select
-              value={selectedProject || "all"}
-              onValueChange={(value) => setSelectedProject(value === "all" ? null : value)}
+              value={selectedProject || ""}
+              onValueChange={(value) => setSelectedProject(value === "" ? null : value)}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[60px]">
                 <div className="flex items-center gap-2">
                   <Folder className="h-4 w-4" />
-                  <SelectValue placeholder="Filter by project" />
                 </div>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Projects</SelectItem>
                 {store.projects.map((project) => (
                   <SelectItem key={project.id} value={project.id}>
                     <div className="flex items-center gap-2">
@@ -58,17 +56,15 @@ const ForLater = () => {
             </Select>
 
             <Select
-              value={selectedContext || "all"}
-              onValueChange={(value) => setSelectedContext(value === "all" ? null : value)}
+              value={selectedContext || ""}
+              onValueChange={(value) => setSelectedContext(value === "" ? null : value)}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[60px]">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4" />
-                  <SelectValue placeholder="Filter by context" />
                 </div>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Contexts</SelectItem>
                 {store.contexts.map((context) => (
                   <SelectItem key={context.id} value={context.id}>
                     <div className="flex items-center gap-2">

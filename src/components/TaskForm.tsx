@@ -77,7 +77,7 @@ export const TaskForm = () => {
           contextId={contextId}
           setContextId={setContextId}
         />
-        <div className="flex gap-1 items-center flex-wrap">
+        <div className="flex flex-wrap gap-2">
           <DatePicker
             deadline={deadline}
             setDeadline={setDeadline}

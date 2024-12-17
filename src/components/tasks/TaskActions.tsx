@@ -1,4 +1,4 @@
-import { Check, SendHorizontal, Repeat } from "lucide-react";
+import { X, SendHorizontal, Repeat } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/store/useStore";
 
@@ -18,7 +18,7 @@ export const TaskActions = ({ taskId, completed, isRecurring }: TaskActionsProps
         size="icon"
         onClick={() => store.toggleTask(taskId)}
       >
-        <Check className={`w-4 h-4 ${completed ? "text-green-500" : ""}`} />
+        <X className={`w-4 h-4 ${completed ? "text-green-500" : ""}`} />
       </Button>
       {isRecurring && (
         <Repeat className="w-4 h-4 text-blue-500" />

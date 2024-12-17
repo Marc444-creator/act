@@ -12,7 +12,7 @@ import { TaskList } from "../components/TaskList";
 import { Switch } from "@/components/ui/switch";
 import { useNavigate } from "react-router-dom";
 import { FormNavigation } from "../components/FormNavigation";
-import { Folder, MapPin } from "lucide-react";
+import { Folder, MapPin, Calendar } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,

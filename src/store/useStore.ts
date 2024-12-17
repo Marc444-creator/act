@@ -11,10 +11,12 @@ interface Store {
   contexts: Context[];
   notes: Note[];
   noteTypes: NoteType[];
+  remindersEnabled: boolean;
   addHabit: (habit: Omit<Habit, "id">) => void;
   deleteHabit: (id: string) => void;
   toggleHabitDay: (habitId: string, date: string) => void;
   updateHabit: (id: string, name: string) => void;
+  toggleReminders: () => void;
   addTask: (task: Omit<Task, "id" | "createdAt">) => void;
   deleteTask: (id: string) => void;
   toggleTask: (id: string) => void;
@@ -42,6 +44,7 @@ export const useStore = create<Store>()(
       contexts: [],
       notes: [],
       noteTypes: [],
+      remindersEnabled: true,
       
       // Habit methods
       addHabit: (habit) => {
@@ -73,7 +76,10 @@ export const useStore = create<Store>()(
             habit.id === id ? { ...habit, name } : habit
           ),
         })),
-
+      toggleReminders: () =>
+        set((state) => ({
+          remindersEnabled: !state.remindersEnabled,
+        })),
       // Project methods
       addProject: (project) => {
         set((state) => ({

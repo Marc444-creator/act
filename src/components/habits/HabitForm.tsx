@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useStore } from "../../store/useStore";
-import { Plus } from 'lucide-react';
+import { Plus, BellOff } from 'lucide-react';
 
 export const HabitForm = () => {
   const [newHabitName, setNewHabitName] = useState('');
-  const { addHabit } = useStore();
+  const { addHabit, toggleReminders, remindersEnabled } = useStore();
 
   const handleAddHabit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +38,16 @@ export const HabitForm = () => {
         placeholder="Nom de l'habitude..."
         className="flex-grow"
       />
+      <Button
+        type="button"
+        size="icon"
+        variant={remindersEnabled ? "default" : "secondary"}
+        onClick={() => toggleReminders()}
+        className="h-8 w-8"
+        title={remindersEnabled ? "Désactiver les rappels" : "Activer les rappels"}
+      >
+        <BellOff className="h-4 w-4" />
+      </Button>
     </form>
   );
 };

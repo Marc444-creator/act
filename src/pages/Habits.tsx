@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { subDays } from 'date-fns';
+import React, { useState, useEffect } from 'react';
+import { subDays, format } from 'date-fns';
 import { toast } from "sonner";
 import { FormNavigation } from "../components/FormNavigation";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -9,10 +9,38 @@ import { useStore } from "../store/useStore";
 import { HabitForm } from "../components/habits/HabitForm";
 import { HabitsHeader } from "../components/habits/HabitsHeader";
 import { HabitsGrid } from "../components/habits/HabitsGrid";
+import { HabitReminderDialog } from "../components/habits/HabitReminderDialog";
 
 const Habits = () => {
   const [editingHabit, setEditingHabit] = useState<{ id: string; name: string } | null>(null);
-  const { habits, deleteHabit, toggleHabitDay, updateHabit } = useStore();
+  const [showReminder, setShowReminder] = useState(false);
+  const { habits, deleteHabit, toggleHabitDay, updateHabit, remindersEnabled } = useStore();
+
+  useEffect(() => {
+    const checkHabits = () => {
+      if (!remindersEnabled) return;
+      
+      const lastShownDate = localStorage.getItem('lastReminderDate');
+      const today = format(new Date(), 'yyyy-MM-dd');
+      
+      if (lastShownDate === today) return;
+
+      const threeDaysAgo = subDays(new Date(), 3);
+      const untickedHabits = habits.filter(habit => {
+        const recentDays = [0, 1, 2].map(days => 
+          format(subDays(new Date(), days), 'yyyy-MM-dd')
+        );
+        return !recentDays.some(day => habit.completedDays[day]);
+      });
+
+      if (untickedHabits.length > 0) {
+        setShowReminder(true);
+        localStorage.setItem('lastReminderDate', today);
+      }
+    };
+
+    checkHabits();
+  }, [habits, remindersEnabled]);
 
   const handleDeleteHabit = (habitId: string) => {
     if (confirm("Êtes-vous sûr de vouloir supprimer cette habitude ?")) {
@@ -39,6 +67,13 @@ const Habits = () => {
     subDays(today, 1),
     today
   ];
+
+  const untickedHabits = habits.filter(habit => {
+    const recentDays = [0, 1, 2].map(days => 
+      format(subDays(new Date(), days), 'yyyy-MM-dd')
+    );
+    return !recentDays.some(day => habit.completedDays[day]);
+  }).map(habit => habit.name);
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
@@ -78,6 +113,12 @@ const Habits = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <HabitReminderDialog 
+        open={showReminder} 
+        onOpenChange={setShowReminder}
+        untickedHabits={untickedHabits}
+      />
     </div>
   );
 };

@@ -62,27 +62,29 @@ const Index = () => {
       className="min-h-screen bg-gray-50 p-8"
       onTouchStart={handleTouchStart}
     >
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-4xl mx-auto space-y-4">
         <FormNavigation />
         
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center mb-2">
           <h1 className="text-4xl font-bold text-gray-900">Tasks</h1>
         </div>
 
         <TaskForm />
 
-        <FilterBar
-          filterProject={filterProject}
-          setFilterProject={setFilterProject}
-          filterContext={filterContext}
-          setFilterContext={setFilterContext}
-          sortOrder={sortOrder}
-          setSortOrder={setSortOrder}
-          showCompleted={showCompleted}
-          setShowCompleted={setShowCompleted}
-        />
+        <div className="space-y-0">
+          <FilterBar
+            filterProject={filterProject}
+            setFilterProject={setFilterProject}
+            filterContext={filterContext}
+            setFilterContext={setFilterContext}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            showCompleted={showCompleted}
+            setShowCompleted={setShowCompleted}
+          />
 
-        <SearchBar value={searchTerm} onChange={setSearchTerm} />
+          <SearchBar value={searchTerm} onChange={setSearchTerm} />
+        </div>
 
         <TaskList
           filterProject={filterProject}

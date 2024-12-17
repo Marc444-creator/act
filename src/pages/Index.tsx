@@ -1,30 +1,17 @@
 import { useState, useEffect } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useStore } from "../store/useStore";
 import { TaskForm } from "../components/TaskForm";
 import { TaskList } from "../components/TaskList";
-import { Switch } from "@/components/ui/switch";
 import { useNavigate } from "react-router-dom";
 import { FormNavigation } from "../components/FormNavigation";
-import { Folder, MapPin, Calendar } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { FilterBar } from "../components/filters/FilterBar";
 
 const Index = () => {
   const [filterProject, setFilterProject] = useState<string | null>(null);
   const [filterContext, setFilterContext] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<string | null>(null);
   const [showCompleted, setShowCompleted] = useState(false);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const navigate = useNavigate();
   const store = useStore();
 
@@ -41,42 +28,7 @@ const Index = () => {
     const interval = setInterval(checkRecurringTasks, 60000);
 
     return () => clearInterval(interval);
-  }, []); // Remove store from dependencies to prevent infinite loop
-
-  // Get only projects that have tasks assigned
-  const projectsWithTasks = store.projects.filter(project =>
-    store.tasks.some(task => task.projectId === project.id)
-  ).sort((a, b) => a.name.localeCompare(b.name));
-
-  // Get only contexts that have tasks assigned
-  const contextsWithTasks = store.contexts.filter(context =>
-    store.tasks.some(task => task.contextId === context.id)
-  ).sort((a, b) => a.name.localeCompare(b.name));
-
-  // Calculate incomplete tasks per context
-  const tasksPerContext = store.contexts.reduce((acc, context) => {
-    const count = store.tasks.filter(task => 
-      task.contextId === context.id && !task.completed
-    ).length;
-    acc[context.id] = count;
-    return acc;
-  }, {} as Record<string, number>);
-
-  // Calculate incomplete tasks per project
-  const tasksPerProject = store.projects.reduce((acc, project) => {
-    const count = store.tasks.filter(task => 
-      task.projectId === project.id && !task.completed
-    ).length;
-    acc[project.id] = count;
-    return acc;
-  }, {} as Record<string, number>);
-
-  // Get dot color based on incomplete task count
-  const getDotColor = (count: number) => {
-    if (count === 0) return '#22c55e'; // green
-    if (count === 1) return '#FFD700'; // yellow
-    return '#ef4444'; // red
-  };
+  }, []);
 
   // Handle swipe right
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -117,83 +69,23 @@ const Index = () => {
 
         <TaskForm />
 
-        {/* Filters */}
-        <div className="flex items-center gap-2 flex-nowrap overflow-x-auto">
-          <Select value={filterProject || "none"} onValueChange={(value) => setFilterProject(value === "none" ? null : value)}>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <SelectTrigger className="w-8 h-8 p-0">
-                    <Folder className="h-4 w-4" />
-                  </SelectTrigger>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Project</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <SelectContent>
-              <SelectItem value="none">All Projects</SelectItem>
-              {projectsWithTasks.map((project) => (
-                <SelectItem key={project.id} value={project.id}>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: project.color }}
-                    />
-                    {project.name}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select value={filterContext || "none"} onValueChange={(value) => setFilterContext(value === "none" ? null : value)}>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <SelectTrigger className="w-8 h-8 p-0">
-                    <MapPin className="h-4 w-4" />
-                  </SelectTrigger>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Context</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <SelectContent>
-              <SelectItem value="none">All Contexts</SelectItem>
-              {contextsWithTasks.map((context) => (
-                <SelectItem key={context.id} value={context.id}>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: context.color }}
-                    />
-                    {context.name}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <div className="flex items-center gap-2 whitespace-nowrap">
-            <Switch
-              checked={showCompleted}
-              onCheckedChange={setShowCompleted}
-              id="show-completed"
-            />
-            <label htmlFor="show-completed" className="text-sm text-gray-600">
-              Show completed
-            </label>
-          </div>
-        </div>
+        <FilterBar
+          filterProject={filterProject}
+          setFilterProject={setFilterProject}
+          filterContext={filterContext}
+          setFilterContext={setFilterContext}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
+          showCompleted={showCompleted}
+          setShowCompleted={setShowCompleted}
+        />
 
         <TaskList
           filterProject={filterProject}
           filterContext={filterContext}
           filterStatus={filterStatus}
           showCompleted={showCompleted}
+          sortOrder={sortOrder}
         />
       </div>
     </div>

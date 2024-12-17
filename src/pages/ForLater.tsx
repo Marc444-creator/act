@@ -28,7 +28,7 @@ const ForLater = () => {
         <FormNavigation />
         
         <div className="space-y-4">
-          <h1 className="text-4xl font-bold text-gray-900">For Later</h1>
+          <h1 className="text-4xl font-bold text-gray-900 text-center">For Later</h1>
           
           <div className="flex items-center gap-4 bg-[#ea384c]/10 p-4 rounded-lg">
             <Select

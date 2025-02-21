@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -29,7 +30,7 @@ export const HabitRow = ({
   return (
     <>
       <div 
-        className="flex flex-col justify-center pr-2 cursor-pointer hover:bg-gray-50 rounded-md"
+        className="flex flex-col justify-center pr-2 cursor-pointer hover:bg-gray-50 rounded-md border border-white/20"
         onClick={() => onEdit({ id: habit.id, name: habit.name })}
       >
         <span className="text-sm sm:text-base font-medium">{habit.name}</span>
@@ -37,7 +38,7 @@ export const HabitRow = ({
       {displayDays.map((day) => {
         const dateStr = format(day, 'yyyy-MM-dd');
         return (
-          <div key={dateStr} className="flex justify-center items-center">
+          <div key={dateStr} className="flex justify-center items-center border border-white/20">
             <Checkbox
               checked={habit.completedDays[dateStr] || false}
               onCheckedChange={() => onToggleDay(habit.id, dateStr)}
@@ -46,16 +47,16 @@ export const HabitRow = ({
           </div>
         );
       })}
-      <div className="text-center font-semibold text-blue-600 text-sm sm:text-base" title="Monthly Score">
+      <div className="text-center font-semibold text-blue-600 text-sm sm:text-base border border-white/20" title="Monthly Score">
         {monthlyScore}
       </div>
-      <div className="text-center font-semibold text-green-600 text-sm sm:text-base" title="Weekly Average">
+      <div className="text-center font-semibold text-green-600 text-sm sm:text-base border border-white/20" title="Weekly Average">
         {weeklyAverage}
       </div>
-      <div className="text-center font-semibold text-purple-600 text-sm sm:text-base" title="Yearly Score">
+      <div className="text-center font-semibold text-purple-600 text-sm sm:text-base border border-white/20" title="Yearly Score">
         {yearlyScore}
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center border border-white/20">
         <Button
           variant="ghost"
           size="icon"

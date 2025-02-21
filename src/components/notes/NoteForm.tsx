@@ -83,7 +83,10 @@ export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps)
   if (!isFormVisible && !selectedNote) {
     return (
       <Button 
-        onClick={() => setIsFormVisible(true)}
+        onClick={() => {
+          setIsFormVisible(true);
+          onFormVisible?.(true);
+        }}
         size="icon"
         className="bg-[#9b87f5] hover:bg-[#9b87f5]/90"
       >

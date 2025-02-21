@@ -1,4 +1,3 @@
-
 import { Note } from "@/types";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -67,11 +66,14 @@ export const NoteForm = ({
     setUrls(urls.filter(url => url !== urlToRemove));
   };
 
-  const handleAddDate = (date: Date) => {
-    if (!dates.some(d => d.getTime() === date.getTime())) {
-      setDates([...dates, date]);
+  const handleAddDate = (date: Date | undefined) => {
+    if (date) {
+      const newDate = new Date(date.setHours(0, 0, 0, 0));
+      if (!dates.some(d => d.getTime() === newDate.getTime())) {
+        setDates([...dates, newDate]);
+      }
+      setIsCalendarOpen(false);
     }
-    setIsCalendarOpen(false);
   };
 
   const handleRemoveDate = (dateToRemove: Date) => {
@@ -249,6 +251,7 @@ export const NoteForm = ({
           <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger asChild>
               <Button
+                type="button"
                 variant="outline"
                 className="bg-white text-black hover:bg-white/90 hover:text-black"
               >
@@ -259,9 +262,10 @@ export const NoteForm = ({
             <PopoverContent className="w-auto p-0" align="start">
               <CalendarComponent
                 mode="single"
-                selected={new Date()}
-                onSelect={(date) => date && handleAddDate(date)}
+                selected={undefined}
+                onSelect={handleAddDate}
                 initialFocus
+                className="bg-white"
               />
             </PopoverContent>
           </Popover>

@@ -73,7 +73,7 @@ export const TaskItem = ({
 
   return (
     <>
-      <div className="flex flex-col gap-2 p-4 bg-black text-white rounded-lg shadow-sm md:flex-row md:items-center">
+      <div className="flex flex-col gap-2 p-4 bg-black text-white rounded-lg shadow-sm md:flex-row md:items-center border border-white">
         <div className="flex items-center gap-2 flex-1">
           <div>
             <TaskActions

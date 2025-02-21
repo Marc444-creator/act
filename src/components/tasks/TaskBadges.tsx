@@ -1,3 +1,4 @@
+
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -15,7 +16,7 @@ export const TaskBadges = ({ deadline, projectId, contextId }: TaskBadgesProps) 
   return (
     <div className="flex items-center gap-2 ml-6 flex-wrap">
       {deadline && (
-        <Badge variant="outline" className="gap-1">
+        <Badge variant="outline" className="gap-1 text-white border-white">
           <CalendarIcon className="w-3 h-3" />
           {format(new Date(deadline), 'PP')}
         </Badge>

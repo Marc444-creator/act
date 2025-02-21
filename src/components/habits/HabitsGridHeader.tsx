@@ -22,17 +22,7 @@ export const HabitsGridHeader = ({ displayDays }: HabitsGridHeaderProps) => {
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="text-center font-semibold text-sm sm:text-base cursor-help">
-              Mois
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Total nombre d'occurrences dans le mois en cours</p>
-          </TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div className="text-center font-semibold text-sm sm:text-base cursor-help">
-              Sem.
+              W
             </div>
           </TooltipTrigger>
           <TooltipContent>
@@ -42,7 +32,17 @@ export const HabitsGridHeader = ({ displayDays }: HabitsGridHeaderProps) => {
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="text-center font-semibold text-sm sm:text-base cursor-help">
-              An
+              M
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Total nombre d'occurrences dans le mois en cours</p>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="text-center font-semibold text-sm sm:text-base cursor-help">
+              Y
             </div>
           </TooltipTrigger>
           <TooltipContent>

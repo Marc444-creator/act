@@ -11,17 +11,20 @@ interface ContextFilterProps {
 export const ContextFilter = ({ value, onChange }: ContextFilterProps) => {
   const store = useStore();
 
-  // Filter contexts and count uncompleted tasks
-  const contextsWithUncompletedTasks = store.contexts.filter(context => {
-    return store.tasks.some(task => 
-      task.contextId === context.id && !task.completed
-    );
-  }).map(context => {
-    const uncompletedCount = store.tasks.filter(
-      task => task.contextId === context.id && !task.completed
-    ).length;
-    return { ...context, uncompletedCount };
-  });
+  // Filter and sort contexts alphabetically by name
+  const contextsWithUncompletedTasks = store.contexts
+    .filter(context => {
+      return store.tasks.some(task => 
+        task.contextId === context.id && !task.completed
+      );
+    })
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map(context => {
+      const uncompletedCount = store.tasks.filter(
+        task => task.contextId === context.id && !task.completed
+      ).length;
+      return { ...context, uncompletedCount };
+    });
 
   const getStatusDotColor = (count: number) => {
     if (count === 1) return "bg-green-500";

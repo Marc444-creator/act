@@ -59,4 +59,5 @@ export interface Note {
   createdAt: Date;
   updatedAt: Date;
   urls: string[];
+  dates: Date[];
 }

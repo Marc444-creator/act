@@ -1,9 +1,10 @@
 
 import { Note } from "@/types";
 import { Button } from "../ui/button";
-import { Trash2, Link } from "lucide-react";
+import { Trash2, Link, Calendar } from "lucide-react";
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
+import { format } from "date-fns";
 
 interface NoteCardProps {
   note: Note;
@@ -62,6 +63,20 @@ export const NoteCard = ({ note, onNoteSelect }: NoteCardProps) => {
           <Trash2 className="h-4 w-4" />
         </Button>
       </div>
+
+      {note.dates && note.dates.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-2">
+          {note.dates.map((date, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-1 text-sm text-gray-600"
+            >
+              <Calendar className="h-3 w-3" />
+              <span>{format(new Date(date), 'PP')}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {note.urls && note.urls.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-2">

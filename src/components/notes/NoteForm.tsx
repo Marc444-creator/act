@@ -13,7 +13,14 @@ import {
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
 import { useState } from "react";
-import { Plus, Link, X } from "lucide-react";
+import { Plus, Link, X, Calendar } from "lucide-react";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
 
 interface NoteFormProps {
   selectedNote?: Note;
@@ -31,6 +38,7 @@ export const NoteForm = ({
   const [title, setTitle] = useState(selectedNote?.title || "");
   const [content, setContent] = useState(selectedNote?.content || "");
   const [urls, setUrls] = useState<string[]>(selectedNote?.urls || []);
+  const [dates, setDates] = useState<Date[]>(selectedNote?.dates || []);
   const [newUrl, setNewUrl] = useState("");
   const [selectedNoteType, setSelectedNoteType] = useState<string | null>(
     selectedNote?.noteTypeId || null
@@ -38,6 +46,7 @@ export const NoteForm = ({
   const [selectedProject, setSelectedProject] = useState<string | null>(
     selectedNote?.projectId || null
   );
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const store = useStore();
 
@@ -58,6 +67,17 @@ export const NoteForm = ({
     setUrls(urls.filter(url => url !== urlToRemove));
   };
 
+  const handleAddDate = (date: Date) => {
+    if (!dates.some(d => d.getTime() === date.getTime())) {
+      setDates([...dates, date]);
+    }
+    setIsCalendarOpen(false);
+  };
+
+  const handleRemoveDate = (dateToRemove: Date) => {
+    setDates(dates.filter(date => date.getTime() !== dateToRemove.getTime()));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -71,7 +91,8 @@ export const NoteForm = ({
         content, 
         title, 
         noteTypeId: selectedNoteType,
-        urls
+        urls,
+        dates
       });
       toast.success("Note updated successfully!");
       if (onBack) onBack();
@@ -82,10 +103,12 @@ export const NoteForm = ({
         noteTypeId: selectedNoteType,
         projectId: selectedProject,
         urls,
+        dates,
       });
       setTitle("");
       setContent("");
       setUrls([]);
+      setDates([]);
       setSelectedNoteType(null);
       setSelectedProject(null);
       if (onBack) onBack();
@@ -212,6 +235,53 @@ export const NoteForm = ({
                   size="icon"
                   className="h-4 w-4 p-0 hover:bg-transparent text-black hover:text-black/90"
                   onClick={() => handleRemoveUrl(url)}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <div className="flex gap-2">
+          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="bg-white text-black hover:bg-white/90 hover:text-black"
+              >
+                <Calendar className="h-4 w-4 mr-2" />
+                Add Date
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <CalendarComponent
+                mode="single"
+                selected={new Date()}
+                onSelect={(date) => date && handleAddDate(date)}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        {dates.length > 0 && (
+          <div className="flex flex-wrap gap-2 p-2 border rounded-md bg-white">
+            {dates.map((date, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1"
+              >
+                <Calendar className="h-3 w-3 text-black" />
+                <span className="text-sm text-black">{format(date, 'PP')}</span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-4 p-0 hover:bg-transparent text-black hover:text-black/90"
+                  onClick={() => handleRemoveDate(date)}
                 >
                   <X className="h-3 w-3" />
                 </Button>

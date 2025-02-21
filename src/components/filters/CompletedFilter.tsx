@@ -20,7 +20,7 @@ export const CompletedFilter = ({ value, onChange }: CompletedFilterProps) => {
         <TooltipTrigger asChild>
           <div className="flex items-center">
             <Switch
-              className="bg-black data-[state=checked]:bg-black"
+              className="!bg-black data-[state=checked]:!bg-black"
               checked={value}
               onCheckedChange={onChange}
               id="show-completed"

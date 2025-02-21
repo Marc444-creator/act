@@ -30,12 +30,12 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent 
-        className={`${selectedNote || showNoteForm ? 'w-full max-w-full p-0' : 'w-[90%] sm:w-[540px]'} overflow-y-auto`}
+        className={`${selectedNote || showNoteForm ? 'w-full max-w-full p-0' : 'w-[90%] sm:w-[540px]'} overflow-y-auto bg-black text-white`}
       >
         {selectedNote || showNoteForm ? (
           <div className="h-full flex flex-col">
-            <div className="flex items-center justify-between p-4 border-b">
-              <Button variant="ghost" onClick={handleBack}>
+            <div className="flex items-center justify-between p-4 border-b border-white/10">
+              <Button variant="ghost" onClick={handleBack} className="text-white hover:text-white/90">
                 <X className="h-4 w-4 mr-2" />
                 Back
               </Button>
@@ -55,7 +55,7 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
         ) : (
           <div className="space-y-6">
             <FormNavigation />
-            <h2 className="text-2xl font-bold text-center">Notes</h2>
+            <h2 className="text-2xl font-bold text-center text-white">Notes</h2>
             
             <div>
               <NoteForm 
@@ -65,7 +65,7 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             </div>
 
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Your Notes</h3>
+              <h3 className="text-lg font-semibold text-white">Your Notes</h3>
               <NoteList onNoteSelect={handleNoteSelect} />
             </div>
           </div>

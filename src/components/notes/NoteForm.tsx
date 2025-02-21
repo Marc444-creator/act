@@ -1,3 +1,4 @@
+
 import { Note } from "@/types";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -9,17 +10,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
-import { Plus, Link, X, Calendar as CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
+import { Plus } from "lucide-react";
+import { NoteUrlManager } from "./NoteUrlManager";
+import { NoteDatePicker } from "./NoteDatePicker";
 
 interface NoteFormProps {
   selectedNote?: Note;
@@ -31,7 +27,6 @@ export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps)
   const [isFormVisible, setIsFormVisible] = useState(!!selectedNote);
   const [title, setTitle] = useState(selectedNote?.title || "");
   const [content, setContent] = useState(selectedNote?.content || "");
-  const [currentUrl, setCurrentUrl] = useState("");
   const [urls, setUrls] = useState<string[]>(selectedNote?.urls || []);
   const [dates, setDates] = useState<Date[]>(selectedNote?.dates || []);
   const [selectedNoteType, setSelectedNoteType] = useState<string | null>(
@@ -77,74 +72,12 @@ export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps)
       setTitle("");
       setContent("");
       setUrls([]);
-      setCurrentUrl("");
       setDates([]);
       setSelectedNoteType(null);
       setSelectedProject(null);
       setIsFormVisible(false);
       toast.success("Note created successfully!");
     }
-  };
-
-  const handleDateSelect = (date: Date | undefined) => {
-    if (!date) return;
-
-    const dateExists = dates.some(
-      (d) => d.toISOString().split('T')[0] === date.toISOString().split('T')[0]
-    );
-
-    if (dateExists) {
-      setDates(dates.filter(
-        (d) => d.toISOString().split('T')[0] !== date.toISOString().split('T')[0]
-      ));
-    } else {
-      setDates([...dates, date]);
-    }
-  };
-
-  const handleRemoveDate = (dateToRemove: Date) => {
-    setDates(dates.filter(
-      (date) => date.toISOString().split('T')[0] !== dateToRemove.toISOString().split('T')[0]
-    ));
-  };
-
-  const isValidUrl = (string: string) => {
-    try {
-      new URL(string);
-      return true;
-    } catch (_) {
-      return false;
-    }
-  };
-
-  const handleUrlClick = (url: string) => {
-    if (isValidUrl(url)) {
-      window.open(url, '_blank');
-    }
-  };
-
-  const handleAddUrl = () => {
-    if (!currentUrl.trim()) {
-      return;
-    }
-
-    if (!isValidUrl(currentUrl)) {
-      toast.error("Please enter a valid URL");
-      return;
-    }
-
-    if (urls.includes(currentUrl)) {
-      toast.error("This URL already exists");
-      return;
-    }
-
-    setUrls([...urls, currentUrl]);
-    setCurrentUrl("");
-    toast.success("URL added successfully!");
-  };
-
-  const handleRemoveUrl = (urlToRemove: string) => {
-    setUrls(urls.filter(url => url !== urlToRemove));
   };
 
   if (!isFormVisible && !selectedNote) {
@@ -225,88 +158,9 @@ export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps)
         </Select>
       </div>
 
-      <div className="space-y-2">
-        <div className="flex gap-2">
-          <Input
-            placeholder="Add URL"
-            value={currentUrl}
-            onChange={(e) => setCurrentUrl(e.target.value)}
-          />
-          <Button 
-            type="button"
-            onClick={handleAddUrl}
-            size="icon"
-            variant="outline"
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
-        </div>
-
-        {urls.length > 0 && (
-          <div className="space-y-2">
-            {urls.map((url, index) => (
-              <div key={index} className="flex items-center gap-2 p-2 border rounded-md group">
-                <button
-                  type="button"
-                  onClick={() => handleUrlClick(url)}
-                  className="flex-1 text-left text-blue-600 hover:underline overflow-hidden overflow-ellipsis whitespace-nowrap"
-                >
-                  {url}
-                </button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleRemoveUrl(url)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <div className="flex gap-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline" className="flex-1">
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                Add Dates
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                selected={undefined}
-                onSelect={handleDateSelect}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-
-        {dates.length > 0 && (
-          <div className="space-y-2">
-            {dates.map((date, index) => (
-              <div key={index} className="flex items-center justify-between p-2 border rounded-md group">
-                <span>{format(date, 'PPP')}</span>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleRemoveDate(date)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <NoteUrlManager urls={urls} onUrlsChange={setUrls} />
+      
+      <NoteDatePicker dates={dates} onDatesChange={setDates} />
 
       <Textarea
         placeholder="Write your note here..."

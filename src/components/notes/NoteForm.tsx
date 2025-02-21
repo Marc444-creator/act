@@ -13,7 +13,7 @@ import {
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
 import { useState } from "react";
-import { Plus, Link } from "lucide-react";
+import { Plus, Link, X } from "lucide-react";
 
 interface NoteFormProps {
   selectedNote?: Note;
@@ -23,7 +23,8 @@ interface NoteFormProps {
 export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
   const [title, setTitle] = useState(selectedNote?.title || "");
   const [content, setContent] = useState(selectedNote?.content || "");
-  const [url, setUrl] = useState(selectedNote?.url || "");
+  const [currentUrl, setCurrentUrl] = useState("");
+  const [urls, setUrls] = useState<string[]>(selectedNote?.urls || []);
   const [selectedNoteType, setSelectedNoteType] = useState<string | null>(
     selectedNote?.noteTypeId || null
   );
@@ -41,18 +42,12 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
       return;
     }
 
-    // Validate URL if provided
-    if (url && !isValidUrl(url)) {
-      toast.error("Please enter a valid URL");
-      return;
-    }
-
     if (selectedNote) {
       store.updateNote(selectedNote.id, { 
         content, 
         title, 
         noteTypeId: selectedNoteType,
-        url
+        urls
       });
       toast.success("Note updated successfully!");
       if (onBack) onBack();
@@ -62,11 +57,12 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
         content,
         noteTypeId: selectedNoteType,
         projectId: selectedProject,
-        url,
+        urls,
       });
       setTitle("");
       setContent("");
-      setUrl("");
+      setUrls([]);
+      setCurrentUrl("");
       setSelectedNoteType(null);
       setSelectedProject(null);
       toast.success("Note created successfully!");
@@ -82,10 +78,34 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
     }
   };
 
-  const handleUrlClick = () => {
-    if (url && isValidUrl(url)) {
+  const handleUrlClick = (url: string) => {
+    if (isValidUrl(url)) {
       window.open(url, '_blank');
     }
+  };
+
+  const handleAddUrl = () => {
+    if (!currentUrl.trim()) {
+      return;
+    }
+
+    if (!isValidUrl(currentUrl)) {
+      toast.error("Please enter a valid URL");
+      return;
+    }
+
+    if (urls.includes(currentUrl)) {
+      toast.error("This URL already exists");
+      return;
+    }
+
+    setUrls([...urls, currentUrl]);
+    setCurrentUrl("");
+    toast.success("URL added successfully!");
+  };
+
+  const handleRemoveUrl = (urlToRemove: string) => {
+    setUrls(urls.filter(url => url !== urlToRemove));
   };
 
   return (
@@ -154,23 +174,46 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
         </Select>
       </div>
 
-      <div className="relative">
-        <Input
-          placeholder="Add URL (optional)"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          className="pr-10"
-        />
-        {url && (
-          <Button
+      <div className="space-y-2">
+        <div className="flex gap-2">
+          <Input
+            placeholder="Add URL"
+            value={currentUrl}
+            onChange={(e) => setCurrentUrl(e.target.value)}
+          />
+          <Button 
             type="button"
-            variant="ghost"
+            onClick={handleAddUrl}
             size="icon"
-            className="absolute right-2 top-1/2 -translate-y-1/2"
-            onClick={handleUrlClick}
+            variant="outline"
           >
-            <Link className="h-4 w-4" />
+            <Plus className="h-4 w-4" />
           </Button>
+        </div>
+
+        {urls.length > 0 && (
+          <div className="space-y-2">
+            {urls.map((url, index) => (
+              <div key={index} className="flex items-center gap-2 p-2 border rounded-md group">
+                <button
+                  type="button"
+                  onClick={() => handleUrlClick(url)}
+                  className="flex-1 text-left text-blue-600 hover:underline overflow-hidden overflow-ellipsis whitespace-nowrap"
+                >
+                  {url}
+                </button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleRemoveUrl(url)}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 

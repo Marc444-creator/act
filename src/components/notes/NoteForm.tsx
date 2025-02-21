@@ -18,11 +18,16 @@ import { Plus } from "lucide-react";
 interface NoteFormProps {
   selectedNote?: Note;
   onBack?: () => void;
+  isFormVisible?: boolean;
   onFormVisible?: (visible: boolean) => void;
 }
 
-export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps) => {
-  const [isFormVisible, setIsFormVisible] = useState(!!selectedNote);
+export const NoteForm = ({ 
+  selectedNote, 
+  onBack, 
+  isFormVisible = false,
+  onFormVisible 
+}: NoteFormProps) => {
   const [title, setTitle] = useState(selectedNote?.title || "");
   const [content, setContent] = useState(selectedNote?.content || "");
   const [urls, setUrls] = useState<string[]>(selectedNote?.urls || []);
@@ -70,16 +75,10 @@ export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps)
     }
   };
 
-  // If we're not showing the form and there's no selected note, show the + button
   if (!isFormVisible && !selectedNote) {
     return (
       <Button 
-        onClick={() => {
-          setIsFormVisible(true);
-          if (onFormVisible) {
-            onFormVisible(true);
-          }
-        }}
+        onClick={() => onFormVisible?.(true)}
         size="icon"
         className="bg-[#9b87f5] hover:bg-[#9b87f5]/90"
       >
@@ -88,7 +87,6 @@ export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps)
     );
   }
 
-  // If we are showing the form or there's a selected note, show the form
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="flex items-center gap-2">

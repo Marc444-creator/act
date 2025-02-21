@@ -41,7 +41,7 @@ export const NoteForm = ({
 
   const store = useStore();
 
-  const handleAddUrl = (e: React.FormEvent) => {
+  const handleAddUrl = (e: React.MouseEvent) => {
     e.preventDefault();
     if (!newUrl.trim()) return;
 
@@ -173,22 +173,29 @@ export const NoteForm = ({
       </div>
 
       <div className="space-y-2">
-        <form onSubmit={handleAddUrl} className="flex gap-2">
+        <div className="flex gap-2">
           <Input
             type="url"
             placeholder="Add URL"
             value={newUrl}
             onChange={(e) => setNewUrl(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleAddUrl(e as unknown as React.MouseEvent);
+              }
+            }}
           />
           <Button 
-            type="submit"
+            type="button"
             size="icon"
             variant="outline"
             className="shrink-0"
+            onClick={handleAddUrl}
           >
             <Plus className="h-4 w-4" />
           </Button>
-        </form>
+        </div>
 
         {urls.length > 0 && (
           <div className="flex flex-wrap gap-2 p-2 border rounded-md">

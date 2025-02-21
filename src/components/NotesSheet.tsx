@@ -30,21 +30,25 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent 
-        className={`${selectedNote ? 'w-full max-w-full p-0' : 'w-[90%] sm:w-[540px]'} overflow-y-auto`}
+        className={`${selectedNote || isCreatingNote ? 'w-full max-w-full p-0' : 'w-[90%] sm:w-[540px]'} overflow-y-auto`}
       >
-        {selectedNote ? (
+        {selectedNote || isCreatingNote ? (
           <div className="h-full flex flex-col">
             <div className="flex items-center justify-between p-4 border-b">
               <Button variant="ghost" onClick={handleBack}>
                 <X className="h-4 w-4 mr-2" />
                 Back
               </Button>
-              <h2 className="text-2xl font-bold">Edit Note</h2>
+              <h2 className="text-2xl font-bold">{selectedNote ? 'Edit Note' : 'New Note'}</h2>
               <div className="w-[64px]" />
             </div>
             
             <div className="flex-1 p-6">
-              <NoteForm selectedNote={selectedNoteData} onBack={handleBack} />
+              <NoteForm 
+                selectedNote={selectedNoteData} 
+                onBack={handleBack}
+                onFormVisible={(visible) => setIsCreatingNote(visible)} 
+              />
             </div>
           </div>
         ) : (
@@ -52,7 +56,7 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             <FormNavigation />
             <h2 className="text-2xl font-bold text-center">Notes</h2>
             
-            <div className={isCreatingNote ? "space-y-4" : ""}>
+            <div>
               <NoteForm onFormVisible={(visible) => setIsCreatingNote(visible)} />
             </div>
 

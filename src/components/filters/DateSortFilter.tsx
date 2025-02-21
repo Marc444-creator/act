@@ -1,17 +1,6 @@
 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface DateSortFilterProps {
   value: "asc" | "desc";
@@ -21,18 +10,12 @@ interface DateSortFilterProps {
 export const DateSortFilter = ({ value, onChange }: DateSortFilterProps) => {
   return (
     <Select value={value} onValueChange={onChange}>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <SelectTrigger className="w-8 h-8 p-0 bg-white">
-              <Calendar className="h-4 w-4 text-black" />
-            </SelectTrigger>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Sort by date</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <SelectTrigger className="w-[180px] bg-black text-white border-white/10">
+        <div className="flex items-center gap-2">
+          <Calendar className="h-4 w-4 text-black" />
+          <SelectValue placeholder="Sort by date" />
+        </div>
+      </SelectTrigger>
       <SelectContent>
         <SelectItem value="asc">Earliest First</SelectItem>
         <SelectItem value="desc">Latest First</SelectItem>

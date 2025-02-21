@@ -28,7 +28,7 @@ export const ContextFilter = ({ value, onChange }: ContextFilterProps) => {
 
   const getStatusDotColor = (count: number) => {
     if (count === 1) return "bg-green-500";
-    if (count === 2) return "bg-orange-500";
+    if (count === 2) return "bg-yellow-500";
     return "bg-red-500";
   };
 

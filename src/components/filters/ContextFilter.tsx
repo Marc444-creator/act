@@ -1,3 +1,4 @@
+
 import { MapPin } from "lucide-react";
 import {
   Select,
@@ -40,8 +41,8 @@ export const ContextFilter = ({ value, onChange }: ContextFilterProps) => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <SelectTrigger className="w-8 h-8 p-0">
-              <MapPin className="h-4 w-4" />
+            <SelectTrigger className="w-8 h-8 p-0 bg-white">
+              <MapPin className="h-4 w-4 text-black" />
             </SelectTrigger>
           </TooltipTrigger>
           <TooltipContent>

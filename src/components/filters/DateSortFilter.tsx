@@ -1,3 +1,4 @@
+
 import { Calendar } from "lucide-react";
 import {
   Select,
@@ -23,8 +24,8 @@ export const DateSortFilter = ({ value, onChange }: DateSortFilterProps) => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <SelectTrigger className="w-8 h-8 p-0">
-              <Calendar className="h-4 w-4" />
+            <SelectTrigger className="w-8 h-8 p-0 bg-white">
+              <Calendar className="h-4 w-4 text-black" />
             </SelectTrigger>
           </TooltipTrigger>
           <TooltipContent>

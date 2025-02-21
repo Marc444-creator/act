@@ -1,3 +1,4 @@
+
 import { Folder } from "lucide-react";
 import {
   Select,
@@ -40,8 +41,8 @@ export const ProjectFilter = ({ value, onChange }: ProjectFilterProps) => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <SelectTrigger className="w-8 h-8 p-0">
-              <Folder className="h-4 w-4" />
+            <SelectTrigger className="w-8 h-8 p-0 bg-white">
+              <Folder className="h-4 w-4 text-black" />
             </SelectTrigger>
           </TooltipTrigger>
           <TooltipContent>

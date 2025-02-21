@@ -1,3 +1,4 @@
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,8 +42,8 @@ export const TaskFormInputs = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <SelectTrigger className="w-8 h-8 p-0">
-                <Folder className="h-4 w-4" />
+              <SelectTrigger className="w-8 h-8 p-0 bg-white">
+                <Folder className="h-4 w-4 text-black" />
               </SelectTrigger>
             </TooltipTrigger>
             <TooltipContent>
@@ -63,8 +64,8 @@ export const TaskFormInputs = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <SelectTrigger className="w-8 h-8 p-0">
-                <MapPin className="h-4 w-4" />
+              <SelectTrigger className="w-8 h-8 p-0 bg-white">
+                <MapPin className="h-4 w-4 text-black" />
               </SelectTrigger>
             </TooltipTrigger>
             <TooltipContent>

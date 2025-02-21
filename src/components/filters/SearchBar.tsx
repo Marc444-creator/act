@@ -1,3 +1,4 @@
+
 import { Input } from "@/components/ui/input";
 
 interface SearchBarProps {
@@ -13,7 +14,7 @@ export const SearchBar = ({ value, onChange }: SearchBarProps) => {
         placeholder="Search tasks..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full"
+        className="w-full bg-white text-black placeholder:text-black/60"
       />
     </div>
   );

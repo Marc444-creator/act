@@ -21,6 +21,7 @@ interface NoteFormProps {
 }
 
 export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
+  const [isFormVisible, setIsFormVisible] = useState(!!selectedNote);
   const [title, setTitle] = useState(selectedNote?.title || "");
   const [content, setContent] = useState(selectedNote?.content || "");
   const [currentUrl, setCurrentUrl] = useState("");
@@ -65,6 +66,7 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
       setCurrentUrl("");
       setSelectedNoteType(null);
       setSelectedProject(null);
+      setIsFormVisible(false);
       toast.success("Note created successfully!");
     }
   };
@@ -107,6 +109,18 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
   const handleRemoveUrl = (urlToRemove: string) => {
     setUrls(urls.filter(url => url !== urlToRemove));
   };
+
+  if (!isFormVisible && !selectedNote) {
+    return (
+      <Button 
+        onClick={() => setIsFormVisible(true)}
+        size="icon"
+        className="bg-[#9b87f5] hover:bg-[#9b87f5]/90"
+      >
+        <Plus className="h-4 w-4" />
+      </Button>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

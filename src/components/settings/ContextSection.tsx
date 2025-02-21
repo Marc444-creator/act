@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { useStore } from "../../store/useStore";
@@ -32,7 +33,7 @@ export const ContextSection = ({ onAddClick }: ContextSectionProps) => {
               className="w-4 h-4 rounded-full"
               style={{ backgroundColor: context.color }}
             />
-            <span>{context.name}</span>
+            <span className="text-black">{context.name}</span>
           </div>
           <Button
             variant="ghost"

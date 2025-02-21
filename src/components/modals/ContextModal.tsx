@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -25,14 +26,15 @@ export const ContextModal = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg w-96">
-        <h2 className="text-xl font-bold mb-4">{title}</h2>
-        <p className="text-sm text-gray-500 mb-4">{description}</p>
+        <h2 className="text-xl font-bold mb-4 text-black">{title}</h2>
+        <p className="text-sm text-black/70 mb-4">{description}</p>
         <form onSubmit={handleAddContext} className="space-y-4">
           <Input
             type="text"
             value={newContextName}
             onChange={(e) => setNewContextName(e.target.value)}
             placeholder="Name"
+            className="bg-white text-black placeholder:text-black/60"
           />
           <Input
             type="color"
@@ -44,10 +46,11 @@ export const ContextModal = ({
               type="button"
               variant="outline"
               onClick={() => setShowContextModal(false)}
+              className="text-black hover:text-black/90"
             >
               Cancel
             </Button>
-            <Button type="submit">Add</Button>
+            <Button type="submit" className="bg-black text-white hover:bg-black/90">Add</Button>
           </div>
         </form>
       </div>

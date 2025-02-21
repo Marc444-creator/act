@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { useStore } from "../../store/useStore";
@@ -32,7 +33,7 @@ export const NoteTypeSection = ({ onAddClick }: NoteTypeSectionProps) => {
               className="w-4 h-4 rounded-full"
               style={{ backgroundColor: noteType.color }}
             />
-            <span>{noteType.name}</span>
+            <span className="text-black">{noteType.name}</span>
           </div>
           <Button
             variant="ghost"

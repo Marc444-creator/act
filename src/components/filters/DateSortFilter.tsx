@@ -10,10 +10,9 @@ interface DateSortFilterProps {
 export const DateSortFilter = ({ value, onChange }: DateSortFilterProps) => {
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="w-[180px] bg-black text-white border-white/10">
+      <SelectTrigger className="w-[60px] bg-black text-white border-white/10">
         <div className="flex items-center gap-2">
           <Calendar className="h-4 w-4 text-black" />
-          <SelectValue placeholder="Sort by date" />
         </div>
       </SelectTrigger>
       <SelectContent>

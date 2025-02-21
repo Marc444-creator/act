@@ -32,7 +32,7 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
       <SheetContent 
         className={`${selectedNote || isCreatingNote ? 'w-full max-w-full p-0' : 'w-[90%] sm:w-[540px]'} overflow-y-auto`}
       >
-        {selectedNote || isCreatingNote ? (
+        {(selectedNote || isCreatingNote) ? (
           <div className="h-full flex flex-col">
             <div className="flex items-center justify-between p-4 border-b">
               <Button variant="ghost" onClick={handleBack}>
@@ -47,7 +47,6 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
               <NoteForm 
                 selectedNote={selectedNoteData} 
                 onBack={handleBack}
-                onFormVisible={(visible) => setIsCreatingNote(visible)} 
               />
             </div>
           </div>
@@ -57,15 +56,19 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             <h2 className="text-2xl font-bold text-center">Notes</h2>
             
             <div>
-              <NoteForm onFormVisible={(visible) => setIsCreatingNote(visible)} />
+              <Button 
+                onClick={() => setIsCreatingNote(true)}
+                size="icon"
+                className="bg-[#9b87f5] hover:bg-[#9b87f5]/90"
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
             </div>
 
-            {!isCreatingNote && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Your Notes</h3>
-                <NoteList onNoteSelect={handleNoteSelect} />
-              </div>
-            )}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Your Notes</h3>
+              <NoteList onNoteSelect={handleNoteSelect} />
+            </div>
           </div>
         )}
       </SheetContent>

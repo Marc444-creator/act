@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import { NoteUrlManager } from "./NoteUrlManager";
 import { NoteDatePicker } from "./NoteDatePicker";
@@ -20,11 +20,9 @@ import { NoteDatePicker } from "./NoteDatePicker";
 interface NoteFormProps {
   selectedNote?: Note;
   onBack?: () => void;
-  onFormVisible?: (visible: boolean) => void;
 }
 
-export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps) => {
-  const [isFormVisible, setIsFormVisible] = useState(!!selectedNote);
+export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
   const [title, setTitle] = useState(selectedNote?.title || "");
   const [content, setContent] = useState(selectedNote?.content || "");
   const [urls, setUrls] = useState<string[]>(selectedNote?.urls || []);
@@ -37,10 +35,6 @@ export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps)
   );
 
   const store = useStore();
-
-  useEffect(() => {
-    onFormVisible?.(isFormVisible);
-  }, [isFormVisible, onFormVisible]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,25 +69,10 @@ export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps)
       setDates([]);
       setSelectedNoteType(null);
       setSelectedProject(null);
-      setIsFormVisible(false);
       toast.success("Note created successfully!");
+      if (onBack) onBack();
     }
   };
-
-  if (!isFormVisible && !selectedNote) {
-    return (
-      <Button 
-        onClick={() => {
-          setIsFormVisible(true);
-          onFormVisible?.(true);
-        }}
-        size="icon"
-        className="bg-[#9b87f5] hover:bg-[#9b87f5]/90"
-      >
-        <Plus className="h-4 w-4" />
-      </Button>
-    );
-  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

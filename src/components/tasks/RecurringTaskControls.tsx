@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -62,7 +63,7 @@ export const RecurringTaskControls = ({
         variant={isRecurring ? "default" : "outline"}
         size="icon"
         onClick={() => setIsRecurring(!isRecurring)}
-        className="w-8 h-8 p-0"
+        className="w-8 h-8 p-0 bg-white text-black hover:bg-white/90 hover:text-black"
       >
         <RotateCw className="h-4 w-4" />
       </Button>
@@ -72,7 +73,7 @@ export const RecurringTaskControls = ({
           <Select value={frequency} onValueChange={(value: 'daily' | 'weekly' | 'monthly') => {
             setFrequency(value);
           }}>
-            <SelectTrigger className="w-[90px]">
+            <SelectTrigger className="w-[90px] bg-white text-black">
               <SelectValue placeholder="Freq" />
             </SelectTrigger>
             <SelectContent>
@@ -87,7 +88,7 @@ export const RecurringTaskControls = ({
               value={dailyInterval.toString()} 
               onValueChange={(value) => setDailyInterval(parseInt(value))}
             >
-              <SelectTrigger className="w-[90px]">
+              <SelectTrigger className="w-[90px] bg-white text-black">
                 <SelectValue placeholder="Every" />
               </SelectTrigger>
               <SelectContent>

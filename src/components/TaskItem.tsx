@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useStore } from "../store/useStore";
 import { TaskActions } from "./tasks/TaskActions";
@@ -82,8 +83,8 @@ export const TaskItem = ({
             />
           </div>
           <span
-            className={`flex-1 cursor-pointer ${
-              task.completed ? "line-through text-gray-400" : ""
+            className={`flex-1 cursor-pointer text-black ${
+              task.completed ? "line-through text-black/40" : ""
             }`}
             onClick={() => onTaskClick(task)}
           >

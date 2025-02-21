@@ -68,11 +68,11 @@ export const HabitRow = ({
         </Button>
       </div>
 
-      <div className="text-center font-semibold text-blue-600 text-sm sm:text-base border border-white/20" title="Monthly Score">
-        {monthlyScore}
-      </div>
       <div className="text-center font-semibold text-green-600 text-sm sm:text-base border border-white/20" title="Weekly Average">
         {weeklyAverage}
+      </div>
+      <div className="text-center font-semibold text-blue-600 text-sm sm:text-base border border-white/20" title="Monthly Score">
+        {monthlyScore}
       </div>
       <div className="text-center font-semibold text-purple-600 text-sm sm:text-base border border-white/20" title="Yearly Score">
         {yearlyScore}

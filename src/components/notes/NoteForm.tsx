@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 
 interface NoteFormProps {
@@ -34,10 +34,6 @@ export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps)
   );
 
   const store = useStore();
-
-  useEffect(() => {
-    onFormVisible?.(isFormVisible);
-  }, [isFormVisible, onFormVisible]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,18 +65,20 @@ export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps)
       setUrls([]);
       setSelectedNoteType(null);
       setSelectedProject(null);
-      setIsFormVisible(false);
-      onFormVisible?.(false);
+      if (onBack) onBack();
       toast.success("Note created successfully!");
     }
   };
 
+  // If we're not showing the form and there's no selected note, show the + button
   if (!isFormVisible && !selectedNote) {
     return (
       <Button 
         onClick={() => {
           setIsFormVisible(true);
-          onFormVisible?.(true);
+          if (onFormVisible) {
+            onFormVisible(true);
+          }
         }}
         size="icon"
         className="bg-[#9b87f5] hover:bg-[#9b87f5]/90"
@@ -90,6 +88,7 @@ export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps)
     );
   }
 
+  // If we are showing the form or there's a selected note, show the form
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="flex items-center gap-2">

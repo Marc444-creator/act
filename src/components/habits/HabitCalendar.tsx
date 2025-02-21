@@ -34,11 +34,11 @@ export const HabitCalendar = ({
             mode="multiple"
             selected={selectedDates}
             onSelect={(dates) => {
-              if (dates) {
-                const lastSelectedDate = dates[dates.length - 1];
-                const dateStr = format(lastSelectedDate, 'yyyy-MM-dd');
-                onToggleDay(dateStr);
-              }
+              if (!dates || dates.length === 0) return;
+              const lastSelectedDate = dates[dates.length - 1];
+              if (!(lastSelectedDate instanceof Date) || isNaN(lastSelectedDate.getTime())) return;
+              const dateStr = format(lastSelectedDate, 'yyyy-MM-dd');
+              onToggleDay(dateStr);
             }}
             initialFocus
             className="bg-black text-white"

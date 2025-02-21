@@ -13,7 +13,7 @@ import {
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Link, X } from "lucide-react";
 
 interface NoteFormProps {
   selectedNote?: Note;
@@ -31,6 +31,7 @@ export const NoteForm = ({
   const [title, setTitle] = useState(selectedNote?.title || "");
   const [content, setContent] = useState(selectedNote?.content || "");
   const [urls, setUrls] = useState<string[]>(selectedNote?.urls || []);
+  const [newUrl, setNewUrl] = useState("");
   const [selectedNoteType, setSelectedNoteType] = useState<string | null>(
     selectedNote?.noteTypeId || null
   );
@@ -39,6 +40,24 @@ export const NoteForm = ({
   );
 
   const store = useStore();
+
+  const handleAddUrl = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newUrl.trim()) return;
+
+    try {
+      // Try to create a URL object to validate the URL
+      new URL(newUrl);
+      setUrls([...urls, newUrl]);
+      setNewUrl("");
+    } catch (err) {
+      toast.error("Please enter a valid URL");
+    }
+  };
+
+  const handleRemoveUrl = (urlToRemove: string) => {
+    setUrls(urls.filter(url => url !== urlToRemove));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,6 +170,48 @@ export const NoteForm = ({
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="space-y-2">
+        <form onSubmit={handleAddUrl} className="flex gap-2">
+          <Input
+            type="url"
+            placeholder="Add URL"
+            value={newUrl}
+            onChange={(e) => setNewUrl(e.target.value)}
+          />
+          <Button 
+            type="submit"
+            size="icon"
+            variant="outline"
+            className="shrink-0"
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        </form>
+
+        {urls.length > 0 && (
+          <div className="flex flex-wrap gap-2 p-2 border rounded-md">
+            {urls.map((url, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1"
+              >
+                <Link className="h-3 w-3" />
+                <span className="text-sm truncate max-w-[200px]">{url}</span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-4 p-0 hover:bg-transparent"
+                  onClick={() => handleRemoveUrl(url)}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <Textarea

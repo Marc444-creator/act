@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useStore } from "../store/useStore";
@@ -9,14 +10,17 @@ import { NoteForm } from "./notes/NoteForm";
 
 export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [selectedNote, setSelectedNote] = useState<string | null>(null);
+  const [isCreatingNote, setIsCreatingNote] = useState(false);
   const store = useStore();
 
   const handleNoteSelect = (noteId: string) => {
     setSelectedNote(noteId);
+    setIsCreatingNote(false);
   };
 
   const handleBack = () => {
     setSelectedNote(null);
+    setIsCreatingNote(false);
   };
 
   const selectedNoteData = selectedNote
@@ -48,12 +52,16 @@ export const NotesSheet = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             <FormNavigation />
             <h2 className="text-2xl font-bold text-center">Notes</h2>
             
-            <NoteForm />
-
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Your Notes</h3>
-              <NoteList onNoteSelect={handleNoteSelect} />
+            <div className={isCreatingNote ? "space-y-4" : ""}>
+              <NoteForm onFormVisible={(visible) => setIsCreatingNote(visible)} />
             </div>
+
+            {!isCreatingNote && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Your Notes</h3>
+                <NoteList onNoteSelect={handleNoteSelect} />
+              </div>
+            )}
           </div>
         )}
       </SheetContent>

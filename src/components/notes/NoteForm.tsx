@@ -12,15 +12,16 @@ import {
 } from "@/components/ui/select";
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Link, X } from "lucide-react";
 
 interface NoteFormProps {
   selectedNote?: Note;
   onBack?: () => void;
+  onFormVisible?: (visible: boolean) => void;
 }
 
-export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
+export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps) => {
   const [isFormVisible, setIsFormVisible] = useState(!!selectedNote);
   const [title, setTitle] = useState(selectedNote?.title || "");
   const [content, setContent] = useState(selectedNote?.content || "");
@@ -34,6 +35,10 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
   );
 
   const store = useStore();
+
+  useEffect(() => {
+    onFormVisible?.(isFormVisible);
+  }, [isFormVisible, onFormVisible]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

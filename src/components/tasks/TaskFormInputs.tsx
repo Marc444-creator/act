@@ -36,6 +36,17 @@ export const TaskFormInputs = ({
 }: TaskFormInputsProps) => {
   const store = useStore();
 
+  // Map projects with their uncompleted tasks count
+  const projectsWithStatus = store.projects.map(project => {
+    const hasUncompletedTasks = store.tasks.some(
+      task => task.projectId === project.id && !task.completed
+    );
+    return {
+      ...project,
+      statusColor: hasUncompletedTasks ? "bg-green-500" : "bg-red-500"
+    };
+  });
+
   return (
     <>
       <Select value={projectId || "none"} onValueChange={setProjectId}>
@@ -53,9 +64,12 @@ export const TaskFormInputs = ({
         </TooltipProvider>
         <SelectContent>
           <SelectItem value="none">Project</SelectItem>
-          {store.projects.map((project) => (
+          {projectsWithStatus.map((project) => (
             <SelectItem key={project.id} value={project.id}>
-              {project.name}
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${project.statusColor}`} />
+                {project.name}
+              </div>
             </SelectItem>
           ))}
         </SelectContent>

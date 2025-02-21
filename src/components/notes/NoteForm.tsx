@@ -12,21 +12,21 @@ import {
 } from "@/components/ui/select";
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
-import { useState } from "react";
-import { Plus } from "lucide-react";
-import { NoteUrlManager } from "./NoteUrlManager";
-import { NoteDatePicker } from "./NoteDatePicker";
+import { useState, useEffect } from "react";
+import { Plus, Link, X } from "lucide-react";
 
 interface NoteFormProps {
   selectedNote?: Note;
   onBack?: () => void;
+  onFormVisible?: (visible: boolean) => void;
 }
 
-export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
+export const NoteForm = ({ selectedNote, onBack, onFormVisible }: NoteFormProps) => {
+  const [isFormVisible, setIsFormVisible] = useState(!!selectedNote);
   const [title, setTitle] = useState(selectedNote?.title || "");
   const [content, setContent] = useState(selectedNote?.content || "");
+  const [currentUrl, setCurrentUrl] = useState("");
   const [urls, setUrls] = useState<string[]>(selectedNote?.urls || []);
-  const [dates, setDates] = useState<Date[]>(selectedNote?.dates || []);
   const [selectedNoteType, setSelectedNoteType] = useState<string | null>(
     selectedNote?.noteTypeId || null
   );
@@ -35,6 +35,10 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
   );
 
   const store = useStore();
+
+  useEffect(() => {
+    onFormVisible?.(isFormVisible);
+  }, [isFormVisible, onFormVisible]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,8 +53,7 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
         content, 
         title, 
         noteTypeId: selectedNoteType,
-        urls,
-        dates
+        urls
       });
       toast.success("Note updated successfully!");
       if (onBack) onBack();
@@ -61,18 +64,68 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
         noteTypeId: selectedNoteType,
         projectId: selectedProject,
         urls,
-        dates,
       });
       setTitle("");
       setContent("");
       setUrls([]);
-      setDates([]);
+      setCurrentUrl("");
       setSelectedNoteType(null);
       setSelectedProject(null);
+      setIsFormVisible(false);
       toast.success("Note created successfully!");
-      if (onBack) onBack();
     }
   };
+
+  const isValidUrl = (string: string) => {
+    try {
+      new URL(string);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  };
+
+  const handleUrlClick = (url: string) => {
+    if (isValidUrl(url)) {
+      window.open(url, '_blank');
+    }
+  };
+
+  const handleAddUrl = () => {
+    if (!currentUrl.trim()) {
+      return;
+    }
+
+    if (!isValidUrl(currentUrl)) {
+      toast.error("Please enter a valid URL");
+      return;
+    }
+
+    if (urls.includes(currentUrl)) {
+      toast.error("This URL already exists");
+      return;
+    }
+
+    setUrls([...urls, currentUrl]);
+    setCurrentUrl("");
+    toast.success("URL added successfully!");
+  };
+
+  const handleRemoveUrl = (urlToRemove: string) => {
+    setUrls(urls.filter(url => url !== urlToRemove));
+  };
+
+  if (!isFormVisible && !selectedNote) {
+    return (
+      <Button 
+        onClick={() => setIsFormVisible(true)}
+        size="icon"
+        className="bg-[#9b87f5] hover:bg-[#9b87f5]/90"
+      >
+        <Plus className="h-4 w-4" />
+      </Button>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -140,9 +193,48 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
         </Select>
       </div>
 
-      <NoteUrlManager urls={urls} onUrlsChange={setUrls} />
-      
-      <NoteDatePicker dates={dates} onDatesChange={setDates} />
+      <div className="space-y-2">
+        <div className="flex gap-2">
+          <Input
+            placeholder="Add URL"
+            value={currentUrl}
+            onChange={(e) => setCurrentUrl(e.target.value)}
+          />
+          <Button 
+            type="button"
+            onClick={handleAddUrl}
+            size="icon"
+            variant="outline"
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
+
+        {urls.length > 0 && (
+          <div className="space-y-2">
+            {urls.map((url, index) => (
+              <div key={index} className="flex items-center gap-2 p-2 border rounded-md group">
+                <button
+                  type="button"
+                  onClick={() => handleUrlClick(url)}
+                  className="flex-1 text-left text-blue-600 hover:underline overflow-hidden overflow-ellipsis whitespace-nowrap"
+                >
+                  {url}
+                </button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleRemoveUrl(url)}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       <Textarea
         placeholder="Write your note here..."

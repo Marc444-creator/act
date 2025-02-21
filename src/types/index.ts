@@ -59,5 +59,4 @@ export interface Note {
   createdAt: Date;
   updatedAt: Date;
   urls: string[];
-  dates: Date[]; // New field for storing multiple dates
 }

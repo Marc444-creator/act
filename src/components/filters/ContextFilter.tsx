@@ -11,6 +11,13 @@ interface ContextFilterProps {
 export const ContextFilter = ({ value, onChange }: ContextFilterProps) => {
   const store = useStore();
 
+  // Filter contexts to only show those with uncompleted tasks
+  const contextsWithUncompletedTasks = store.contexts.filter(context => {
+    return store.tasks.some(task => 
+      task.contextId === context.id && !task.completed
+    );
+  });
+
   return (
     <Select
       value={value || "none"}
@@ -23,7 +30,7 @@ export const ContextFilter = ({ value, onChange }: ContextFilterProps) => {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="none">All Contexts</SelectItem>
-        {store.contexts.map((context) => (
+        {contextsWithUncompletedTasks.map((context) => (
           <SelectItem key={context.id} value={context.id}>
             {context.name}
           </SelectItem>

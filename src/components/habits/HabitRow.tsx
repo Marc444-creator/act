@@ -33,10 +33,25 @@ export const HabitRow = ({
   return (
     <>
       <div 
-        className="flex flex-col justify-center pr-2 cursor-pointer hover:bg-gray-50 rounded-md border border-white/20"
-        onClick={() => onEdit({ id: habit.id, name: habit.name })}
+        className="flex items-center justify-between pr-2 cursor-pointer hover:bg-gray-50 rounded-md border border-white/20"
       >
-        <span className="text-sm sm:text-base font-medium">{habit.name}</span>
+        <span 
+          className="text-sm sm:text-base font-medium px-2 py-1"
+          onClick={() => onEdit({ id: habit.id, name: habit.name })}
+        >
+          {habit.name}
+        </span>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 h-8 w-8"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowCalendar(true);
+          }}
+        >
+          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+        </Button>
       </div>
       {displayDays.map((day) => {
         const dateStr = format(day, 'yyyy-MM-dd');
@@ -59,18 +74,7 @@ export const HabitRow = ({
       <div className="text-center font-semibold text-purple-600 text-sm sm:text-base border border-white/20" title="Yearly Score">
         {yearlyScore}
       </div>
-      <div className="flex justify-end gap-1 border border-white/20">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 h-8 w-8"
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowCalendar(true);
-          }}
-        >
-          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
-        </Button>
+      <div className="flex justify-end border border-white/20">
         <Button
           variant="ghost"
           size="icon"

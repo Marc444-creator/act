@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useStore } from "@/store/useStore";
-import { Filter } from "lucide-react";
+import { Folder, FileText } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -52,7 +52,7 @@ export const NoteFilters = ({
               onValueChange={(value) => setFilterNoteType(value === "all" ? null : value)}
             >
               <SelectTrigger className="w-10 p-0 justify-center bg-white">
-                <Filter className="h-4 w-4 text-black" />
+                <FileText className="h-4 w-4 text-black" />
               </SelectTrigger>
               <SelectContent className="bg-white">
                 <SelectItem value="all" className="text-black">All types</SelectItem>
@@ -84,7 +84,7 @@ export const NoteFilters = ({
               onValueChange={(value) => setFilterProject(value === "all" ? null : value)}
             >
               <SelectTrigger className="w-10 p-0 justify-center bg-white">
-                <Filter className="h-4 w-4 text-black" />
+                <Folder className="h-4 w-4 text-black" />
               </SelectTrigger>
               <SelectContent className="bg-white">
                 <SelectItem value="all" className="text-black">All projects</SelectItem>

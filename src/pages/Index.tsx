@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useStore } from "../store/useStore";
 import { TaskForm } from "../components/TaskForm";
@@ -59,14 +60,14 @@ const Index = () => {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 p-8"
+      className="min-h-screen bg-black text-white p-8"
       onTouchStart={handleTouchStart}
     >
       <div className="max-w-4xl mx-auto space-y-4">
         <FormNavigation />
         
         <div className="flex justify-center items-center mb-2">
-          <h1 className="text-4xl font-bold text-gray-900">Tasks</h1>
+          <h1 className="text-4xl font-bold text-white">Tasks</h1>
         </div>
 
         <TaskForm />

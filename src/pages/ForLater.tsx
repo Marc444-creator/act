@@ -1,3 +1,4 @@
+
 import { TaskList } from "../components/TaskList";
 import { FormNavigation } from "../components/FormNavigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -42,19 +43,19 @@ const ForLater = () => {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-black text-white p-8">
       <div className="max-w-4xl mx-auto space-y-8">
         <FormNavigation />
         
         <div className="space-y-4">
-          <h1 className="text-4xl font-bold text-gray-900 text-center">For Later</h1>
+          <h1 className="text-4xl font-bold text-white text-center">For Later</h1>
           
           <div className="flex items-center gap-4 bg-[#ea384c]/10 p-4 rounded-lg">
             <Select
               value={selectedProject || "none"}
               onValueChange={(value) => setSelectedProject(value === "none" ? null : value)}
             >
-              <SelectTrigger className="w-[60px]">
+              <SelectTrigger className="w-[60px] bg-black text-white border-white/10">
                 <div className="flex items-center gap-2">
                   <Folder className="h-4 w-4" />
                 </div>
@@ -70,7 +71,7 @@ const ForLater = () => {
                           backgroundColor: project.taskCount === 1 ? '#4ade80' : '#ea384c'
                         }}
                       />
-                      {project.name}
+                      <span>{project.name}</span>
                     </div>
                   </SelectItem>
                 ))}
@@ -81,7 +82,7 @@ const ForLater = () => {
               value={selectedContext || "none"}
               onValueChange={(value) => setSelectedContext(value === "none" ? null : value)}
             >
-              <SelectTrigger className="w-[60px]">
+              <SelectTrigger className="w-[60px] bg-black text-white border-white/10">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4" />
                 </div>
@@ -97,7 +98,7 @@ const ForLater = () => {
                           backgroundColor: context.taskCount === 1 ? '#4ade80' : '#ea384c'
                         }}
                       />
-                      {context.name}
+                      <span>{context.name}</span>
                     </div>
                   </SelectItem>
                 ))}
@@ -108,7 +109,7 @@ const ForLater = () => {
               value={sortOrder}
               onValueChange={(value: "asc" | "desc") => setSortOrder(value)}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] bg-black text-white border-white/10">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
                   <SelectValue placeholder="Sort by date" />

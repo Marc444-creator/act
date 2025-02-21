@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { subDays, format } from 'date-fns';
 import { toast } from "sonner";
@@ -76,14 +77,14 @@ const Habits = () => {
   }).map(habit => habit.name);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
+    <div className="min-h-screen bg-black text-white p-4 sm:p-8">
       <div className="max-w-4xl mx-auto space-y-8">
         <FormNavigation />
         
-        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm space-y-6">
+        <div className="bg-black/50 p-4 sm:p-6 rounded-lg shadow-sm space-y-6 border border-white/10">
           <HabitsHeader />
           
-          <div className="bg-blue-100/80 p-4 rounded-lg">
+          <div className="bg-blue-100/10 p-4 rounded-lg">
             <HabitForm />
           </div>
 
@@ -98,7 +99,7 @@ const Habits = () => {
       </div>
 
       <Dialog open={!!editingHabit} onOpenChange={() => setEditingHabit(null)}>
-        <DialogContent>
+        <DialogContent className="bg-black text-white border border-white/10">
           <DialogHeader>
             <DialogTitle>Modifier l'habitude</DialogTitle>
           </DialogHeader>
@@ -106,6 +107,7 @@ const Habits = () => {
             value={editingHabit?.name || ''}
             onChange={(e) => setEditingHabit(prev => prev ? { ...prev, name: e.target.value } : null)}
             placeholder="Nom de l'habitude"
+            className="bg-black text-white border-white/10"
           />
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditingHabit(null)}>Annuler</Button>

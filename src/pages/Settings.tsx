@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { useStore } from "../store/useStore";
@@ -66,24 +67,24 @@ const Settings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-black text-white p-8">
       <div className="max-w-4xl mx-auto space-y-8">
         <FormNavigation />
         
         <div className="flex justify-center items-center">
-          <h1 className="text-4xl font-bold text-gray-900">Settings</h1>
+          <h1 className="text-4xl font-bold text-white">Settings</h1>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
-            <div className="flex items-center justify-between gap-2 bg-white p-3 rounded-lg shadow">
+            <div className="flex items-center justify-between gap-2 bg-black/50 p-3 rounded-lg shadow border border-white/10">
               <h2 className="text-xl font-semibold">Projects</h2>
               <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowProjectModal(true)}
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-white hover:text-white/90"
                 >
                   <Plus className="h-5 w-5" />
                 </Button>
@@ -91,7 +92,7 @@ const Settings = () => {
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowProjects(!showProjects)}
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-white hover:text-white/90"
                 >
                   {showProjects ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
                 </Button>
@@ -101,14 +102,14 @@ const Settings = () => {
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center justify-between gap-2 bg-white p-3 rounded-lg shadow">
+            <div className="flex items-center justify-between gap-2 bg-black/50 p-3 rounded-lg shadow border border-white/10">
               <h2 className="text-xl font-semibold">Contexts</h2>
               <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowContextModal(true)}
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-white hover:text-white/90"
                 >
                   <Plus className="h-5 w-5" />
                 </Button>
@@ -116,7 +117,7 @@ const Settings = () => {
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowContexts(!showContexts)}
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-white hover:text-white/90"
                 >
                   {showContexts ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
                 </Button>
@@ -126,14 +127,14 @@ const Settings = () => {
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center justify-between gap-2 bg-white p-3 rounded-lg shadow">
+            <div className="flex items-center justify-between gap-2 bg-black/50 p-3 rounded-lg shadow border border-white/10">
               <h2 className="text-xl font-semibold">Note Types</h2>
               <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowNoteTypeModal(true)}
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-white hover:text-white/90"
                 >
                   <Plus className="h-5 w-5" />
                 </Button>
@@ -141,7 +142,7 @@ const Settings = () => {
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowNoteTypes(!showNoteTypes)}
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-white hover:text-white/90"
                 >
                   {showNoteTypes ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
                 </Button>

@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2, Calendar } from "lucide-react";
-import { format } from 'date-fns';
+import { Trash2, Calendar, Trophy } from "lucide-react";
+import { format, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
 import type { Habit } from "../../types";
 import { HabitCalendar } from "./HabitCalendar";
 
@@ -29,6 +29,21 @@ export const HabitRow = ({
   onToggleDay
 }: HabitRowProps) => {
   const [showCalendar, setShowCalendar] = useState(false);
+
+  const calculateCurrentWeekScore = () => {
+    const today = new Date();
+    const weekStart = startOfWeek(today);
+    const weekEnd = endOfWeek(today);
+    const daysInWeek = eachDayOfInterval({ start: weekStart, end: weekEnd });
+    
+    return daysInWeek.reduce((count, day) => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      return habit.completedDays[dateStr] ? count + 1 : count;
+    }, 0);
+  };
+
+  const currentWeekScore = calculateCurrentWeekScore();
+  const isAboveAverage = currentWeekScore > parseFloat(weeklyAverage);
 
   return (
     <>
@@ -66,6 +81,11 @@ export const HabitRow = ({
         >
           <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
         </Button>
+      </div>
+
+      <div className="flex justify-center items-center gap-1 font-semibold text-sm sm:text-base border border-white/20" title="Current Week Score">
+        <Trophy className={`h-3 w-3 sm:h-4 sm:w-4 ${isAboveAverage ? 'text-green-600' : 'text-red-600'}`} />
+        <span className={isAboveAverage ? 'text-green-600' : 'text-red-600'}>{currentWeekScore}</span>
       </div>
 
       <div className="text-center font-semibold text-green-600 text-sm sm:text-base border border-white/20" title="Weekly Average">

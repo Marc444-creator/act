@@ -3,6 +3,7 @@ import React from 'react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Trophy } from "lucide-react";
 
 interface HabitsGridHeaderProps {
   displayDays: Date[];
@@ -19,6 +20,16 @@ export const HabitsGridHeader = ({ displayDays }: HabitsGridHeaderProps) => {
           </div>
         ))}
         <div className="text-center font-semibold text-sm sm:text-base">Cal</div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="text-center font-semibold text-sm sm:text-base cursor-help">
+              <Trophy className="h-4 w-4 mx-auto" />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Nombre d'occurrences cette semaine</p>
+          </TooltipContent>
+        </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="text-center font-semibold text-sm sm:text-base cursor-help">

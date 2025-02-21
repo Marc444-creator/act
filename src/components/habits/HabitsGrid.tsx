@@ -63,7 +63,7 @@ export const HabitsGrid = ({
 
   return (
     <div className="mt-8 overflow-x-auto">
-      <div className="grid grid-cols-[minmax(120px,1fr)_repeat(2,40px)_40px_50px_50px_50px_40px] sm:grid-cols-[minmax(150px,1fr)_repeat(2,50px)_50px_60px_60px_60px_50px] gap-2 sm:gap-4">
+      <div className="grid grid-cols-[minmax(120px,1fr)_repeat(2,40px)_40px_40px_50px_50px_50px_40px] sm:grid-cols-[minmax(150px,1fr)_repeat(2,50px)_50px_50px_60px_60px_60px_50px] gap-2 sm:gap-4">
         <HabitsGridHeader displayDays={displayDays} />
         {habits.map((habit) => (
           <HabitRow

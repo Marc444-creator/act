@@ -1,3 +1,4 @@
+
 export interface Task {
   id: string;
   title: string;
@@ -57,4 +58,5 @@ export interface Note {
   noteTypeId: string | null;
   createdAt: Date;
   updatedAt: Date;
+  url?: string;
 }

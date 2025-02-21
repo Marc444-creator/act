@@ -1,3 +1,4 @@
+
 import { Note } from "@/types";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -12,7 +13,7 @@ import {
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Link } from "lucide-react";
 
 interface NoteFormProps {
   selectedNote?: Note;
@@ -22,6 +23,7 @@ interface NoteFormProps {
 export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
   const [title, setTitle] = useState(selectedNote?.title || "");
   const [content, setContent] = useState(selectedNote?.content || "");
+  const [url, setUrl] = useState(selectedNote?.url || "");
   const [selectedNoteType, setSelectedNoteType] = useState<string | null>(
     selectedNote?.noteTypeId || null
   );
@@ -39,8 +41,19 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
       return;
     }
 
+    // Validate URL if provided
+    if (url && !isValidUrl(url)) {
+      toast.error("Please enter a valid URL");
+      return;
+    }
+
     if (selectedNote) {
-      store.updateNote(selectedNote.id, { content, title, noteTypeId: selectedNoteType });
+      store.updateNote(selectedNote.id, { 
+        content, 
+        title, 
+        noteTypeId: selectedNoteType,
+        url
+      });
       toast.success("Note updated successfully!");
       if (onBack) onBack();
     } else {
@@ -49,12 +62,29 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
         content,
         noteTypeId: selectedNoteType,
         projectId: selectedProject,
+        url,
       });
       setTitle("");
       setContent("");
+      setUrl("");
       setSelectedNoteType(null);
       setSelectedProject(null);
       toast.success("Note created successfully!");
+    }
+  };
+
+  const isValidUrl = (string: string) => {
+    try {
+      new URL(string);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  };
+
+  const handleUrlClick = () => {
+    if (url && isValidUrl(url)) {
+      window.open(url, '_blank');
     }
   };
 
@@ -122,6 +152,26 @@ export const NoteForm = ({ selectedNote, onBack }: NoteFormProps) => {
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="relative">
+        <Input
+          placeholder="Add URL (optional)"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          className="pr-10"
+        />
+        {url && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-2 top-1/2 -translate-y-1/2"
+            onClick={handleUrlClick}
+          >
+            <Link className="h-4 w-4" />
+          </Button>
+        )}
       </div>
 
       <Textarea

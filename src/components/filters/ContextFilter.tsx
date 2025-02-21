@@ -11,12 +11,23 @@ interface ContextFilterProps {
 export const ContextFilter = ({ value, onChange }: ContextFilterProps) => {
   const store = useStore();
 
-  // Filter contexts to only show those with uncompleted tasks
+  // Filter contexts and count uncompleted tasks
   const contextsWithUncompletedTasks = store.contexts.filter(context => {
     return store.tasks.some(task => 
       task.contextId === context.id && !task.completed
     );
+  }).map(context => {
+    const uncompletedCount = store.tasks.filter(
+      task => task.contextId === context.id && !task.completed
+    ).length;
+    return { ...context, uncompletedCount };
   });
+
+  const getStatusDotColor = (count: number) => {
+    if (count === 1) return "bg-green-500";
+    if (count === 2) return "bg-orange-500";
+    return "bg-red-500";
+  };
 
   return (
     <Select
@@ -32,7 +43,12 @@ export const ContextFilter = ({ value, onChange }: ContextFilterProps) => {
         <SelectItem value="none">All Contexts</SelectItem>
         {contextsWithUncompletedTasks.map((context) => (
           <SelectItem key={context.id} value={context.id}>
-            {context.name}
+            <div className="flex items-center gap-2">
+              <div 
+                className={`w-2 h-2 rounded-full ${getStatusDotColor(context.uncompletedCount)}`}
+              />
+              {context.name}
+            </div>
           </SelectItem>
         ))}
       </SelectContent>

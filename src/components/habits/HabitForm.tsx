@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,7 +37,7 @@ export const HabitForm = () => {
         value={newHabitName}
         onChange={(e) => setNewHabitName(e.target.value)}
         placeholder="Nom de l'habitude..."
-        className="flex-grow"
+        className="flex-grow bg-white text-black placeholder:text-black/60"
       />
       <Button
         type="button"

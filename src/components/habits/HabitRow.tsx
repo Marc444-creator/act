@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2 } from "lucide-react";
+import { Trash2, Calendar } from "lucide-react";
 import { format } from 'date-fns';
 import type { Habit } from "../../types";
+import { HabitCalendar } from "./HabitCalendar";
 
 interface HabitRowProps {
   habit: Habit;
@@ -27,6 +28,8 @@ export const HabitRow = ({
   onEdit,
   onToggleDay
 }: HabitRowProps) => {
+  const [showCalendar, setShowCalendar] = useState(false);
+
   return (
     <>
       <div 
@@ -56,7 +59,18 @@ export const HabitRow = ({
       <div className="text-center font-semibold text-purple-600 text-sm sm:text-base border border-white/20" title="Yearly Score">
         {yearlyScore}
       </div>
-      <div className="flex justify-center border border-white/20">
+      <div className="flex justify-center gap-2 border border-white/20">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 h-8 w-8"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowCalendar(true);
+          }}
+        >
+          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+        </Button>
         <Button
           variant="ghost"
           size="icon"
@@ -69,6 +83,14 @@ export const HabitRow = ({
           <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
         </Button>
       </div>
+
+      <HabitCalendar
+        open={showCalendar}
+        onOpenChange={setShowCalendar}
+        habitName={habit.name}
+        completedDays={habit.completedDays}
+        onToggleDay={(dateStr) => onToggleDay(habit.id, dateStr)}
+      />
     </>
   );
 };

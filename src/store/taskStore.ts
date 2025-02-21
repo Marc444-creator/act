@@ -1,3 +1,4 @@
+
 import { Task } from "@/types";
 import { addDays, addWeeks, addMonths, getDay, getDate, isBefore, startOfDay, endOfDay, isWithinInterval, subDays } from "date-fns";
 import { toast } from "sonner";
@@ -62,7 +63,6 @@ export const createTaskStore = (set: any, get: any): TaskStore => ({
         const deadlineDate = new Date(task.deadline);
         const oneDayBefore = subDays(deadlineDate, 1);
         
-        // Check if current date is within the day before deadline
         if (isWithinInterval(now, { 
           start: startOfDay(oneDayBefore),
           end: endOfDay(oneDayBefore)
@@ -81,7 +81,6 @@ export const createTaskStore = (set: any, get: any): TaskStore => ({
         ),
       }));
 
-      // Notify user about moved tasks
       tasksToMove.forEach(task => {
         toast.info(`Task "${task.title}" was moved to main list as deadline approaches`);
       });
@@ -92,7 +91,6 @@ export const createTaskStore = (set: any, get: any): TaskStore => ({
     const state = get();
     const now = new Date();
     const today = startOfDay(now);
-    const tomorrow = endOfDay(now);
     let newTasks: Task[] = [];
 
     console.log("Checking for recurring tasks to generate...");
@@ -106,11 +104,22 @@ export const createTaskStore = (set: any, get: any): TaskStore => ({
       let shouldGenerate = false;
       let nextDeadline = null;
 
+      // Get all existing instances of this recurring task
+      const existingInstances = state.tasks.filter((t: Task) => 
+        t.recurring && 
+        t.recurring.frequency === task.recurring?.frequency &&
+        t.title === task.title &&
+        t.id !== task.id
+      );
+
+      // Check if we need to generate a new instance
       switch (task.recurring.frequency) {
         case 'daily':
           const interval = task.recurring.interval || 1;
           const daysSinceLastGenerated = Math.floor((now.getTime() - lastGenerated.getTime()) / (1000 * 60 * 60 * 24));
-          shouldGenerate = daysSinceLastGenerated >= interval;
+          shouldGenerate = daysSinceLastGenerated >= interval && !existingInstances.some(instance => 
+            !instance.completed && instance.deadline && instance.deadline > lastGenerated
+          );
           if (shouldGenerate && task.deadline) {
             nextDeadline = addDays(new Date(task.deadline), interval);
           }
@@ -120,7 +129,12 @@ export const createTaskStore = (set: any, get: any): TaskStore => ({
           if (task.recurring.daysOfWeek && task.recurring.daysOfWeek.length > 0) {
             const currentDayOfWeek = getDay(now);
             shouldGenerate = task.recurring.daysOfWeek.includes(currentDayOfWeek) &&
-              isBefore(lastGenerated, today);
+              isBefore(lastGenerated, today) &&
+              !existingInstances.some(instance => 
+                !instance.completed && 
+                instance.deadline && 
+                getDay(new Date(instance.deadline)) === currentDayOfWeek
+              );
             
             if (shouldGenerate && task.deadline) {
               nextDeadline = addWeeks(new Date(task.deadline), 1);
@@ -132,7 +146,12 @@ export const createTaskStore = (set: any, get: any): TaskStore => ({
           if (task.recurring.daysOfMonth && task.recurring.daysOfMonth.length > 0) {
             const currentDayOfMonth = getDate(now);
             shouldGenerate = task.recurring.daysOfMonth.includes(currentDayOfMonth) &&
-              isBefore(lastGenerated, today);
+              isBefore(lastGenerated, today) &&
+              !existingInstances.some(instance => 
+                !instance.completed && 
+                instance.deadline && 
+                getDate(new Date(instance.deadline)) === currentDayOfMonth
+              );
             
             if (shouldGenerate && task.deadline) {
               nextDeadline = addMonths(new Date(task.deadline), 1);

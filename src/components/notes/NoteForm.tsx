@@ -46,7 +46,6 @@ export const NoteForm = ({
     if (!newUrl.trim()) return;
 
     try {
-      // Try to create a URL object to validate the URL
       new URL(newUrl);
       setUrls([...urls, newUrl]);
       setNewUrl("");
@@ -120,7 +119,7 @@ export const NoteForm = ({
           placeholder="Note title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="text-xl font-semibold"
+          className="text-xl font-semibold bg-white text-black placeholder:text-black/60"
         />
       </div>
       
@@ -129,13 +128,13 @@ export const NoteForm = ({
           value={selectedNoteType || "none"}
           onValueChange={(value) => setSelectedNoteType(value === "none" ? null : value)}
         >
-          <SelectTrigger className="flex-1">
+          <SelectTrigger className="flex-1 bg-white text-black">
             <SelectValue placeholder="Select note type" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">No type</SelectItem>
+          <SelectContent className="bg-white">
+            <SelectItem value="none" className="text-black">No type</SelectItem>
             {store.noteTypes.map((type) => (
-              <SelectItem key={type.id} value={type.id}>
+              <SelectItem key={type.id} value={type.id} className="text-black">
                 <div className="flex items-center gap-2">
                   <div
                     className="w-2 h-2 rounded-full"
@@ -152,13 +151,13 @@ export const NoteForm = ({
           value={selectedProject || "none"}
           onValueChange={(value) => setSelectedProject(value === "none" ? null : value)}
         >
-          <SelectTrigger className="flex-1">
+          <SelectTrigger className="flex-1 bg-white text-black">
             <SelectValue placeholder="Select project" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">No project</SelectItem>
+          <SelectContent className="bg-white">
+            <SelectItem value="none" className="text-black">No project</SelectItem>
             {store.projects.map((project) => (
-              <SelectItem key={project.id} value={project.id}>
+              <SelectItem key={project.id} value={project.id} className="text-black">
                 <div className="flex items-center gap-2">
                   <div
                     className="w-2 h-2 rounded-full"
@@ -185,12 +184,13 @@ export const NoteForm = ({
                 handleAddUrl(e as unknown as React.MouseEvent);
               }
             }}
+            className="bg-white text-black placeholder:text-black/60"
           />
           <Button 
             type="button"
             size="icon"
             variant="outline"
-            className="shrink-0"
+            className="shrink-0 bg-white text-black hover:bg-white/90 hover:text-black"
             onClick={handleAddUrl}
           >
             <Plus className="h-4 w-4" />
@@ -198,19 +198,19 @@ export const NoteForm = ({
         </div>
 
         {urls.length > 0 && (
-          <div className="flex flex-wrap gap-2 p-2 border rounded-md">
+          <div className="flex flex-wrap gap-2 p-2 border rounded-md bg-white">
             {urls.map((url, index) => (
               <div
                 key={index}
                 className="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1"
               >
-                <Link className="h-3 w-3" />
-                <span className="text-sm truncate max-w-[200px]">{url}</span>
+                <Link className="h-3 w-3 text-black" />
+                <span className="text-sm truncate max-w-[200px] text-black">{url}</span>
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="h-4 w-4 p-0 hover:bg-transparent"
+                  className="h-4 w-4 p-0 hover:bg-transparent text-black hover:text-black/90"
                   onClick={() => handleRemoveUrl(url)}
                 >
                   <X className="h-3 w-3" />
@@ -225,7 +225,7 @@ export const NoteForm = ({
         placeholder="Write your note here..."
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className={`min-h-[42px] text-lg transition-all duration-200 focus:min-h-[200px] ${
+        className={`min-h-[42px] text-lg transition-all duration-200 focus:min-h-[200px] bg-white text-black placeholder:text-black/60 ${
           selectedNote ? "focus:min-h-[calc(100vh-300px)]" : ""
         }`}
       />

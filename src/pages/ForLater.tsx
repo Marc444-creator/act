@@ -50,7 +50,7 @@ const ForLater = () => {
         <div className="space-y-4">
           <h1 className="text-4xl font-bold text-white text-center">For Later</h1>
           
-          <div className="flex items-center gap-4 bg-[#ea384c]/10 p-4 rounded-lg">
+          <div className="flex items-center gap-4 bg-red-500 p-4 rounded-lg">
             <Select
               value={selectedProject || "none"}
               onValueChange={(value) => setSelectedProject(value === "none" ? null : value)}

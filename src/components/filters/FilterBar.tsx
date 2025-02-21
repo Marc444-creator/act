@@ -1,3 +1,4 @@
+
 import { ProjectFilter } from "./ProjectFilter";
 import { ContextFilter } from "./ContextFilter";
 import { DateSortFilter } from "./DateSortFilter";
@@ -25,7 +26,7 @@ export const FilterBar = ({
   setShowCompleted,
 }: FilterBarProps) => {
   return (
-    <div className="flex items-center gap-2 flex-nowrap overflow-x-auto bg-[#ea384c]/20 p-2 rounded-md">
+    <div className="flex items-center gap-2 flex-nowrap overflow-x-auto bg-red-500 p-2 rounded-md">
       <ProjectFilter value={filterProject} onChange={setFilterProject} />
       <ContextFilter value={filterContext} onChange={setFilterContext} />
       <DateSortFilter value={sortOrder} onChange={setSortOrder} />

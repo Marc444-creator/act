@@ -18,7 +18,7 @@ export const ContextFilter = ({ value, onChange }: ContextFilterProps) => {
     >
       <SelectTrigger className="w-[60px] bg-black text-white border-white/10">
         <div className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-black" />
+          <MapPin className="h-4 w-4 text-white" />
         </div>
       </SelectTrigger>
       <SelectContent>

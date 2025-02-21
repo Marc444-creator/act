@@ -34,25 +34,13 @@ export const HabitRow = ({
     <>
       <div 
         className="flex items-center justify-between pr-2 cursor-pointer hover:bg-gray-50 rounded-md border border-white/20"
+        onClick={() => onEdit({ id: habit.id, name: habit.name })}
       >
-        <span 
-          className="text-sm sm:text-base font-medium px-2 py-1"
-          onClick={() => onEdit({ id: habit.id, name: habit.name })}
-        >
+        <span className="text-sm sm:text-base font-medium px-2 py-1">
           {habit.name}
         </span>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 h-8 w-8"
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowCalendar(true);
-          }}
-        >
-          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
-        </Button>
       </div>
+      
       {displayDays.map((day) => {
         const dateStr = format(day, 'yyyy-MM-dd');
         return (
@@ -65,6 +53,21 @@ export const HabitRow = ({
           </div>
         );
       })}
+
+      <div className="flex justify-center items-center border border-white/20">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 h-8 w-8"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowCalendar(true);
+          }}
+        >
+          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+        </Button>
+      </div>
+
       <div className="text-center font-semibold text-blue-600 text-sm sm:text-base border border-white/20" title="Monthly Score">
         {monthlyScore}
       </div>

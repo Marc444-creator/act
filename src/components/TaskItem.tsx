@@ -73,7 +73,7 @@ export const TaskItem = ({
 
   return (
     <>
-      <div className="flex flex-col gap-2 p-4 bg-white rounded-lg shadow-sm md:flex-row md:items-center">
+      <div className="flex flex-col gap-2 p-4 bg-black text-white rounded-lg shadow-sm md:flex-row md:items-center">
         <div className="flex items-center gap-2 flex-1">
           <div>
             <TaskActions
@@ -83,8 +83,8 @@ export const TaskItem = ({
             />
           </div>
           <span
-            className={`flex-1 cursor-pointer text-black ${
-              task.completed ? "line-through text-black/40" : ""
+            className={`flex-1 cursor-pointer ${
+              task.completed ? "line-through text-white/40" : "text-white"
             }`}
             onClick={() => onTaskClick(task)}
           >

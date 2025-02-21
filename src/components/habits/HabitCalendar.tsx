@@ -23,12 +23,6 @@ export const HabitCalendar = ({
     .filter(([_, completed]) => completed)
     .map(([dateStr]) => new Date(dateStr));
 
-  const handleSelect = (date: Date | undefined) => {
-    if (!date) return;
-    const dateStr = format(date, 'yyyy-MM-dd');
-    onToggleDay(dateStr);
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-black text-white border border-white/10">
@@ -41,7 +35,8 @@ export const HabitCalendar = ({
             selected={selectedDates}
             onSelect={(dates) => {
               if (!Array.isArray(dates)) {
-                handleSelect(dates);
+                const dateStr = format(dates, 'yyyy-MM-dd');
+                onToggleDay(dateStr);
               }
             }}
             className="bg-black text-white"

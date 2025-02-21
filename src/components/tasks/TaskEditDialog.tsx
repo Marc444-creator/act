@@ -1,3 +1,4 @@
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,6 +10,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { RecurringTaskControls } from "./RecurringTaskControls";
 import { useStore } from "@/store/useStore";
+import { toast } from "sonner";
 
 interface TaskEditDialogProps {
   task: any;
@@ -54,6 +56,17 @@ export const TaskEditDialog = ({
   setDailyInterval,
 }: TaskEditDialogProps) => {
   const store = useStore();
+
+  const handleRecurringToggle = (newValue: boolean) => {
+    if (!newValue && task.recurring) {
+      if (confirm("Êtes-vous sûr de vouloir arrêter la récurrence de cette tâche ? Elle n'apparaîtra plus automatiquement.")) {
+        setIsRecurring(false);
+        toast.success("La récurrence de la tâche a été désactivée");
+      }
+    } else {
+      setIsRecurring(newValue);
+    }
+  };
 
   return (
     <Dialog open={editingTaskId === task.id} onOpenChange={() => onEditSubmit(task.id)}>
@@ -126,7 +139,7 @@ export const TaskEditDialog = ({
             <div className="flex items-center gap-2 flex-nowrap overflow-x-auto">
               <RecurringTaskControls
                 isRecurring={isRecurring}
-                setIsRecurring={setIsRecurring}
+                setIsRecurring={handleRecurringToggle}
                 frequency={frequency}
                 setFrequency={setFrequency}
                 selectedDays={selectedDays}

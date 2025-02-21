@@ -31,14 +31,15 @@ export const HabitCalendar = ({
         </DialogHeader>
         <div className="flex justify-center py-4">
           <Calendar
-            mode="multiple"
-            selected={selectedDates}
-            onSelect={(dates) => {
-              if (!Array.isArray(dates)) {
-                const dateStr = format(dates, 'yyyy-MM-dd');
+            mode="single"
+            selected={undefined}
+            onSelect={(date) => {
+              if (date) {
+                const dateStr = format(date, 'yyyy-MM-dd');
                 onToggleDay(dateStr);
               }
             }}
+            initialFocus
             className="bg-black text-white"
           />
         </div>

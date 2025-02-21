@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { subDays, format } from 'date-fns';
 import { toast } from "sonner";
@@ -64,7 +63,6 @@ const Habits = () => {
 
   const today = new Date();
   const displayDays = [
-    subDays(today, 2),
     subDays(today, 1),
     today
   ];

@@ -47,6 +47,11 @@ export const TaskFormInputs = ({
     };
   });
 
+  // Sort contexts alphabetically by name
+  const sortedContexts = [...store.contexts].sort((a, b) => 
+    a.name.localeCompare(b.name)
+  );
+
   return (
     <>
       <Select value={projectId || "none"} onValueChange={setProjectId}>
@@ -89,7 +94,7 @@ export const TaskFormInputs = ({
         </TooltipProvider>
         <SelectContent>
           <SelectItem value="none">Context</SelectItem>
-          {store.contexts.map((context) => (
+          {sortedContexts.map((context) => (
             <SelectItem key={context.id} value={context.id}>
               {context.name}
             </SelectItem>

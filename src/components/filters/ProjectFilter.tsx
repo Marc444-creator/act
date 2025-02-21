@@ -11,6 +11,13 @@ interface ProjectFilterProps {
 export const ProjectFilter = ({ value, onChange }: ProjectFilterProps) => {
   const store = useStore();
 
+  // Filter projects to only show those with uncompleted tasks
+  const projectsWithUncompletedTasks = store.projects.filter(project => {
+    return store.tasks.some(task => 
+      task.projectId === project.id && !task.completed
+    );
+  });
+
   return (
     <Select
       value={value || "none"}
@@ -23,7 +30,7 @@ export const ProjectFilter = ({ value, onChange }: ProjectFilterProps) => {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="none">All Projects</SelectItem>
-        {store.projects.map((project) => (
+        {projectsWithUncompletedTasks.map((project) => (
           <SelectItem key={project.id} value={project.id}>
             {project.name}
           </SelectItem>

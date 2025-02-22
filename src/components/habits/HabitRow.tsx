@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2, Calendar, Trophy } from "lucide-react";
+import { Trash2, Calendar } from "lucide-react";
 import { format, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
 import type { Habit } from "../../types";
 import { HabitCalendar } from "./HabitCalendar";
@@ -83,8 +83,7 @@ export const HabitRow = ({
         </Button>
       </div>
 
-      <div className="flex justify-center items-center gap-1 font-semibold text-sm sm:text-base border border-white/20" title="Current Week Score">
-        <Trophy className={`h-3 w-3 sm:h-4 sm:w-4 ${isAboveAverage ? 'text-green-600' : 'text-red-600'}`} />
+      <div className="text-center font-semibold text-sm sm:text-base border border-white/20" title="Current Week Score">
         <span className={isAboveAverage ? 'text-green-600' : 'text-red-600'}>{currentWeekScore}</span>
       </div>
 

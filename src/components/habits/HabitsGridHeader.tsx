@@ -11,7 +11,7 @@ interface HabitsGridHeaderProps {
 
 export const HabitsGridHeader = ({ displayDays }: HabitsGridHeaderProps) => {
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <>
         <div className="font-semibold text-sm sm:text-base px-2">Habitude</div>
         {displayDays.map(day => (
@@ -22,9 +22,9 @@ export const HabitsGridHeader = ({ displayDays }: HabitsGridHeaderProps) => {
         <div className="text-center font-semibold text-sm sm:text-base">Cal</div>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="text-center font-semibold text-sm sm:text-base cursor-help">
+            <button className="w-full text-center font-semibold text-sm sm:text-base cursor-help">
               <Trophy className="h-4 w-4 mx-auto" />
-            </div>
+            </button>
           </TooltipTrigger>
           <TooltipContent>
             <p>Nombre d'occurrences cette semaine</p>
@@ -32,9 +32,9 @@ export const HabitsGridHeader = ({ displayDays }: HabitsGridHeaderProps) => {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="text-center font-semibold text-sm sm:text-base cursor-help">
+            <button className="w-full text-center font-semibold text-sm sm:text-base cursor-help">
               W
-            </div>
+            </button>
           </TooltipTrigger>
           <TooltipContent>
             <p>Moyenne hebdomadaire depuis le début de l'année</p>
@@ -42,9 +42,9 @@ export const HabitsGridHeader = ({ displayDays }: HabitsGridHeaderProps) => {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="text-center font-semibold text-sm sm:text-base cursor-help">
+            <button className="w-full text-center font-semibold text-sm sm:text-base cursor-help">
               M
-            </div>
+            </button>
           </TooltipTrigger>
           <TooltipContent>
             <p>Total nombre d'occurrences dans le mois en cours</p>
@@ -52,9 +52,9 @@ export const HabitsGridHeader = ({ displayDays }: HabitsGridHeaderProps) => {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="text-center font-semibold text-sm sm:text-base cursor-help">
+            <button className="w-full text-center font-semibold text-sm sm:text-base cursor-help">
               Y
-            </div>
+            </button>
           </TooltipTrigger>
           <TooltipContent>
             <p>Total annuel</p>

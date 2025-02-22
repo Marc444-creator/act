@@ -96,7 +96,7 @@ export const HabitRow = ({
       <div className="flex justify-center items-center min-h-[2.5rem] font-semibold text-purple-600 text-sm sm:text-base border border-white/20" title="Yearly Score">
         {yearlyScore}
       </div>
-      <div className="flex justify-end border border-white/20">
+      <div className="flex justify-center items-center min-h-[2.5rem] border border-white/20">
         <Button
           variant="ghost"
           size="icon"

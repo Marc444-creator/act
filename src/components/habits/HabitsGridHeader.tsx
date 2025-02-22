@@ -11,7 +11,7 @@ interface HabitsGridHeaderProps {
 
 export const HabitsGridHeader = ({ displayDays }: HabitsGridHeaderProps) => {
   return (
-    <TooltipProvider disableHoverableContent={true}>
+    <TooltipProvider delayDuration={0}>
       <>
         <div className="font-semibold text-sm sm:text-base px-2">Habitude</div>
         {displayDays.map(day => (

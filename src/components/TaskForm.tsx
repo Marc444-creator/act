@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useStore } from "../store/useStore";
 import { toast } from "sonner";
@@ -66,7 +67,7 @@ export const TaskForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-2 bg-blue-100/80 p-4 rounded-lg">
+    <form onSubmit={handleSubmit} className="space-y-2 bg-black p-4 rounded-lg">
       <div className="flex flex-col gap-2">
         <TaskFormHeader title={title} setTitle={setTitle} />
         <TaskFormControls

@@ -63,7 +63,7 @@ export const RecurringTaskControls = ({
         variant={isRecurring ? "default" : "outline"}
         size="icon"
         onClick={() => setIsRecurring(!isRecurring)}
-        className="w-8 h-8 p-0 bg-white text-black hover:bg-white/90 hover:text-black"
+        className="w-8 h-8 p-0 bg-black text-white hover:bg-black/90 hover:text-white border-white/10"
       >
         <RotateCw className="h-4 w-4" />
       </Button>
@@ -73,7 +73,7 @@ export const RecurringTaskControls = ({
           <Select value={frequency} onValueChange={(value: 'daily' | 'weekly' | 'monthly') => {
             setFrequency(value);
           }}>
-            <SelectTrigger className="w-[90px] bg-white text-black">
+            <SelectTrigger className="w-[90px] bg-black text-white border-white/10">
               <SelectValue placeholder="Freq" />
             </SelectTrigger>
             <SelectContent>
@@ -88,7 +88,7 @@ export const RecurringTaskControls = ({
               value={dailyInterval.toString()} 
               onValueChange={(value) => setDailyInterval(parseInt(value))}
             >
-              <SelectTrigger className="w-[90px] bg-white text-black">
+              <SelectTrigger className="w-[90px] bg-black text-white border-white/10">
                 <SelectValue placeholder="Every" />
               </SelectTrigger>
               <SelectContent>
@@ -112,7 +112,7 @@ export const RecurringTaskControls = ({
                   />
                   <label
                     htmlFor={`day-${day.value}`}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-white"
                   >
                     {day.label}
                   </label>
@@ -132,7 +132,7 @@ export const RecurringTaskControls = ({
                   />
                   <label
                     htmlFor={`day-${day.value}`}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-white"
                   >
                     {day.label}
                   </label>

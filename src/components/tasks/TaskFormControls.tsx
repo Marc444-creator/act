@@ -1,3 +1,4 @@
+
 import { TaskFormInputs } from "./TaskFormInputs";
 import { DatePicker } from "./DatePicker";
 import { RecurringTaskControls } from "./RecurringTaskControls";
@@ -40,7 +41,7 @@ export const TaskFormControls = ({
   setDailyInterval,
 }: TaskFormControlsProps) => {
   return (
-    <div className="flex items-center justify-center gap-2 flex-nowrap overflow-x-auto bg-blue-100/80 p-2 rounded-md">
+    <div className="flex items-center justify-center gap-2 flex-nowrap overflow-x-auto bg-black p-2 rounded-md">
       <TaskFormInputs
         title={title}
         setTitle={setTitle}

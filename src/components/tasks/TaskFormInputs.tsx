@@ -58,8 +58,8 @@ export const TaskFormInputs = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <SelectTrigger className="w-8 h-8 p-0 bg-white">
-                <Folder className="h-4 w-4 text-black" />
+              <SelectTrigger className="w-8 h-8 p-0 bg-black text-white border-white/10">
+                <Folder className="h-4 w-4 text-white" />
               </SelectTrigger>
             </TooltipTrigger>
             <TooltipContent>
@@ -83,8 +83,8 @@ export const TaskFormInputs = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <SelectTrigger className="w-8 h-8 p-0 bg-white">
-                <MapPin className="h-4 w-4 text-black" />
+              <SelectTrigger className="w-8 h-8 p-0 bg-black text-white border-white/10">
+                <MapPin className="h-4 w-4 text-white" />
               </SelectTrigger>
             </TooltipTrigger>
             <TooltipContent>

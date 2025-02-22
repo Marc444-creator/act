@@ -10,7 +10,13 @@ interface TaskFormHeaderProps {
 export const TaskFormHeader = ({ title, setTitle }: TaskFormHeaderProps) => {
   return (
     <div className="flex items-center gap-2">
-      <Button type="submit" className="w-8 h-8 rounded-full p-0 shrink-0 text-sm bg-white text-black hover:bg-white/90 hover:text-black">+</Button>
+      <Button 
+        type="submit" 
+        size="icon"
+        className="bg-[#9b87f5] hover:bg-[#8b77e5] text-white rounded-full h-8 w-8 flex items-center justify-center"
+      >
+        +
+      </Button>
       <Input
         placeholder="Add a task..."
         value={title}

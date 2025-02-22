@@ -83,17 +83,17 @@ export const HabitRow = ({
         </Button>
       </div>
 
-      <div className="text-center font-semibold text-sm sm:text-base border border-white/20" title="Current Week Score">
+      <div className="flex justify-center items-center min-h-[2.5rem] font-semibold text-sm sm:text-base border border-white/20" title="Current Week Score">
         <span className={isAboveAverage ? 'text-green-600' : 'text-red-600'}>{currentWeekScore}</span>
       </div>
 
-      <div className="text-center font-semibold text-green-600 text-sm sm:text-base border border-white/20" title="Weekly Average">
+      <div className="flex justify-center items-center min-h-[2.5rem] font-semibold text-green-600 text-sm sm:text-base border border-white/20" title="Weekly Average">
         {weeklyAverage}
       </div>
-      <div className="text-center font-semibold text-blue-600 text-sm sm:text-base border border-white/20" title="Monthly Score">
+      <div className="flex justify-center items-center min-h-[2.5rem] font-semibold text-blue-600 text-sm sm:text-base border border-white/20" title="Monthly Score">
         {monthlyScore}
       </div>
-      <div className="text-center font-semibold text-purple-600 text-sm sm:text-base border border-white/20" title="Yearly Score">
+      <div className="flex justify-center items-center min-h-[2.5rem] font-semibold text-purple-600 text-sm sm:text-base border border-white/20" title="Yearly Score">
         {yearlyScore}
       </div>
       <div className="flex justify-end border border-white/20">

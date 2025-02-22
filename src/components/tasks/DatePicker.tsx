@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -21,8 +22,8 @@ export const DatePicker = ({ deadline, setDeadline, isRecurring }: DatePickerPro
         <Button
           variant={"outline"}
           className={cn(
-            "w-8 h-8 p-0",
-            !deadline && "text-muted-foreground"
+            "w-8 h-8 p-0 bg-black text-white border-white/10",
+            !deadline && "text-white"
           )}
           title={isRecurring ? "Set first occurrence date" : "Set deadline"}
         >

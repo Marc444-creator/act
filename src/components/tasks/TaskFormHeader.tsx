@@ -21,7 +21,7 @@ export const TaskFormHeader = ({ title, setTitle }: TaskFormHeaderProps) => {
         placeholder="Add a task..."
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="flex-1 bg-black text-white placeholder:text-white/60"
+        className="flex-1 bg-white text-black placeholder:text-black/60"
       />
     </div>
   );
